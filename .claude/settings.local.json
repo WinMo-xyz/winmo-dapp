@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: add Buffer polyfill for browser compatibility on Netlify\n\nSolana libraries depend on Node.js Buffer which isn''t available in\nbrowsers, causing a blank page in production. Added buffer polyfill\nand configured Vite to define global as globalThis.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(netlify status:*)",
+      "WebFetch(domain:animated-churros-b3f2ca.netlify.app)"
+    ]
+  }
+}
