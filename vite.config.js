@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/jupiter/, ''),
           headers: {
-            'x-api-key': env.VITE_JUPITER_API_KEY || '',
+            'x-api-key': 'bfda7f2b-652c-4a12-a752-0bef22f9cbae',
           },
         },
       },

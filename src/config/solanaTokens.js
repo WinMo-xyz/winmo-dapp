@@ -2,6 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 
 const CB = 'https://logo.clearbit.com/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
+const CG = 'https://coin-images.coingecko.com/coins/images/'
 
 /**
  * SPL token list for portfolio balance reads.
@@ -102,6 +103,27 @@ export const SPL_TOKEN_LIST = [
     decimals: 9,
     mint: new PublicKey('So11111111111111111111111111111111111111112'),
   },
+  {
+    symbol: 'RENDER',
+    name: 'Render',
+    logo: CB + 'rendernetwork.com',
+    decimals: 8,
+    mint: new PublicKey('rndrizKT3MK1iimdxRdWabcF7Zg7AR5T4nud4EkHBof'),
+  },
+  {
+    symbol: 'TRUMP',
+    name: 'Official Trump',
+    logo: CG + '53746/large/trump.jpg',
+    decimals: 6,
+    mint: new PublicKey('6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN'),
+  },
+  {
+    symbol: 'PUMP',
+    name: 'Pump.fun',
+    logo: CB + 'pump.fun',
+    decimals: 6,
+    mint: new PublicKey('pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn'),
+  },
   // Yield tokens
   {
     symbol: 'JitoSOL',
@@ -124,6 +146,83 @@ export const SPL_TOKEN_LIST = [
     logo: CB + 'gold.org',
     decimals: 9,
     mint: new PublicKey('9TPL8droGJ7jThsq4momaoz6uhTcvX2SeMqipoPmNa8R'),
+  },
+  {
+    symbol: 'GLD',
+    name: 'SPDR Gold Shares',
+    logo: CB + 'ssga.com',
+    decimals: 9,
+    mint: new PublicKey('hWfiw4mcxT8rnNFkk6fsCQSxoxgZ9yVhB6tyeVcondo'),
+  },
+  {
+    symbol: 'SLV',
+    name: 'iShares Silver Trust',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('iy11ytbSGcUnrjE6Lfv78TFqxKyUESfku1FugS9ondo'),
+  },
+  {
+    symbol: 'USO',
+    name: 'United States Oil Fund',
+    logo: CB + 'uscfinvestments.com',
+    decimals: 9,
+    mint: new PublicKey('rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo'),
+  },
+  {
+    symbol: 'COPX',
+    name: 'Global X Copper Miners ETF',
+    logo: CB + 'globalxetfs.com',
+    decimals: 9,
+    mint: new PublicKey('X7j77hTmjZJbepkXXBcsEapM8qNgdfihkFj6CZ5ondo'),
+  },
+  {
+    symbol: 'DBC',
+    name: 'Invesco DB Commodity Index',
+    logo: CB + 'invesco.com',
+    decimals: 9,
+    mint: new PublicKey('td1aY5AvYQuwGD75qNq9aPipMexraN9mQXJwqifondo'),
+  },
+  {
+    symbol: 'FTGC',
+    name: 'First Trust Global Tactical Commodity',
+    logo: CB + 'ftportfolios.com',
+    decimals: 9,
+    mint: new PublicKey('ivBnfPTyuHDNWmMSnbavckhJK6SHZW8h77nZKsEondo'),
+  },
+  {
+    symbol: 'IAU',
+    name: 'iShares Gold Trust',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('M77ZvkZ8zW5udRbuJCbuwSwavRa7bGAZYMTwru8ondo'),
+  },
+  {
+    symbol: 'NIKL',
+    name: 'Sprott Nickel Miners ETF',
+    logo: CB + 'sprott.com',
+    decimals: 9,
+    mint: new PublicKey('V8LRV7kWjrx6Prke9oHEHNUiR122BVtyuPciTCTondo'),
+  },
+  {
+    symbol: 'PALL',
+    name: 'abrdn Physical Palladium Shares ETF',
+    logo: CB + 'abrdn.com',
+    decimals: 9,
+    mint: new PublicKey('P7hTXnKk2d2DyqWnefp5BSroE1qjjKpKxg9SxQqondo'),
+  },
+  {
+    symbol: 'PDBC',
+    name: 'Invesco Optimum Yield Diversified Commodity',
+    logo: CB + 'invesco.com',
+    decimals: 9,
+    mint: new PublicKey('M6agiXbNgy8Xon9ngiW4ZDPbMFcNCTMkMMkshZyondo'),
+  },
+  {
+    symbol: 'REMX',
+    name: 'VanEck Rare Earth/Strategic Metals ETF',
+    logo: CB + 'vaneck.com',
+    decimals: 9,
+    mint: new PublicKey('tiitb2Z1HtpB2DpVr6V7tdCFS3jmTinLeuGj9EVondo'),
   },
   // Stocks — Pre-IPO
   {
@@ -211,6 +310,27 @@ export const SPL_TOKEN_LIST = [
     decimals: 9,
     mint: new PublicKey('XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C'),
   },
+  {
+    symbol: 'NVDA',
+    name: 'NVIDIA',
+    logo: CB + 'nvidia.com',
+    decimals: 9,
+    mint: new PublicKey('Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh'),
+  },
+  {
+    symbol: 'AMZN',
+    name: 'Amazon',
+    logo: CB + 'amazon.com',
+    decimals: 9,
+    mint: new PublicKey('Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg'),
+  },
+  {
+    symbol: 'QQQ',
+    name: 'Invesco QQQ ETF',
+    logo: CB + 'invesco.com',
+    decimals: 9,
+    mint: new PublicKey('Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ'),
+  },
   // Stocks — Mid Cap
   {
     symbol: 'MCD',
@@ -240,6 +360,27 @@ export const SPL_TOKEN_LIST = [
     decimals: 9,
     mint: new PublicKey('1YVZ4LGpq8CAhpdpm3mgy7GgPb83gJczCpxLUQ3ondo'),
   },
+  {
+    symbol: 'COIN',
+    name: 'Coinbase',
+    logo: CB + 'coinbase.com',
+    decimals: 9,
+    mint: new PublicKey('Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu'),
+  },
+  {
+    symbol: 'MSTR',
+    name: 'MicroStrategy',
+    logo: CB + 'microstrategy.com',
+    decimals: 9,
+    mint: new PublicKey('XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ'),
+  },
+  {
+    symbol: 'CRCL',
+    name: 'Circle',
+    logo: CB + 'circle.com',
+    decimals: 9,
+    mint: new PublicKey('XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1'),
+  },
   // Stocks — Small Cap
   {
     symbol: 'SBUX',
@@ -261,6 +402,112 @@ export const SPL_TOKEN_LIST = [
     logo: CB + 'intuit.com',
     decimals: 9,
     mint: new PublicKey('CozoH5HBTyyeYSQxHcWpGzd4Sq5XBaKzBzvTtN3ondo'),
+  },
+  // ETF
+  {
+    symbol: 'IVV',
+    name: 'iShares Core S&P 500 ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('CqW2pd6dCPG9xKZfAsTovzDsMmAGKJSDBNcwM96ondo'),
+  },
+  {
+    symbol: 'IWM',
+    name: 'iShares Russell 2000 ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('dvj2kKFSyjpnyYSYppgFdAEVfgjMEoQGi9VaV23ondo'),
+  },
+  {
+    symbol: 'DGRW',
+    name: 'WisdomTree US Quality Dividend Growth Fund',
+    logo: CB + 'wisdomtree.com',
+    decimals: 9,
+    mint: new PublicKey('gnoSQSNTNZHViqVfxCcPDVxcRA29mrJL7C6JqYLondo'),
+  },
+  {
+    symbol: 'EEM',
+    name: 'iShares MSCI Emerging Markets ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('916SDKz7y5ZcEZC9CtnQ5Djs1Y8Yv3UAPb6bak8ondo'),
+  },
+  {
+    symbol: 'EFA',
+    name: 'iShares MSCI EAFE ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('AbvryMGnaba9oADMZk8Vp2Av6MtczsncGyfWaC4ondo'),
+  },
+  {
+    symbol: 'IEMG',
+    name: 'iShares Core MSCI Emerging Markets ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('cdVNL9WXD2BTkbZhRZMVXPmVSiRo44hJWRtnaC8ondo'),
+  },
+  {
+    symbol: 'IJH',
+    name: 'iShares Core S&P MidCap ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('cfPLN9WXD2BTkbZhRZMVXPmVSiRo44hJWRtnaC8ondo'),
+  },
+  {
+    symbol: 'ITOT',
+    name: 'iShares Core S&P Total US Stock Market ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('CPWkMURVvcnX8hGjqCTb8i5LkzV3VSvyk7SeJi8ondo'),
+  },
+  {
+    symbol: 'IWF',
+    name: 'iShares Russell 1000 Growth ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('dSHPFuMMjZqt7xDYGWrexXTSkdEZAiZngqymQF2ondo'),
+  },
+  {
+    symbol: 'IWN',
+    name: 'iShares Russell 2000 Value ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('DX7g7WNjDpVzNK9CG81v7wb6ZbiNzYfkdzH2Xs5ondo'),
+  },
+  {
+    symbol: 'PSQ',
+    name: 'ProShares Short QQQ',
+    logo: CB + 'proshares.com',
+    decimals: 9,
+    mint: new PublicKey('qKtU9A7ij34XmtxaSzYfxCpkgAZzzFsqnUb2kW2ondo'),
+  },
+  {
+    symbol: 'SQQQ',
+    name: 'ProShares UltraPro Short QQQ',
+    logo: CB + 'proshares.com',
+    decimals: 9,
+    mint: new PublicKey('D1tu7Fnm3cCpKyyPXrqm5GXShPqMj7a2SEjjq9fondo'),
+  },
+  {
+    symbol: 'TQQQ',
+    name: 'ProShares UltraPro QQQ',
+    logo: CB + 'proshares.com',
+    decimals: 9,
+    mint: new PublicKey('14W1itEkV7k1W819mLSknFTaMmkCtPokbF2tRkPUondo'),
+  },
+  {
+    symbol: 'VTI',
+    name: 'Vanguard Total Stock Market ETF',
+    logo: CB + 'vanguard.com',
+    decimals: 9,
+    mint: new PublicKey('jCCU4GwukjNxAXJowG2S4KCrr5g6YyUB61WHYvGondo'),
+  },
+  {
+    symbol: 'VTV',
+    name: 'Vanguard Value ETF',
+    logo: CB + 'vanguard.com',
+    decimals: 9,
+    mint: new PublicKey('KuiYLPVq65qixD9TgvxBC576C4gG6vVTCdbh2zFondo'),
   },
   // Bonds
   {
@@ -290,5 +537,47 @@ export const SPL_TOKEN_LIST = [
     logo: CB + 'ishares.com',
     decimals: 9,
     mint: new PublicKey('13qTjKx53y6LKGGStiKeieGbnVx3fx1bbwopKFb3ondo'),
+  },
+  {
+    symbol: 'BINC',
+    name: 'iShares Flexible Income Active ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('mhZ69E1vDnAsQJXAwarLYSX5tmgeMajXBJ2rXAcondo'),
+  },
+  {
+    symbol: 'CLOA',
+    name: 'iShares AAA CLO Active ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('t71FyTYHVkPAb5g48adDHmkVxXYbUuP2eq6jDZLondo'),
+  },
+  {
+    symbol: 'CLOI',
+    name: 'VanEck CLO ETF',
+    logo: CB + 'vaneck.com',
+    decimals: 9,
+    mint: new PublicKey('ucQ3VfWAx9pkCN4Kg84zE56FtB4FJN2kQH4ArYYondo'),
+  },
+  {
+    symbol: 'JAAA',
+    name: 'Janus Henderson AAA CLO ETF',
+    logo: CB + 'janushenderson.com',
+    decimals: 9,
+    mint: new PublicKey('KZtqx9BJbpcGY7vdzhqPXM3ECKChxE5YhXaDiwRondo'),
+  },
+  {
+    symbol: 'TIP',
+    name: 'iShares TIPS Bond ETF',
+    logo: CB + 'ishares.com',
+    decimals: 9,
+    mint: new PublicKey('k6BPp2Xmf2TYgrZiUyWfUoZBKeqaDbvPoAVgSx2ondo'),
+  },
+  {
+    symbol: 'USFR',
+    name: 'WisdomTree Floating Rate Treasury Fund',
+    logo: CB + 'wisdomtree.com',
+    decimals: 9,
+    mint: new PublicKey('o6U1Sm6Vd7EofMyCrL28mrp2QLzgYGgjveHiEQ5ondo'),
   },
 ]

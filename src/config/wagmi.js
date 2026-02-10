@@ -3,9 +3,11 @@ import { mainnet } from 'wagmi/chains'
 import { http } from 'wagmi'
 
 export const config = getDefaultConfig({
-  appName: 'WinMo DApp',
-  // Get a real project ID at https://cloud.walletconnect.com/ (free)
-  projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'winmo-dapp-demo',
+  appName: 'WinMo',
+  appDescription: 'Multi-chain DeFi portfolio & trading',
+  appUrl: 'https://app.winmo.xyz',
+  appIcon: 'https://app.winmo.xyz/favicon.svg',
+  projectId: '861c3750c40fc4ec1ff2ad29ed455431',
   chains: [mainnet],
   transports: {
     [mainnet.id]: http('https://rpc.ankr.com/eth'),

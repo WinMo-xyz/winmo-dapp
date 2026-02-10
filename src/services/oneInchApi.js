@@ -1,9 +1,8 @@
 import { getTokensForChain } from '../config/tokens'
 
 const CHAIN_ID = 1 // Ethereum mainnet
-
-// Dev: Vite proxy handles CORS + auth. Prod: replace with your own backend proxy.
-const BASE = '/api/1inch/swap/v6.0/' + CHAIN_ID
+const ONEINCH_KEY = '' // TODO: add your 1inch API key
+const BASE = 'https://api.1inch.dev/swap/v6.0/' + CHAIN_ID
 
 // Native ETH placeholder used by 1inch
 const NATIVE_ETH = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
@@ -53,11 +52,13 @@ export function resolveTokenAddress(asset) {
 // ─── API calls ────────────────────────────────────────────
 
 async function api(endpoint, params) {
-  const url = new URL(`${window.location.origin}${BASE}${endpoint}`)
+  const url = new URL(`${BASE}${endpoint}`)
   Object.entries(params).forEach(([k, v]) => {
     if (v != null) url.searchParams.set(k, String(v))
   })
-  const res = await fetch(url.toString())
+  const res = await fetch(url.toString(), {
+    headers: { 'Authorization': `Bearer ${ONEINCH_KEY}` },
+  })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.description || body.error || `1inch error ${res.status}`)

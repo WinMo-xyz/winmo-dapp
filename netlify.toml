@@ -21,6 +21,11 @@
   to = "/.netlify/functions/oneinch-proxy/:splat"
   status = 200
 
+[[redirects]]
+  from = "/api/jupiter/*"
+  to = "/.netlify/functions/jupiter-proxy/:splat"
+  status = 200
+
 # SPA fallback (must be last)
 [[redirects]]
   from = "/*"

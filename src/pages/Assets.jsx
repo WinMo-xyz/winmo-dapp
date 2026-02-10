@@ -14,6 +14,7 @@ const STOCK_SUBS = [
   { key: 'large-cap', label: 'Large Cap' },
   { key: 'mid-cap', label: 'Mid Cap' },
   { key: 'small-cap', label: 'Small Cap' },
+  { key: 'etf', label: 'ETF' },
 ]
 
 const CRYPTO_SUBS = [

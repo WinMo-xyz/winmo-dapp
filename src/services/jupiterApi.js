@@ -1,7 +1,7 @@
 import { SPL_TOKEN_LIST } from '../config/solanaTokens.js'
 
-// Dev: Vite proxy handles CORS + auth. Prod: replace with your own backend proxy.
-const BASE = '/api/jupiter/swap/v1'
+const BASE = 'https://api.jup.ag/swap/v1'
+const JUP_KEY = 'bfda7f2b-652c-4a12-a752-0bef22f9cbae'
 
 // Wrapped SOL mint (Jupiter uses this for native SOL)
 const WSOL_MINT = 'So11111111111111111111111111111111111111112'
@@ -50,7 +50,9 @@ export function getSplDecimals(mintAddress) {
 
 export async function getQuote(inputMint, outputMint, amount, slippageBps = 50) {
   const url = `${BASE}/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=${slippageBps}`
-  const res = await fetch(url)
+  const res = await fetch(url, {
+    headers: { 'x-api-key': JUP_KEY },
+  })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     throw new Error(body.error || `Jupiter quote error ${res.status}`)
@@ -61,7 +63,7 @@ export async function getQuote(inputMint, outputMint, amount, slippageBps = 50) 
 export async function getSwapTransaction(quoteResponse, userPublicKey) {
   const res = await fetch(`${BASE}/swap`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': JUP_KEY },
     body: JSON.stringify({
       quoteResponse,
       userPublicKey: userPublicKey.toString(),
