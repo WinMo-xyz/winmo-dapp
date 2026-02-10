@@ -102,6 +102,21 @@ export const SPL_TOKEN_LIST = [
     decimals: 9,
     mint: new PublicKey('So11111111111111111111111111111111111111112'),
   },
+  // Yield tokens
+  {
+    symbol: 'JitoSOL',
+    name: 'Jito Staked SOL',
+    logo: CB + 'jito.network',
+    decimals: 9,
+    mint: new PublicKey('J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn'),
+  },
+  {
+    symbol: 'JLP',
+    name: 'Jupiter LP',
+    logo: 'https://static.jup.ag/jup/icon.png',
+    decimals: 6,
+    mint: new PublicKey('27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4'),
+  },
   // Commodities
   {
     symbol: 'PAXG',

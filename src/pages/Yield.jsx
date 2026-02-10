@@ -1,20 +1,36 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import DappNavbar from '../components/DappNavbar'
 import AssetLogo from '../components/AssetLogo'
+import BuyModal from '../components/BuyModal'
 import { getYieldProtocols } from '../services/yield'
 import './Yield.css'
 
 const RISK_LEVELS = [
   { key: 'safe', label: 'SAFE', color: 'var(--success)' },
-  { key: 'medium', label: 'MEDIUM', color: 'var(--accent)' },
-  { key: 'high', label: 'HIGH', color: 'var(--red)' },
+  { key: 'low', label: 'LOW RISK', color: '#5b9cf5' },
+  { key: 'high-yield', label: 'HIGH YIELD', color: '#f0a030' },
+  { key: 'speculative', label: 'SPECULATIVE', color: 'var(--red)' },
 ]
 
 export default function Yield() {
-  const [selectedId, setSelectedId] = useState('aave-weth')
+  const [selectedId, setSelectedId] = useState('jitosol')
+  const [depositId, setDepositId] = useState(null)
 
   const allProtocols = getYieldProtocols()
   const selected = allProtocols.find(p => p.id === selectedId) || allProtocols[0]
+  const depositProtocol = depositId ? allProtocols.find(p => p.id === depositId) : null
+
+  // Build a synthetic asset object compatible with BuyModal
+  const depositAsset = useMemo(() => {
+    if (!depositProtocol) return null
+    return {
+      name: depositProtocol.name,
+      symbol: depositProtocol.tokenSymbol,
+      price: 0,
+      logo: depositProtocol.logo,
+      ethereumAddress: depositProtocol.ethereumAddress || undefined,
+    }
+  }, [depositProtocol])
 
   return (
     <>
@@ -25,7 +41,6 @@ export default function Yield() {
           <p className="yield-subtitle">Put idle assets to work. Pick a pool, deposit, earn.</p>
 
           <div className="yield-wrapper">
-            <div className="yield-blur">
               <div className="yield-layout">
                 {/* Left sidebar: risk categories */}
                 <div className="yield-sidebar">
@@ -92,19 +107,22 @@ export default function Yield() {
                         <span>{selected.asset}</span>
                       </div>
                     </div>
-                    <button className="btn btn-accent yield-deposit-btn">
+                    <button
+                      className="btn btn-accent yield-deposit-btn"
+                      onClick={() => setDepositId(selected.id)}
+                    >
                       Deposit
                     </button>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="yield-coming-soon">
-              <span className="coming-soon-badge">Coming Soon</span>
-            </div>
           </div>
         </div>
       </main>
+
+      {depositAsset && (
+        <BuyModal asset={depositAsset} onClose={() => setDepositId(null)} />
+      )}
     </>
   )
 }
