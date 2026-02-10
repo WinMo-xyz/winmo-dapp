@@ -1,0 +1,120 @@
+.price-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Time range buttons */
+.price-chart-ranges {
+  display: flex;
+  gap: 6px;
+}
+
+.range-btn {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-rounded);
+  background: transparent;
+  color: var(--color-light-secondary);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.range-btn:hover:not(:disabled) {
+  background: var(--light-5);
+  color: var(--color-light);
+}
+
+.range-btn.active {
+  background: var(--light-10);
+  color: var(--color-light);
+  border-color: var(--light-20);
+}
+
+.range-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* SVG container */
+.price-chart-svg-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 800 / 220;
+}
+
+.price-chart-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+/* Tooltip */
+.price-chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%) translateY(-12px);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(var(--dark), 0.92);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-3);
+  padding: 6px 10px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.tooltip-price {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-light);
+}
+
+.tooltip-date {
+  font-size: 11px;
+  color: var(--color-light-secondary);
+}
+
+/* Loading skeleton */
+.price-chart-skeleton {
+  aspect-ratio: 800 / 220;
+  border-radius: var(--radius-3);
+  background: var(--light-5);
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-wave {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--light-5) 50%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Unavailable state */
+.price-chart-unavailable {
+  aspect-ratio: 800 / 220;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-3);
+  background: var(--light-5);
+  color: var(--color-light-secondary);
+  font-size: 14px;
+}

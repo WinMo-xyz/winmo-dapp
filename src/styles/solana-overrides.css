@@ -1,0 +1,144 @@
+/* ── Solana wallet-adapter overrides — Dark theme (default) ── */
+
+.wallet-adapter-modal {
+  z-index: 10000 !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background: rgba(var(--dark), 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(var(--light), 0.08) !important;
+  border-radius: 20px !important;
+  font-family: var(--font-body) !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+.wallet-adapter-modal-title {
+  font-family: var(--font-display) !important;
+  color: rgb(var(--light)) !important;
+  font-weight: 600 !important;
+}
+
+.wallet-adapter-modal-list li {
+  border-radius: 12px !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button {
+  background: rgba(var(--light), 0.03) !important;
+  border: 1px solid rgba(var(--light), 0.06) !important;
+  border-radius: 12px !important;
+  color: rgb(var(--light)) !important;
+  font-family: var(--font-body) !important;
+  transition: all 0.2s ease !important;
+}
+
+.wallet-adapter-modal-list .wallet-adapter-button:hover {
+  background: rgba(var(--light), 0.07) !important;
+  border-color: rgba(var(--accent-rgb), 0.3) !important;
+}
+
+.wallet-adapter-modal-button-close {
+  background: rgba(var(--light), 0.06) !important;
+  transition: background 0.2s ease !important;
+}
+
+.wallet-adapter-modal-button-close:hover {
+  background: rgba(var(--light), 0.12) !important;
+}
+
+.wallet-adapter-modal-button-close svg {
+  fill: rgb(var(--light)) !important;
+}
+
+.wallet-adapter-modal-overlay {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.wallet-adapter-modal-middle {
+  background: transparent !important;
+}
+
+.wallet-adapter-modal-middle .wallet-adapter-button {
+  background: rgba(var(--accent-rgb), 0.15) !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.3) !important;
+  color: var(--accent) !important;
+}
+
+.wallet-adapter-modal-middle .wallet-adapter-button:hover {
+  background: rgba(var(--accent-rgb), 0.25) !important;
+}
+
+.wallet-adapter-modal-list-more {
+  color: rgba(var(--light), 0.6) !important;
+}
+
+.wallet-adapter-modal-list-more svg {
+  fill: rgba(var(--light), 0.6) !important;
+}
+
+.wallet-adapter-modal-collapse-button svg {
+  fill: rgba(var(--light), 0.5) !important;
+}
+
+/* ── Light mode ──────────────────────────────────────────── */
+
+[data-theme="light"] .wallet-adapter-modal-wrapper {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(28, 25, 23, 0.1) !important;
+  box-shadow: 0 16px 48px rgba(140, 130, 115, 0.2) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-title {
+  color: rgb(28, 25, 23) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-list .wallet-adapter-button {
+  background: rgba(28, 25, 23, 0.04) !important;
+  border-color: rgba(28, 25, 23, 0.08) !important;
+  color: rgb(28, 25, 23) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-list .wallet-adapter-button:hover {
+  background: rgba(28, 25, 23, 0.08) !important;
+  border-color: rgba(154, 123, 46, 0.35) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-button-close {
+  background: rgba(28, 25, 23, 0.06) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-button-close:hover {
+  background: rgba(28, 25, 23, 0.12) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-button-close svg {
+  fill: rgb(28, 25, 23) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-overlay {
+  background: rgba(140, 130, 115, 0.35) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-middle .wallet-adapter-button {
+  background: rgba(154, 123, 46, 0.1) !important;
+  border-color: rgba(154, 123, 46, 0.25) !important;
+  color: #9a7b2e !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-middle .wallet-adapter-button:hover {
+  background: rgba(154, 123, 46, 0.18) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-list-more {
+  color: rgb(95, 90, 82) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-list-more svg {
+  fill: rgb(95, 90, 82) !important;
+}
+
+[data-theme="light"] .wallet-adapter-modal-collapse-button svg {
+  fill: rgb(95, 90, 82) !important;
+}

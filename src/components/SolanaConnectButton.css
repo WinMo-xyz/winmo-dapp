@@ -1,0 +1,57 @@
+.solana-connect-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--light), 0.08);
+  background: rgba(var(--light), 0.03);
+  color: rgb(var(--light));
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.solana-connect-btn:hover {
+  background: rgba(var(--light), 0.07);
+  border-color: rgba(var(--accent-rgb), 0.3);
+}
+
+.solana-connect-btn.connected {
+  border-color: rgba(var(--accent-rgb), 0.2);
+}
+
+.solana-connect-btn.connected:hover {
+  border-color: rgba(var(--red-rgb, 255, 75, 75), 0.4);
+  background: rgba(var(--red-rgb, 255, 75, 75), 0.08);
+}
+
+.solana-connect-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.solana-connect-addr {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.solana-wallet-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+/* Compact mode (mobile) */
+.solana-connect-btn.compact {
+  padding: 0 10px;
+  gap: 6px;
+}
+
+.solana-connect-btn.compact .solana-connect-label {
+  display: none;
+}

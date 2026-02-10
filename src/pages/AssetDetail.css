@@ -1,0 +1,252 @@
+.asset-detail-page {
+  padding-top: 100px;
+  padding-bottom: 80px;
+  min-height: 100vh;
+}
+
+/* Breadcrumb */
+.asset-detail-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 24px;
+  animation: slide-up 0.5s var(--ease-out) both;
+}
+
+.breadcrumb-link {
+  color: var(--color-light-secondary);
+  transition: color 0.3s;
+}
+
+.breadcrumb-link:hover {
+  color: var(--color-light);
+}
+
+.breadcrumb-sep {
+  color: var(--light-20);
+}
+
+.breadcrumb-current {
+  color: var(--color-light);
+  font-weight: 500;
+}
+
+/* Header */
+.asset-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+  animation: slide-up 0.5s var(--ease-out) 0.06s both;
+}
+
+.asset-detail-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.asset-detail-info .asset-logo {
+  border-radius: var(--radius-2);
+}
+
+.asset-detail-name {
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.asset-detail-symbol {
+  font-size: 14px;
+  color: var(--color-light-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.asset-detail-price-wrap {
+  text-align: right;
+}
+
+.asset-detail-price {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.asset-detail-change {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.asset-detail-change.positive {
+  color: var(--success);
+}
+
+.asset-detail-change.positive::before {
+  content: '▲ ';
+  font-size: 9px;
+}
+
+.asset-detail-change.negative {
+  color: var(--red);
+}
+
+.asset-detail-change.negative::before {
+  content: '▼ ';
+  font-size: 9px;
+}
+
+.asset-detail-desc {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-light-secondary);
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+
+/* Two-column: chart + buy panel */
+.asset-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 40px;
+  animation: slide-up 0.5s var(--ease-out) 0.12s both;
+}
+
+/* Chart */
+.asset-detail-chart {
+  padding: 32px;
+}
+
+/* News */
+.asset-detail-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--color-light);
+  line-height: 1.2;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.news-card {
+  padding: 24px;
+}
+
+.news-source {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.news-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-light);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.news-date {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+}
+
+/* News blur + Coming Soon overlay */
+.news-wrapper {
+  position: relative;
+}
+
+.news-blur {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.news-coming-soon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.news-coming-soon .coming-soon-badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 10px 28px;
+  border-radius: var(--radius-rounded);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  background: rgba(var(--accent-rgb), 0.06);
+  backdrop-filter: blur(4px);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Not found */
+.asset-not-found {
+  text-align: center;
+  padding: 60px 40px;
+  margin-top: 40px;
+}
+
+.asset-not-found h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.asset-not-found p {
+  color: var(--color-light-secondary);
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .asset-detail-grid {
+    grid-template-columns: 1fr 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .asset-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .asset-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .asset-detail-price-wrap {
+    text-align: left;
+  }
+
+  .asset-detail-chart {
+    padding: 20px;
+  }
+
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+}

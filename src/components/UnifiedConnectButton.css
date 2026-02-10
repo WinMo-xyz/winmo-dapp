@@ -1,0 +1,148 @@
+.unified-connect {
+  position: relative;
+}
+
+/* Main connect button (disconnected state) */
+.unified-connect-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: rgb(var(--dark));
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.unified-connect-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* Chain picker dropdown */
+.unified-picker {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  padding: 6px;
+  background: rgba(var(--dark), 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--light), 0.1);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  animation: picker-in 0.15s ease-out;
+}
+
+@keyframes picker-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.unified-picker-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgb(var(--light));
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.unified-picker-option:hover {
+  background: rgba(var(--light), 0.07);
+}
+
+.unified-picker-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  line-height: 1;
+}
+
+.unified-picker-icon.sm {
+  font-size: 16px;
+  width: 20px;
+}
+
+/* Connected state */
+.unified-connected-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.unified-wallet-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(var(--light), 0.08);
+  background: rgba(var(--light), 0.04);
+  color: rgb(var(--light));
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.unified-wallet-pill:hover {
+  background: rgba(var(--light), 0.08);
+  border-color: rgba(var(--light), 0.15);
+}
+
+.unified-wallet-pill.solana:hover {
+  border-color: rgba(var(--red-rgb, 255, 75, 75), 0.4);
+  background: rgba(var(--red-rgb, 255, 75, 75), 0.08);
+}
+
+.unified-chain-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.unified-wallet-addr {
+  font-variant-numeric: tabular-nums;
+}
+
+.unified-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px dashed rgba(var(--light), 0.15);
+  background: transparent;
+  color: rgba(var(--light), 0.4);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unified-add-btn:hover {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.06);
+}

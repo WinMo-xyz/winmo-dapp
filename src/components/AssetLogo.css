@@ -1,0 +1,23 @@
+.asset-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-3);
+  overflow: hidden;
+  background: var(--light-5);
+}
+
+.asset-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.asset-logo-initial {
+  font-weight: 700;
+  font-family: var(--font-heading, 'Clash Display', sans-serif);
+  color: rgba(var(--light), 0.6);
+  line-height: 1;
+}

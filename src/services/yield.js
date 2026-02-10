@@ -1,0 +1,136 @@
+const CB = 'https://logo.clearbit.com/'
+
+const protocols = [
+  // SAFE
+  {
+    id: 'aave-usdc',
+    name: 'aUSDC',
+    protocol: 'Aave',
+    network: 'Ethereum',
+    asset: 'USDC',
+    apy: 4.5,
+    totalDeposits: '$3.2B',
+    strategy: 'Lend your USDC on Aave V3. Borrowers put up more collateral than they take, so your principal is well-covered. About as safe as DeFi gets.',
+    riskLevel: 'safe',
+    logo: CB + 'aave.com',
+  },
+  {
+    id: 'aave-dai',
+    name: 'aDAI',
+    protocol: 'Aave',
+    network: 'Ethereum',
+    asset: 'DAI',
+    apy: 3.8,
+    totalDeposits: '$1.8B',
+    strategy: 'Drop DAI into Aave V3. Borrowers pay you interest, and every loan is overcollateralized. DAI has deep liquidity so withdrawals are fast.',
+    riskLevel: 'safe',
+    logo: CB + 'aave.com',
+  },
+  {
+    id: 'compound-usdt',
+    name: 'cUSDT',
+    protocol: 'Compound',
+    network: 'Ethereum',
+    asset: 'USDT',
+    apy: 3.2,
+    totalDeposits: '$980M',
+    strategy: 'Lend USDT on Compound V3. One of the oldest DeFi protocols still running. Simple deposit, steady interest.',
+    riskLevel: 'safe',
+    logo: CB + 'compound.finance',
+  },
+  // MEDIUM
+  {
+    id: 'aave-weth',
+    name: 'Aave WETH',
+    protocol: 'Aave',
+    network: 'Ethereum',
+    asset: 'WETH',
+    apy: 1.42,
+    totalDeposits: '$7.55B',
+    strategy: 'Lend your WETH on Aave V3. Most borrowers are leveraged traders, so utilization stays high. You are exposed to ETH price swings though.',
+    riskLevel: 'medium',
+    logo: CB + 'aave.com',
+  },
+  {
+    id: 'lido-steth',
+    name: 'Lido stETH',
+    protocol: 'Lido',
+    network: 'Ethereum',
+    asset: 'ETH',
+    apy: 3.1,
+    totalDeposits: '$14.2B',
+    strategy: 'Stake ETH with Lido, get stETH back. The stETH earns staking rewards and you can still use it as collateral elsewhere. Two yields at once.',
+    riskLevel: 'medium',
+    logo: CB + 'lido.fi',
+  },
+  {
+    id: 'curve-3pool',
+    name: 'Curve 3Pool',
+    protocol: 'Curve',
+    network: 'Ethereum',
+    asset: 'USDC/USDT/DAI',
+    apy: 5.8,
+    totalDeposits: '$2.1B',
+    strategy: 'LP into Curve\'s stablecoin pool (USDC/USDT/DAI). You earn swap fees plus CRV tokens. Small risk if one of the stables depegs.',
+    riskLevel: 'medium',
+    logo: CB + 'curve.fi',
+  },
+  {
+    id: 'gmx-glp',
+    name: 'GMX GLP',
+    protocol: 'GMX',
+    network: 'Arbitrum',
+    asset: 'GLP',
+    apy: 8.5,
+    totalDeposits: '$450M',
+    strategy: 'Be the house on GMX. Mint GLP, let perps traders trade against you, and keep 70% of the fees (paid in ETH). You hold a mix of ETH, BTC, and stables.',
+    riskLevel: 'medium',
+    logo: CB + 'gmx.io',
+  },
+  // HIGH
+  {
+    id: 'pendle-eeth',
+    name: 'Pendle eETH',
+    protocol: 'Pendle',
+    network: 'Ethereum',
+    asset: 'eETH',
+    apy: 18.5,
+    totalDeposits: '$320M',
+    strategy: 'Yield trading on EtherFi eETH via Pendle. Lock in a fixed rate or bet on variable. The high APY mostly comes from points and restaking, so it can fluctuate.',
+    riskLevel: 'high',
+    logo: CB + 'pendle.finance',
+  },
+  {
+    id: 'eigenlayer-restake',
+    name: 'EigenLayer Restake',
+    protocol: 'EigenLayer',
+    network: 'Ethereum',
+    asset: 'ETH/LST',
+    apy: 12.0,
+    totalDeposits: '$8.9B',
+    strategy: 'Restake your ETH (or LSTs) on EigenLayer to secure other protocols. Extra yield on top of normal staking, but you can get slashed if a validator misbehaves.',
+    riskLevel: 'high',
+    logo: CB + 'eigenlayer.xyz',
+  },
+  {
+    id: 'morpho-leverage',
+    name: 'Morpho Leverage',
+    protocol: 'Morpho',
+    network: 'Ethereum',
+    asset: 'WETH',
+    apy: 22.4,
+    totalDeposits: '$180M',
+    strategy: 'Leveraged looping on Morpho Blue. Deposit ETH, borrow stables, re-deposit, repeat. Big APY, but if ETH drops fast you get liquidated.',
+    riskLevel: 'high',
+    logo: CB + 'morpho.org',
+  },
+]
+
+export function getYieldProtocols(riskLevel) {
+  if (!riskLevel) return protocols
+  return protocols.filter(p => p.riskLevel === riskLevel)
+}
+
+export function getYieldById(id) {
+  return protocols.find(p => p.id === id) || null
+}
