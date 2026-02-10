@@ -29,8 +29,8 @@ export default function Portfolio() {
   // Only include holdings from wallets that actually have an address
   const realHoldings = useMemo(() => {
     const result = []
-    if (hasEvm) result.push(...evmHoldings)
     if (hasSol) result.push(...solHoldings)
+    if (hasEvm) result.push(...evmHoldings)
     return result.sort((a, b) => b.value - a.value)
   }, [evmHoldings, solHoldings, hasEvm, hasSol])
 
@@ -46,19 +46,19 @@ export default function Portfolio() {
   const totalValue = isDemo ? demoPortfolio.totalValue : realTotal
 
   const chainName = hasEvm && hasSol
-    ? 'Ethereum + Solana'
-    : hasEvm
-      ? 'Ethereum'
-      : hasSol
-        ? 'Solana'
+    ? 'Solana + Ethereum'
+    : hasSol
+      ? 'Solana'
+      : hasEvm
+        ? 'Ethereum'
         : ''
 
   // Build greeting name from wallets that actually have an address
   const greetingName = (() => {
     if (hasEvm && hasSol) {
-      const evmLabel = ensName || `${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`
       const solLabel = `${solanaAddress.slice(0, 4)}...${solanaAddress.slice(-4)}`
-      return `${evmLabel} + ${solLabel}`
+      const evmLabel = ensName || `${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`
+      return `${solLabel} + ${evmLabel}`
     }
     if (hasSol) {
       return `${solanaAddress.slice(0, 4)}...${solanaAddress.slice(-4)}`

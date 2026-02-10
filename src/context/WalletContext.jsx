@@ -15,19 +15,19 @@ export function WalletProvider({ children }) {
 
   const isConnected = isEvmConnected || isSolanaConnected
 
-  // displayName prefers ENS > truncated EVM > truncated Solana
+  // displayName prefers ENS > truncated Solana > truncated EVM
   let displayName = ''
   if (ensName) {
     displayName = ensName
-  } else if (evmAddress) {
-    displayName = `${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`
   } else if (solanaAddress) {
     displayName = `${solanaAddress.slice(0, 4)}...${solanaAddress.slice(-4)}`
+  } else if (evmAddress) {
+    displayName = `${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`
   }
 
   return (
     <WalletContext.Provider value={{
-      address: evmAddress || null,
+      address: solanaAddress || evmAddress || null,
       evmAddress: evmAddress || null,
       solanaAddress,
       isConnected,

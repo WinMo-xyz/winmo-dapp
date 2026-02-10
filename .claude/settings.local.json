@@ -9,7 +9,19 @@
       "Bash(git rm:*)",
       "Bash(git commit:*)",
       "Bash(netlify status:*)",
-      "WebFetch(domain:animated-churros-b3f2ca.netlify.app)"
+      "WebFetch(domain:animated-churros-b3f2ca.netlify.app)",
+      "Bash(curl:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git mv:*)",
+      "Bash(npx netlify-cli functions:list:*)",
+      "Bash(npx @netlify/zip-it-and-ship-it:*)",
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(node -e:*)",
+      "Bash(python3 -m json.tool:*)",
+      "WebSearch",
+      "WebFetch(domain:hub.jup.ag)",
+      "WebFetch(domain:dev.jup.ag)"
     ]
   }
 }

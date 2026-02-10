@@ -141,6 +141,10 @@
   font-size: 15px;
 }
 
+.buy-panel-buy-btn + .buy-panel-buy-btn {
+  margin-top: 10px;
+}
+
 .buy-panel-buy-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -155,6 +159,42 @@
   background: var(--success);
   border-color: var(--success);
   opacity: 1;
+}
+
+.buy-panel-chain-info {
+  font-size: 13px;
+  color: var(--color-light-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  background: var(--light-3);
+  border: 1px solid var(--light-5);
+  border-radius: var(--radius-3);
+}
+
+.buy-panel-chain-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9945ff;
+  background: rgba(153, 69, 255, 0.1);
+  border: 1px solid rgba(153, 69, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: var(--radius-rounded);
+  white-space: nowrap;
+}
+
+.buy-panel-info-msg {
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-3);
+  background: rgba(var(--accent-rgb), 0.08);
+  line-height: 1.4;
 }
 
 .buy-panel-error {

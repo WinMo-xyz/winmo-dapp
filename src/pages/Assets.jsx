@@ -29,7 +29,7 @@ function formatPrice(price) {
 }
 
 export default function Assets() {
-  const [activeTab, setActiveTab] = useState('Stocks')
+  const [activeTab, setActiveTab] = useState('Crypto')
   const [stockSub, setStockSub] = useState('pre-ipo')
   const [cryptoSub, setCryptoSub] = useState('large-cap')
   const [buyAsset, setBuyAsset] = useState(null)

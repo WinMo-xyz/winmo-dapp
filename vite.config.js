@@ -39,6 +39,14 @@ export default defineConfig(({ mode }) => {
             'Authorization': `Bearer ${env.VITE_1INCH_API_KEY || ''}`,
           },
         },
+        '/api/jupiter': {
+          target: 'https://api.jup.ag',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/jupiter/, ''),
+          headers: {
+            'x-api-key': env.VITE_JUPITER_API_KEY || '',
+          },
+        },
       },
     },
   }

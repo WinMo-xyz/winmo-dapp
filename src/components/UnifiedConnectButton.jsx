@@ -52,17 +52,17 @@ export default function UnifiedConnectButton({ compact = false }) {
               <div className="unified-picker">
                 <button
                   className="unified-picker-option"
-                  onClick={() => { setPickerOpen(false); openConnectModal() }}
-                >
-                  <span className="unified-picker-icon">Ξ</span>
-                  <span>Ethereum</span>
-                </button>
-                <button
-                  className="unified-picker-option"
                   onClick={() => { setPickerOpen(false); openSolanaModal(true) }}
                 >
                   <span className="unified-picker-icon">◎</span>
                   <span>Solana</span>
+                </button>
+                <button
+                  className="unified-picker-option"
+                  onClick={() => { setPickerOpen(false); openConnectModal() }}
+                >
+                  <span className="unified-picker-icon">Ξ</span>
+                  <span>Ethereum</span>
                 </button>
               </div>
             )}
@@ -78,16 +78,6 @@ export default function UnifiedConnectButton({ compact = false }) {
       {({ account, chain, openAccountModal, openConnectModal }) => (
         <div className="unified-connect" ref={ref}>
           <div className="unified-connected-group">
-            {/* EVM wallet */}
-            {hasEvm && account ? (
-              <button className="unified-wallet-pill" onClick={openAccountModal}>
-                {chain?.iconUrl && (
-                  <img src={chain.iconUrl} alt={chain.name} className="unified-chain-icon" />
-                )}
-                <span className="unified-wallet-addr">{account.displayName}</span>
-              </button>
-            ) : null}
-
             {/* Solana wallet */}
             {hasSol ? (
               <button className="unified-wallet-pill solana" onClick={disconnectSolana}>
@@ -97,6 +87,16 @@ export default function UnifiedConnectButton({ compact = false }) {
                   <span className="unified-picker-icon sm">◎</span>
                 )}
                 {!compact && <span className="unified-wallet-addr">{truncatedSolana}</span>}
+              </button>
+            ) : null}
+
+            {/* EVM wallet */}
+            {hasEvm && account ? (
+              <button className="unified-wallet-pill" onClick={openAccountModal}>
+                {chain?.iconUrl && (
+                  <img src={chain.iconUrl} alt={chain.name} className="unified-chain-icon" />
+                )}
+                <span className="unified-wallet-addr">{account.displayName}</span>
               </button>
             ) : null}
 
@@ -114,15 +114,6 @@ export default function UnifiedConnectButton({ compact = false }) {
 
           {pickerOpen && (
             <div className="unified-picker">
-              {!hasEvm && (
-                <button
-                  className="unified-picker-option"
-                  onClick={() => { setPickerOpen(false); openConnectModal() }}
-                >
-                  <span className="unified-picker-icon">Ξ</span>
-                  <span>Ethereum</span>
-                </button>
-              )}
               {!hasSol && (
                 <button
                   className="unified-picker-option"
@@ -130,6 +121,15 @@ export default function UnifiedConnectButton({ compact = false }) {
                 >
                   <span className="unified-picker-icon">◎</span>
                   <span>Solana</span>
+                </button>
+              )}
+              {!hasEvm && (
+                <button
+                  className="unified-picker-option"
+                  onClick={() => { setPickerOpen(false); openConnectModal() }}
+                >
+                  <span className="unified-picker-icon">Ξ</span>
+                  <span>Ethereum</span>
                 </button>
               )}
             </div>

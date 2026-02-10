@@ -64,17 +64,17 @@ export default function Home() {
                     <div className="home-chain-picker">
                       <button
                         className="home-chain-option"
-                        onClick={() => { setPickerOpen(false); openConnectModal() }}
-                      >
-                        <span className="home-chain-icon">Ξ</span>
-                        <span>Ethereum</span>
-                      </button>
-                      <button
-                        className="home-chain-option"
                         onClick={() => { setPickerOpen(false); openSolanaModal(true) }}
                       >
                         <span className="home-chain-icon">◎</span>
                         <span>Solana</span>
+                      </button>
+                      <button
+                        className="home-chain-option"
+                        onClick={() => { setPickerOpen(false); openConnectModal() }}
+                      >
+                        <span className="home-chain-icon">Ξ</span>
+                        <span>Ethereum</span>
                       </button>
                     </div>
                   )}

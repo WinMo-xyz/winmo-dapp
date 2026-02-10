@@ -1,4 +1,5 @@
 import { fetchCryptoPrices } from './cmcApi.js'
+import { SPL_TOKEN_LIST } from '../config/solanaTokens.js'
 
 const CB = 'https://logo.clearbit.com/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
@@ -31,14 +32,14 @@ const stocks = [
 
 const crypto = [
   // Large Cap
+  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: CI + 'sol.svg' },
   { id: 'btc', name: 'Bitcoin', symbol: 'BTC', price: 104250.00, change24h: 1.45, category: 'crypto', subcategory: 'large-cap', logo: CI + 'btc.svg', ethereumAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599' },
   { id: 'eth', name: 'Ethereum', symbol: 'ETH', price: 3890.50, change24h: 2.78, category: 'crypto', subcategory: 'large-cap', logo: CI + 'eth.svg', ethereumAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
   { id: 'bnb', name: 'BNB', symbol: 'BNB', price: 715.40, change24h: 0.89, category: 'crypto', subcategory: 'large-cap', logo: CI + 'bnb.svg', ethereumAddress: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605' },
-  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: CI + 'sol.svg' },
   // Mid Cap
+  { id: 'jup', name: 'Jupiter', symbol: 'JUP', price: 1.24, change24h: 4.56, category: 'crypto', subcategory: 'mid-cap', logo: 'https://static.jup.ag/jup/icon.png' },
   { id: 'uni', name: 'Uniswap', symbol: 'UNI', price: 14.20, change24h: 4.56, category: 'crypto', subcategory: 'mid-cap', logo: CI + 'uni.svg', ethereumAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984' },
   { id: 'mnt', name: 'Mantle', symbol: 'MNT', price: 1.08, change24h: 2.34, category: 'crypto', subcategory: 'mid-cap', logo: CB + 'mantle.xyz', ethereumAddress: '0x3c3a81e81dc49a522a592e7622a7e711c06bf354' },
-  { id: 'jup', name: 'Jupiter', symbol: 'JUP', price: 1.24, change24h: 4.56, category: 'crypto', subcategory: 'mid-cap', logo: 'https://static.jup.ag/jup/icon.png' },
   // Small Cap
   { id: 'ray', name: 'Raydium', symbol: 'RAY', price: 5.85, change24h: 3.12, category: 'crypto', subcategory: 'small-cap', logo: CI + 'ray.svg' },
   { id: 'orca-token', name: 'Orca', symbol: 'ORCA', price: 4.20, change24h: 2.45, category: 'crypto', subcategory: 'small-cap', logo: CI + 'orca.svg' },
@@ -190,6 +191,22 @@ const defaultDetail = {
 }
 
 const allAssets = [...stocks, ...crypto, ...commodities, ...bonds]
+
+// Build set of symbols available on Solana from SPL token list
+const _solanaSymbols = new Set(SPL_TOKEN_LIST.map(t => t.symbol))
+_solanaSymbols.add('SOL') // Native SOL (WSOL is the wrapped SPL version)
+
+// Asset symbols that differ from their SPL symbol
+const _solanaAliases = { XAU: 'PAXG' }
+
+export function getAssetChains(asset) {
+  const chains = []
+  if (_solanaSymbols.has(asset.symbol) || _solanaSymbols.has(_solanaAliases[asset.symbol])) {
+    chains.push('solana')
+  }
+  if (asset.ethereumAddress) chains.push('ethereum')
+  return chains
+}
 
 export function getStocks(subcategory) {
   if (!subcategory) return stocks
