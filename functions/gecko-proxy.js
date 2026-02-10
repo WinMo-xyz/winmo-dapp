@@ -1,4 +1,4 @@
-export const handler = async (event) => {
+exports.handler = async (event) => {
   const path = event.path.replace(/^\/.netlify\/functions\/gecko-proxy/, '') || '/'
   const qs = event.rawQuery ? `?${event.rawQuery}` : ''
   const target = `https://api.coingecko.com${path}${qs}`
