@@ -5,6 +5,17 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react()],
+    define: {
+      global: 'globalThis',
+    },
+    resolve: {
+      alias: {
+        buffer: 'buffer',
+      },
+    },
+    optimizeDeps: {
+      include: ['buffer'],
+    },
     server: {
       proxy: {
         '/api/cmc': {
