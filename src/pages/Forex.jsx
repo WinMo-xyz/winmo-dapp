@@ -70,41 +70,10 @@ export default function Forex() {
 // ── Markets Tab ──────────────────────────────────────────────────────────
 
 function MarketsTab({ markets, isLoading, onTrade }) {
-  const [filter, setFilter] = useState('all')
-  const [search, setSearch] = useState('')
-
-  const filtered = useMemo(() => {
-    let list = markets
-    if (filter !== 'all') list = list.filter(m => m.category === filter)
-    if (search) {
-      const q = search.toUpperCase()
-      list = list.filter(m => m.pair.includes(q) || m.base.includes(q) || m.quote.includes(q))
-    }
-    return list
-  }, [markets, filter, search])
-
   if (isLoading) return <div className="forex-loading"><p className="forex-loading-text">Loading FX rates...</p></div>
 
   return (
     <div>
-      <div className="forex-markets-filters">
-        {['all', 'major', 'cross', 'exotic'].map(cat => (
-          <button
-            key={cat}
-            className={`forex-filter-btn ${filter === cat ? 'active' : ''}`}
-            onClick={() => setFilter(cat)}
-          >
-            {cat === 'all' ? `All (${markets.length})` : cat}
-          </button>
-        ))}
-        <input
-          className="forex-search"
-          placeholder="Search pairs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
       <div className="forex-table-wrap glass-card">
         <table className="forex-table">
           <thead>
@@ -117,7 +86,7 @@ function MarketsTab({ markets, isLoading, onTrade }) {
             </tr>
           </thead>
           <tbody>
-            {filtered.map(m => (
+            {markets.map(m => (
               <tr key={m.pair}>
                 <td>
                   <div className="forex-pair-cell">
@@ -140,7 +109,7 @@ function MarketsTab({ markets, isLoading, onTrade }) {
       </div>
 
       <p className="forex-table-footer">
-        {filtered.length} pairs &middot; {filtered.filter(m => m.tradeable).length} tradeable on Solana &middot; Volume data from BIS Triennial Survey
+        {markets.length} pairs &middot; {markets.filter(m => m.tradeable).length} tradeable on Solana &middot; Volume data from BIS Triennial Survey
       </p>
     </div>
   )
@@ -260,29 +229,44 @@ function ArbitrageTab() {
 
   useEffect(() => {
     let cancelled = false
-    setArbLoading(true)
+
+    async function fetchOne(p) {
+      const fromToken = FOREX_TOKENS[p.from]
+      const toToken = FOREX_TOKENS[p.to]
+      if (!fromToken || !toToken) return null
+      const key = `${p.from}>${p.to}`
+      try {
+        const amount = toSmallestUnit('100', fromToken.decimals)
+        const q = await getQuote(fromToken.mint, toToken.mint, amount)
+        const outNum = Number(fromSmallestUnit(q.outAmount, toToken.decimals))
+        return { key, rate: outNum / 100 }
+      } catch {
+        return { key, rate: null }
+      }
+    }
 
     async function scan() {
-      if (!cancelled) setArbLoading(true)
-      const results = {}
-      for (const p of ARB_PAIRS) {
+      if (cancelled) return
+      setArbLoading(true)
+
+      // Process in parallel batches of 4
+      const BATCH = 4
+      for (let i = 0; i < ARB_PAIRS.length; i += BATCH) {
         if (cancelled) break
-        const fromToken = FOREX_TOKENS[p.from]
-        const toToken = FOREX_TOKENS[p.to]
-        if (!fromToken || !toToken) continue
-        const key = `${p.from}>${p.to}`
-        try {
-          const amount = toSmallestUnit('100', fromToken.decimals)
-          const q = await getQuote(fromToken.mint, toToken.mint, amount)
-          const outNum = Number(fromSmallestUnit(q.outAmount, toToken.decimals))
-          results[key] = { rate: outNum / 100 }
-        } catch {
-          results[key] = { rate: null }
-        }
-        await new Promise(r => setTimeout(r, 200))
+        const batch = ARB_PAIRS.slice(i, i + BATCH)
+        const results = await Promise.all(batch.map(fetchOne))
+        if (cancelled) break
+        // Stream each batch into state immediately
+        setArbData(prev => {
+          const next = { ...prev }
+          for (const r of results) {
+            if (r) next[r.key] = { rate: r.rate }
+          }
+          return next
+        })
       }
+
       if (!cancelled) {
-        setArbData(results)
         setArbLoading(false)
         setLastScan(Date.now())
         setCountdown(60)
@@ -429,7 +413,7 @@ function ArbRow({ pairKey, p, r, spread, dir, arbLoading, isExpanded, onToggle }
             className={`forex-trade-btn ${isExpanded ? 'active' : ''}`}
             onClick={onToggle}
           >
-            {isExpanded ? 'Close' : 'Swap'}
+            {isExpanded ? 'Close' : 'Trade'}
           </button>
         </td>
       </tr>
@@ -542,7 +526,7 @@ function ArbInlineSwap({ from: initFrom, to: initTo, onClose }) {
       setStatus('success')
       setTimeout(() => { setStatus('idle'); setAmount(''); setOutAmount(''); setQuote(null) }, 3000)
     } catch (err) {
-      setError(err.message || 'Swap failed')
+      setError(err.message || 'Trade failed')
       setStatus('error')
     }
   }, [connected, publicKey, quote, amount, fromToken, toToken, from, to, outAmount, signTransaction, connection, openWalletModal])
@@ -631,11 +615,11 @@ function ArbInlineSwap({ from: initFrom, to: initTo, onClose }) {
           disabled={isSwapping || quoteLoading || (connected && (!quote || !amount || parseFloat(amount) <= 0))}
         >
           {!connected ? 'Connect Wallet'
-            : isSwapping ? 'Swapping...'
+            : isSwapping ? 'Trading...'
             : status === 'success' ? 'Done!'
             : status === 'error' ? 'Retry'
             : quoteLoading ? 'Getting Quote...'
-            : `Swap ${from} → ${to}`}
+            : `Trade ${from} → ${to}`}
         </button>
       </div>
     </div>

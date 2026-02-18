@@ -3,7 +3,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { SPL_TOKEN_LIST } from '../config/solanaTokens'
 
-const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
+const SOL_LOGO = 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png'
 
 // Build a mint -> token metadata lookup from SPL_TOKEN_LIST
 const MINT_MAP = new Map()
@@ -106,7 +106,7 @@ export function useSolanaPortfolio(priceMap) {
         price,
         value,
         chain: 'Solana',
-        logo: CI + 'sol.svg',
+        logo: SOL_LOGO,
       })
     }
 

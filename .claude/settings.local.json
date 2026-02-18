@@ -55,7 +55,10 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(ls:*)",
-      "Bash(npx -y tsx -e:*)"
+      "Bash(npx -y tsx -e:*)",
+      "WebFetch(domain:dinari.com)",
+      "WebFetch(domain:www.k.co.cr)",
+      "WebFetch(domain:www.kraken.com)"
     ]
   }
 }

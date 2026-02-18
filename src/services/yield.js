@@ -1,4 +1,4 @@
-const CB = 'https://logo.clearbit.com/'
+const CB = 'https://icon.horse/icon/'
 
 const protocols = [
   // SAFE

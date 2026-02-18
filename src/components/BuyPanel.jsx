@@ -6,20 +6,21 @@ import { useEvmAssetBalance, useSolanaAssetBalance, useEvmPaymentBalance, useSol
 import { useWallet } from '../context/WalletContext'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { getAssetChains } from '../services/assets'
+import { getAssetChains, getAssetProviders, PROVIDERS } from '../services/assets'
 import './BuyPanel.css'
 
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
+const SOL_LOGO = 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png'
 
 const EVM_PAYMENT_TOKENS = [
   { symbol: 'USDC', logo: CI + 'usdc.svg' },
   { symbol: 'USDT', logo: CI + 'usdt.svg' },
   { symbol: 'ETH', logo: CI + 'eth.svg' },
-  { symbol: 'SOL', logo: CI + 'sol.svg' },
+  { symbol: 'SOL', logo: SOL_LOGO },
 ]
 
 const SOLANA_PAYMENT_TOKENS = [
-  { symbol: 'SOL', logo: CI + 'sol.svg' },
+  { symbol: 'SOL', logo: SOL_LOGO },
   { symbol: 'USDC', logo: CI + 'usdc.svg' },
   { symbol: 'USDT', logo: CI + 'usdt.svg' },
 ]
@@ -46,11 +47,18 @@ export default function BuyPanel({ asset }) {
   const { setVisible: openSolanaModal } = useWalletModal()
   const { openConnectModal } = useConnectModal()
 
+  // Provider selection for stocks with multiple RWA providers
+  const availableProviders = asset ? getAssetProviders(asset) : []
+  const hasProviders = availableProviders.length > 0
+  const [selectedProvider, setSelectedProvider] = useState(availableProviders[0] || null)
+
   // EVM swap hook (KyberSwap)
-  const evmSwap = useSwap(asset, mode)
+  const evmProvider = selectedProvider?.chain === 'ethereum' ? selectedProvider : undefined
+  const evmSwap = useSwap(asset, mode, evmProvider)
 
   // Solana swap hook (Jupiter)
-  const solSwap = useSolanaSwap(asset, mode)
+  const solProvider = selectedProvider?.chain === 'solana' ? selectedProvider : undefined
+  const solSwap = useSolanaSwap(asset, mode, solProvider)
 
   // Asset balance (for sell mode)
   const evmAssetBal = useEvmAssetBalance(asset)
@@ -63,6 +71,9 @@ export default function BuyPanel({ asset }) {
   // Manual override when user clicks "Try on ..." after a swap error
   const [chainOverride, setChainOverride] = useState(null)
 
+  // When provider is selected, its chain determines the active chain
+  const providerChain = selectedProvider?.chain || null
+
   // Prefer Solana (primary), fall back to EVM based on wallet connectivity
   const autoChain =
     (hasSolanaRoute && isSolanaConnected) ? 'solana'
@@ -70,7 +81,7 @@ export default function BuyPanel({ asset }) {
     : hasSolanaRoute ? 'solana'
     : hasEvmRoute ? 'ethereum'
     : null
-  const activeChain = chainOverride || autoChain
+  const activeChain = hasProviders ? (providerChain || autoChain) : (chainOverride || autoChain)
   const useSolana = activeChain === 'solana'
 
   // Pick the right swap context
@@ -78,9 +89,9 @@ export default function BuyPanel({ asset }) {
   const { quote, quoteLoading, quoteError, swapStatus, swapError, fetchQuote, executeSwap, reset } = swap
   const paymentTokens = useSolana ? SOLANA_PAYMENT_TOKENS : EVM_PAYMENT_TOKENS
 
-  // Alternate chain available for fallback
-  const alternateChain = useSolana && hasEvmRoute ? 'ethereum'
-    : !useSolana && hasSolanaRoute ? 'solana'
+  // Alternate chain available for fallback (only for non-provider assets)
+  const alternateChain = !hasProviders
+    ? (useSolana && hasEvmRoute ? 'ethereum' : !useSolana && hasSolanaRoute ? 'solana' : null)
     : null
 
   const [payToken, setPayToken] = useState(paymentTokens[0].symbol)
@@ -96,8 +107,12 @@ export default function BuyPanel({ asset }) {
     ? (useSolana ? solAssetBal : evmAssetBal)
     : (useSolana ? solPayBal : evmPayBal)
 
-  // Reset override + payToken when asset changes
-  useEffect(() => { setChainOverride(null) }, [asset?.id])
+  // Reset override + provider when asset changes
+  useEffect(() => {
+    setChainOverride(null)
+    const providers = asset ? getAssetProviders(asset) : []
+    setSelectedProvider(providers[0] || null)
+  }, [asset?.id])
 
   // Reset payToken when chain switches
   useEffect(() => {
@@ -172,6 +187,13 @@ export default function BuyPanel({ asset }) {
     }
   }
 
+  const handleProviderSelect = (p) => {
+    setSelectedProvider(p)
+    setAmount('')
+    setReceive('')
+    reset()
+  }
+
   // Format balance for display
   const formatBalance = (bal) => {
     if (bal == null) return '...'
@@ -207,6 +229,27 @@ export default function BuyPanel({ asset }) {
           {actionLabel} {asset.name}
           <span className="buy-panel-symbol">{asset.symbol}</span>
         </h3>
+
+        {hasProviders && (
+          <div className="buy-panel-field">
+            <label className="buy-panel-label">Provider</label>
+            <div className="buy-panel-provider-select">
+              {availableProviders.map(p => (
+                <button
+                  key={p.provider}
+                  className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider ? 'active' : ''}`}
+                  onClick={() => handleProviderSelect(p)}
+                >
+                  <img src={PROVIDERS[p.provider].logo} alt={PROVIDERS[p.provider].name} width={20} height={20} />
+                  <div className="buy-panel-provider-info">
+                    <span className="buy-panel-provider-name">{PROVIDERS[p.provider].name}</span>
+                    <span className="buy-panel-provider-chain">{p.chain}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="buy-panel-chain-info">
           <span className="buy-panel-chain-badge">{chainLabel}</span>
@@ -291,6 +334,28 @@ export default function BuyPanel({ asset }) {
         {actionLabel} {asset.name}
         <span className="buy-panel-symbol">{asset.symbol}</span>
       </h3>
+
+      {hasProviders && (
+        <div className="buy-panel-field">
+          <label className="buy-panel-label">Provider</label>
+          <div className="buy-panel-provider-select">
+            {availableProviders.map(p => (
+              <button
+                key={p.provider}
+                className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider ? 'active' : ''}`}
+                onClick={() => handleProviderSelect(p)}
+                disabled={isSwapping}
+              >
+                <img src={PROVIDERS[p.provider].logo} alt={PROVIDERS[p.provider].name} width={20} height={20} />
+                <div className="buy-panel-provider-info">
+                  <span className="buy-panel-provider-name">{PROVIDERS[p.provider].name}</span>
+                  <span className="buy-panel-provider-chain">{p.chain}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="buy-panel-field">
         <label className="buy-panel-label">{isSell ? 'Receive in' : 'Pay with'}</label>

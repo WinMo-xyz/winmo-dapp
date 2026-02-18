@@ -1,5 +1,5 @@
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
-const CB = 'https://logo.clearbit.com/'
+const CB = 'https://icon.horse/icon/'
 
 export function getPortfolio() {
   const holdings = [
@@ -10,7 +10,7 @@ export function getPortfolio() {
     // Crypto large cap
     { asset: 'Ethereum', symbol: 'ETH', balance: '0.45', price: 3890.50, value: 1750.73, chain: 'Ethereum', logo: CI + 'eth.svg' },
     { asset: 'Bitcoin', symbol: 'BTC', balance: '0.012', price: 104250.00, value: 1251.00, chain: 'Bitcoin', logo: CI + 'btc.svg' },
-    { asset: 'Solana', symbol: 'SOL', balance: '4.5', price: 248.30, value: 1117.35, chain: 'Solana', logo: CI + 'sol.svg' },
+    { asset: 'Solana', symbol: 'SOL', balance: '4.5', price: 248.30, value: 1117.35, chain: 'Solana', logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png' },
     { asset: 'BNB', symbol: 'BNB', balance: '1.2', price: 715.40, value: 858.48, chain: 'BNB Chain', logo: CI + 'bnb.svg' },
     // Crypto mid/small cap
     { asset: 'Uniswap', symbol: 'UNI', balance: '25', price: 14.20, value: 355.00, chain: 'Ethereum', logo: CI + 'uni.svg' },

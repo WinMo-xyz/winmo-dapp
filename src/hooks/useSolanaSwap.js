@@ -18,7 +18,7 @@ import {
  * @param {object} asset — the target asset (from assets.js)
  * @param {'buy'|'sell'} mode — 'buy' swaps payment→asset, 'sell' swaps asset→payment
  */
-export function useSolanaSwap(asset, mode = 'buy') {
+export function useSolanaSwap(asset, mode = 'buy', provider) {
   const { publicKey, signTransaction } = useWallet()
   const { connection } = useConnection()
 
@@ -30,8 +30,8 @@ export function useSolanaSwap(asset, mode = 'buy') {
   const debounceRef = useRef(null)
 
   const isSell = mode === 'sell'
-  const assetMint = resolveSolanaMint(asset)
-  const assetDecimals = assetMint ? getSplDecimals(assetMint) : 6
+  const assetMint = resolveSolanaMint(asset, provider)
+  const assetDecimals = provider?.decimals ?? (assetMint ? getSplDecimals(assetMint) : 6)
 
   // ── Quote ──────────────────────────────────────────────
 

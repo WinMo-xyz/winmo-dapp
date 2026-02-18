@@ -39,8 +39,9 @@ export function fromSmallestUnit(raw, decimals) {
  * Resolve an asset object to its Ethereum mainnet token address.
  * Returns null when no on-chain representation exists (e.g. SOL-native tokens).
  */
-export function resolveTokenAddress(asset) {
+export function resolveTokenAddress(asset, provider) {
   if (!asset) return null
+  if (provider?.chain === 'ethereum' && provider.address) return provider.address
   if (asset.ethereumAddress) return asset.ethereumAddress
   if (SYMBOL_OVERRIDES[asset.symbol]) return SYMBOL_OVERRIDES[asset.symbol]
   const chain = getTokensForChain(CHAIN_ID)

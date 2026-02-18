@@ -2,73 +2,217 @@ import { fetchCryptoPrices } from './cmcApi.js'
 import { SPL_TOKEN_LIST } from '../config/solanaTokens.js'
 import { FX_MARKETS, CURRENCY_META } from '../config/forex'
 
-const CB = 'https://logo.clearbit.com/'
+const CB = 'https://icon.horse/icon/'
+const CM = 'https://companiesmarketcap.com/img/company-logos/64/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
-const CG = 'https://coin-images.coingecko.com/coins/images/'
+const CG = 'https://assets.coingecko.com/coins/images/'
+
+// RWA token provider metadata
+export const PROVIDERS = {
+  ondo:   { name: 'Ondo', chain: 'ethereum', logo: CB + 'ondo.finance' },
+  backed: { name: 'Backed', chain: 'solana', logo: CB + 'backed.fi' },
+  dinari: { name: 'Dinari', chain: 'arbitrum', logo: CB + 'dinari.com' },
+}
 
 const stocks = [
-  // Pre-IPO
+  // Pre-IPO (no providers)
   { id: 'openai', name: 'OpenAI', symbol: 'OPENAI', price: 245.00, change24h: 3.45, category: 'stocks', subcategory: 'pre-ipo', logo: CB + 'openai.com' },
   { id: 'anthropic', name: 'Anthropic', symbol: 'ANTH', price: 185.50, change24h: 2.78, category: 'stocks', subcategory: 'pre-ipo', logo: CB + 'anthropic.com' },
   { id: 'xai', name: 'xAI', symbol: 'XAI', price: 120.75, change24h: 4.12, category: 'stocks', subcategory: 'pre-ipo', logo: CB + 'x.ai' },
   { id: 'spacex', name: 'SpaceX', symbol: 'SPACEX', price: 350.00, change24h: 1.95, category: 'stocks', subcategory: 'pre-ipo', logo: CB + 'spacex.com' },
   { id: 'polymarket', name: 'Polymarket', symbol: 'POLY', price: 42.30, change24h: 5.67, category: 'stocks', subcategory: 'pre-ipo', logo: CB + 'polymarket.com' },
   // Large Cap
-  { id: 'aapl', name: 'Apple', symbol: 'AAPL', price: 198.45, change24h: 0.67, category: 'stocks', subcategory: 'large-cap', logo: CB + 'apple.com' },
-  { id: 'googl', name: 'Alphabet', symbol: 'GOOGL', price: 175.80, change24h: -0.45, category: 'stocks', subcategory: 'large-cap', logo: CB + 'abc.xyz' },
-  { id: 'msft', name: 'Microsoft', symbol: 'MSFT', price: 445.20, change24h: 1.12, category: 'stocks', subcategory: 'large-cap', logo: CB + 'microsoft.com' },
-  { id: 'meta', name: 'Meta', symbol: 'META', price: 585.30, change24h: 1.89, category: 'stocks', subcategory: 'large-cap', logo: CB + 'meta.com' },
-  { id: 'tsla', name: 'Tesla', symbol: 'TSLA', price: 248.50, change24h: -2.34, category: 'stocks', subcategory: 'large-cap', logo: CB + 'tesla.com' },
-  { id: 'jpm', name: 'JPMorgan Chase & Co', symbol: 'JPM', price: 242.80, change24h: 0.78, category: 'stocks', subcategory: 'large-cap', logo: CB + 'jpmorganchase.com' },
-  { id: 'nvda', name: 'NVIDIA', symbol: 'NVDA', price: 140.11, change24h: 2.15, category: 'stocks', subcategory: 'large-cap', logo: CB + 'nvidia.com' },
-  { id: 'amzn', name: 'Amazon', symbol: 'AMZN', price: 228.68, change24h: 1.34, category: 'stocks', subcategory: 'large-cap', logo: CB + 'amazon.com' },
-  { id: 'orcl', name: 'Oracle', symbol: 'ORCL', price: 188.45, change24h: 0.92, category: 'stocks', subcategory: 'large-cap', logo: CB + 'oracle.com' },
-  { id: 'pg', name: 'Procter & Gamble', symbol: 'PG', price: 170.30, change24h: -0.23, category: 'stocks', subcategory: 'large-cap', logo: CB + 'pg.com' },
-  { id: 'qcom', name: 'Qualcomm', symbol: 'QCOM', price: 172.55, change24h: 1.56, category: 'stocks', subcategory: 'large-cap', logo: CB + 'qualcomm.com' },
+  { id: 'aapl', name: 'Apple', symbol: 'AAPL', price: 198.45, change24h: 0.67, category: 'stocks', subcategory: 'large-cap', logo: CB + 'apple.com', providers: [
+    { provider: 'ondo', symbol: 'AAPLon', address: '0x14c3abf95cb9c93a8b82c1cdcb76d72cb87b2d4c', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'AAPLx', address: 'XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'AAPL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'googl', name: 'Alphabet', symbol: 'GOOGL', price: 175.80, change24h: -0.45, category: 'stocks', subcategory: 'large-cap', logo: CB + 'abc.xyz', providers: [
+    { provider: 'ondo', symbol: 'GOOGLon', address: '0xbA47214eDd2bb43099611b208f75E4b42FDcfEDc', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'GOOGLx', address: 'XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'GOOGL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'msft', name: 'Microsoft', symbol: 'MSFT', price: 445.20, change24h: 1.12, category: 'stocks', subcategory: 'large-cap', logo: CB + 'microsoft.com', providers: [
+    { provider: 'ondo', symbol: 'MSFTon', address: '0xB812837b81a3a6b81d7CD74CfB19A7f2784555E5', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'MSFTx', address: 'XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'MSFT.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'meta', name: 'Meta', symbol: 'META', price: 585.30, change24h: 1.89, category: 'stocks', subcategory: 'large-cap', logo: CM + 'META.png', providers: [
+    { provider: 'ondo', symbol: 'METAon', address: '0x59644165402b611b350645555b50afb581c71eb2', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'METAx', address: 'Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'META.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'tsla', name: 'Tesla', symbol: 'TSLA', price: 248.50, change24h: -2.34, category: 'stocks', subcategory: 'large-cap', logo: CM + 'TSLA.png', providers: [
+    { provider: 'ondo', symbol: 'TSLAon', address: '0xf6b1117ec07684D3958caD8BEb1b302bfD21103f', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'TSLAx', address: 'XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'TSLA.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'jpm', name: 'JPMorgan Chase & Co', symbol: 'JPM', price: 242.80, change24h: 0.78, category: 'stocks', subcategory: 'large-cap', logo: CM + 'JPM.png', providers: [
+    { provider: 'ondo', symbol: 'JPMon', address: '0x03c1ec4ca9dbb168e6db0def827c085999cbffaf', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'JPMx', address: 'XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'JPM.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'nvda', name: 'NVIDIA', symbol: 'NVDA', price: 140.11, change24h: 2.15, category: 'stocks', subcategory: 'large-cap', logo: CM + 'NVDA.png', providers: [
+    { provider: 'ondo', symbol: 'NVDAon', address: '0x2d1f7226bd1f780af6b9a49dcc0ae00e8df4bdee', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'NVDAx', address: 'Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'NVDA.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'amzn', name: 'Amazon', symbol: 'AMZN', price: 228.68, change24h: 1.34, category: 'stocks', subcategory: 'large-cap', logo: CB + 'amazon.com', providers: [
+    { provider: 'ondo', symbol: 'AMZNon', address: '0xbb8774FB97436d23d74C1b882E8E9A69322cFD31', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'AMZNx', address: 'Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'AMZN.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'orcl', name: 'Oracle', symbol: 'ORCL', price: 188.45, change24h: 0.92, category: 'stocks', subcategory: 'large-cap', logo: CB + 'oracle.com', providers: [
+    { provider: 'ondo', symbol: 'ORCLon', address: '0x8a23c6baadb88512b30475c83df6a63881e33e1e', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'ORCLx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'ORCL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'pg', name: 'Procter & Gamble', symbol: 'PG', price: 170.30, change24h: -0.23, category: 'stocks', subcategory: 'large-cap', logo: CM + 'PG.png', providers: [
+    { provider: 'ondo', symbol: 'PGon', address: '0x339ce23a355ed6d513dd3e1462975c4ecd86823a', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'PGx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'PG.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'qcom', name: 'Qualcomm', symbol: 'QCOM', price: 172.55, change24h: 1.56, category: 'stocks', subcategory: 'large-cap', logo: CM + 'QCOM.png', providers: [
+    { provider: 'ondo', symbol: 'QCOMon', address: '0xE3419710c1f77D44B4DaB02316d3f048818C4E59', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'QCOMx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'QCOM.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
   // Mid Cap
-  { id: 'mcd', name: "McDonald's Corp", symbol: 'MCD', price: 295.60, change24h: 0.34, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'mcdonalds.com' },
-  { id: 'pep', name: 'PepsiCo', symbol: 'PEP', price: 168.90, change24h: -0.56, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pepsico.com' },
-  { id: 'c', name: 'Citigroup', symbol: 'C', price: 65.40, change24h: 1.23, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'citigroup.com' },
-  { id: 'ba', name: 'Boeing', symbol: 'BA', price: 178.20, change24h: -1.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'boeing.com' },
-  { id: 'coin', name: 'Coinbase', symbol: 'COIN', price: 288.70, change24h: 3.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'coinbase.com' },
-  { id: 'mstr', name: 'MicroStrategy', symbol: 'MSTR', price: 377.20, change24h: 4.12, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'microstrategy.com' },
-  { id: 'pfe', name: 'Pfizer', symbol: 'PFE', price: 26.85, change24h: -0.67, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pfizer.com' },
-  { id: 'crcl', name: 'Circle', symbol: 'CRCL', price: 54.30, change24h: 2.34, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'circle.com' },
-  { id: 'jd', name: 'JD.com', symbol: 'JD', price: 39.75, change24h: 1.89, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'jd.com' },
+  { id: 'mcd', name: "McDonald's Corp", symbol: 'MCD', price: 295.60, change24h: 0.34, category: 'stocks', subcategory: 'mid-cap', logo: CM + 'MCD.png', providers: [
+    { provider: 'ondo', symbol: 'MCDon', address: '0x4c82c8cd9a218612dce60b156b73a36705645e3b', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'MCDx', address: 'XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'MCD.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'pep', name: 'PepsiCo', symbol: 'PEP', price: 168.90, change24h: -0.56, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pepsico.com', providers: [
+    { provider: 'ondo', symbol: 'PEPon', address: '0x3ce219d498d807317f840f4cb0f03fa27dd65046', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'PEPx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'PEP.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'c', name: 'Citigroup', symbol: 'C', price: 65.40, change24h: 1.23, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'citigroup.com', providers: [
+    { provider: 'ondo', symbol: 'Con', address: null, chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'Cx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'C.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'ba', name: 'Boeing', symbol: 'BA', price: 178.20, change24h: -1.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'boeing.com', providers: [
+    { provider: 'ondo', symbol: 'BAon', address: null, chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'BAx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'BA.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'coin', name: 'Coinbase', symbol: 'COIN', price: 288.70, change24h: 3.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'coinbase.com', providers: [
+    { provider: 'ondo', symbol: 'COINon', address: '0xf042cfa86cf1d598a75bdb55c3507a1f39f9493b', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'COINx', address: 'Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'COIN.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'mstr', name: 'MicroStrategy', symbol: 'MSTR', price: 377.20, change24h: 4.12, category: 'stocks', subcategory: 'mid-cap', logo: CM + 'MSTR.png', providers: [
+    { provider: 'ondo', symbol: 'MSTRon', address: '0xcabd955322dfbf94c084929ac5e9eca3feb5556f', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'MSTRx', address: 'XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'MSTR.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'pfe', name: 'Pfizer', symbol: 'PFE', price: 26.85, change24h: -0.67, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pfizer.com', providers: [
+    { provider: 'ondo', symbol: 'PFEon', address: '0x06954faa913fa14c28eb1b2e459594f22f33f3de', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'PFEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'PFE.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'crcl', name: 'Circle', symbol: 'CRCL', price: 54.30, change24h: 2.34, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'circle.com', providers: [
+    { provider: 'ondo', symbol: 'CRCLon', address: '0x3632dea96a953c11dac2f00b4a05a32cd1063fae', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'CRCLx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'CRCL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'jd', name: 'JD.com', symbol: 'JD', price: 39.75, change24h: 1.89, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'jd.com', providers: [
+    { provider: 'ondo', symbol: 'JDon', address: '0xdeB6B89088cA9B7d7756087c8a0F7C6DF46f319C', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'JDx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'JD.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
   // Small Cap
-  { id: 'sbux', name: 'Starbucks', symbol: 'SBUX', price: 98.75, change24h: 0.89, category: 'stocks', subcategory: 'small-cap', logo: CB + 'starbucks.com' },
-  { id: 'adbe', name: 'Adobe', symbol: 'ADBE', price: 485.30, change24h: 2.12, category: 'stocks', subcategory: 'small-cap', logo: CB + 'adobe.com' },
-  { id: 'intu', name: 'Intuit', symbol: 'INTU', price: 625.40, change24h: 1.56, category: 'stocks', subcategory: 'small-cap', logo: CB + 'intuit.com' },
-  { id: 'gme', name: 'GameStop', symbol: 'GME', price: 29.85, change24h: 5.67, category: 'stocks', subcategory: 'small-cap', logo: CB + 'gamestop.com' },
+  { id: 'sbux', name: 'Starbucks', symbol: 'SBUX', price: 98.75, change24h: 0.89, category: 'stocks', subcategory: 'small-cap', logo: CM + 'SBUX.png', providers: [
+    { provider: 'ondo', symbol: 'SBUXon', address: '0xf15fbc1349ab99abad63db3f9a510bf413be3bef', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'SBUXx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'SBUX.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'adbe', name: 'Adobe', symbol: 'ADBE', price: 485.30, change24h: 2.12, category: 'stocks', subcategory: 'small-cap', logo: CB + 'adobe.com', providers: [
+    { provider: 'ondo', symbol: 'ADBEon', address: null, chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'ADBEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'ADBE.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'intu', name: 'Intuit', symbol: 'INTU', price: 625.40, change24h: 1.56, category: 'stocks', subcategory: 'small-cap', logo: CB + 'intuit.com', providers: [
+    { provider: 'ondo', symbol: 'INTUon', address: null, chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'INTUx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'INTU.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'gme', name: 'GameStop', symbol: 'GME', price: 29.85, change24h: 5.67, category: 'stocks', subcategory: 'small-cap', logo: CB + 'gamestop.com', providers: [
+    { provider: 'ondo', symbol: 'GMEon', address: '0x71d24baeb0a033ec5f90ff65c4210545af378d97', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'GMEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'GME.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
   // ETF
-  { id: 'spy', name: 'SPDR S&P 500 ETF', symbol: 'SPY', price: 605.20, change24h: 0.45, category: 'stocks', subcategory: 'etf', logo: CB + 'ssga.com', ethereumAddress: '0xFeDC5f4a6c38211c1338aa411018DFAf26612c08' },
-  { id: 'qqq', name: 'Invesco QQQ ETF', symbol: 'QQQ', price: 525.80, change24h: 0.78, category: 'stocks', subcategory: 'etf', logo: CB + 'invesco.com', ethereumAddress: '0x0e397938c1aa0680954093495b70a9f5e2249aba' },
-  { id: 'iefa', name: 'iShares Core MSCI EAFE ETF', symbol: 'IEFA', price: 79.25, change24h: 0.15, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0xfeff7a377a86462f5a2a872009722c154707f09e' },
-  { id: 'ivv', name: 'iShares Core S&P 500 ETF', symbol: 'IVV', price: 697.00, change24h: 0.42, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x62ca254a363dc3c748e7e955c20447ab5bf06ff7' },
-  { id: 'iwm', name: 'iShares Russell 2000 ETF', symbol: 'IWM', price: 267.00, change24h: -0.35, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x070d79021dd7e841123cb0cf554993bf683c511d' },
-  { id: 'dgrw', name: 'WisdomTree US Quality Dividend Growth Fund', symbol: 'DGRW', price: 46.00, change24h: 0.28, category: 'stocks', subcategory: 'etf', logo: CB + 'wisdomtree.com', ethereumAddress: '0x81eb954936a7062d1758fc0e6e3b88d42d9c361c' },
-  { id: 'eem', name: 'iShares MSCI Emerging Markets ETF', symbol: 'EEM', price: 60.51, change24h: 0.67, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x77a1a02e4a888ada8620b93c30de8a41e621126c' },
-  { id: 'efa', name: 'iShares MSCI EAFE ETF', symbol: 'EFA', price: 104.00, change24h: 0.23, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x4111b60bc87f2bd1e81e783e271d7f0ec6ee088b' },
-  { id: 'iemg', name: 'iShares Core MSCI Emerging Markets ETF', symbol: 'IEMG', price: 72.83, change24h: 0.54, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0xcdd60d15125bf3362b6838d2506b0fa33bc1a515' },
-  { id: 'ijh', name: 'iShares Core S&P MidCap ETF', symbol: 'IJH', price: 71.79, change24h: -0.18, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0xfd50fc4e3686a8da814c5c3d6121d8ab98a537f0' },
-  { id: 'itot', name: 'iShares Core S&P Total US Stock Market ETF', symbol: 'ITOT', price: 151.90, change24h: 0.35, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x0692481c369e2bdc728a69ae31b848343a4567be' },
-  { id: 'iwf', name: 'iShares Russell 1000 Growth ETF', symbol: 'IWF', price: 460.98, change24h: 0.89, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x8d05432c2786e3f93f1a9a62b9572dbf54f3ea06' },
-  { id: 'iwn', name: 'iShares Russell 2000 Value ETF', symbol: 'IWN', price: 200.95, change24h: -0.42, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', ethereumAddress: '0x9dcf7f739b8c0270e2fc0cc8d0dabe355a150dba' },
-  { id: 'psq', name: 'ProShares Short QQQ', symbol: 'PSQ', price: 30.52, change24h: -0.78, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', ethereumAddress: '0x9ebd34d99cc3a45b39cafc14ad7994263fa2be56' },
-  { id: 'sqqq', name: 'ProShares UltraPro Short QQQ', symbol: 'SQQQ', price: 68.32, change24h: -2.15, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', ethereumAddress: '0x0a00c19246fc41b2524d56c87ec44ce8b30ba0f8' },
-  { id: 'tqqq', name: 'ProShares UltraPro QQQ', symbol: 'TQQQ', price: 51.71, change24h: 1.45, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', ethereumAddress: '0xa45cd7ac9865b9539166ebaf2abc362df4736580' },
-  { id: 'vti', name: 'Vanguard Total Stock Market ETF', symbol: 'VTI', price: 342.70, change24h: 0.32, category: 'stocks', subcategory: 'etf', logo: CB + 'vanguard.com', ethereumAddress: '0x57b392146848c6321bb2a3d4358df1bdeacdc62a' },
-  { id: 'vtv', name: 'Vanguard Value ETF', symbol: 'VTV', price: 206.39, change24h: 0.18, category: 'stocks', subcategory: 'etf', logo: CB + 'vanguard.com', ethereumAddress: '0x84e8f1b9b40dd1832925702459d12ffb14d97bf3' },
+  { id: 'spy', name: 'SPDR S&P 500 ETF', symbol: 'SPY', price: 605.20, change24h: 0.45, category: 'stocks', subcategory: 'etf', logo: CB + 'ssga.com', providers: [
+    { provider: 'ondo', symbol: 'SPYon', address: '0xFeDC5f4a6c38211c1338aa411018DFAf26612c08', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'SPYx', address: 'XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'SPY.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'qqq', name: 'Invesco QQQ ETF', symbol: 'QQQ', price: 525.80, change24h: 0.78, category: 'stocks', subcategory: 'etf', logo: CB + 'invesco.com', providers: [
+    { provider: 'ondo', symbol: 'QQQon', address: '0x0e397938c1aa0680954093495b70a9f5e2249aba', chain: 'ethereum', decimals: 18 },
+    { provider: 'backed', symbol: 'QQQx', address: 'Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ', chain: 'solana', decimals: 6 },
+    { provider: 'dinari', symbol: 'QQQ.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'iefa', name: 'iShares Core MSCI EAFE ETF', symbol: 'IEFA', price: 79.25, change24h: 0.15, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IEFAon', address: '0xfeff7a377a86462f5a2a872009722c154707f09e', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'ivv', name: 'iShares Core S&P 500 ETF', symbol: 'IVV', price: 697.00, change24h: 0.42, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IVVon', address: '0x62ca254a363dc3c748e7e955c20447ab5bf06ff7', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'iwm', name: 'iShares Russell 2000 ETF', symbol: 'IWM', price: 267.00, change24h: -0.35, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IWMon', address: '0x070d79021dd7e841123cb0cf554993bf683c511d', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'dgrw', name: 'WisdomTree US Quality Dividend Growth Fund', symbol: 'DGRW', price: 46.00, change24h: 0.28, category: 'stocks', subcategory: 'etf', logo: CB + 'wisdomtree.com', providers: [
+    { provider: 'ondo', symbol: 'DGRWon', address: '0x81eb954936a7062d1758fc0e6e3b88d42d9c361c', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'eem', name: 'iShares MSCI Emerging Markets ETF', symbol: 'EEM', price: 60.51, change24h: 0.67, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'EEMon', address: '0x77a1a02e4a888ada8620b93c30de8a41e621126c', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'efa', name: 'iShares MSCI EAFE ETF', symbol: 'EFA', price: 104.00, change24h: 0.23, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'EFAon', address: '0x4111b60bc87f2bd1e81e783e271d7f0ec6ee088b', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'iemg', name: 'iShares Core MSCI Emerging Markets ETF', symbol: 'IEMG', price: 72.83, change24h: 0.54, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IEMGon', address: '0xcdd60d15125bf3362b6838d2506b0fa33bc1a515', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'ijh', name: 'iShares Core S&P MidCap ETF', symbol: 'IJH', price: 71.79, change24h: -0.18, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IJHon', address: '0xfd50fc4e3686a8da814c5c3d6121d8ab98a537f0', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'itot', name: 'iShares Core S&P Total US Stock Market ETF', symbol: 'ITOT', price: 151.90, change24h: 0.35, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'ITOTon', address: '0x0692481c369e2bdc728a69ae31b848343a4567be', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'iwf', name: 'iShares Russell 1000 Growth ETF', symbol: 'IWF', price: 460.98, change24h: 0.89, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IWFon', address: '0x8d05432c2786e3f93f1a9a62b9572dbf54f3ea06', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'iwn', name: 'iShares Russell 2000 Value ETF', symbol: 'IWN', price: 200.95, change24h: -0.42, category: 'stocks', subcategory: 'etf', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IWNon', address: '0x9dcf7f739b8c0270e2fc0cc8d0dabe355a150dba', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'psq', name: 'ProShares Short QQQ', symbol: 'PSQ', price: 30.52, change24h: -0.78, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', providers: [
+    { provider: 'ondo', symbol: 'PSQon', address: '0x9ebd34d99cc3a45b39cafc14ad7994263fa2be56', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'sqqq', name: 'ProShares UltraPro Short QQQ', symbol: 'SQQQ', price: 68.32, change24h: -2.15, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', providers: [
+    { provider: 'ondo', symbol: 'SQQQon', address: '0x0a00c19246fc41b2524d56c87ec44ce8b30ba0f8', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'tqqq', name: 'ProShares UltraPro QQQ', symbol: 'TQQQ', price: 51.71, change24h: 1.45, category: 'stocks', subcategory: 'etf', logo: CB + 'proshares.com', providers: [
+    { provider: 'ondo', symbol: 'TQQQon', address: '0xa45cd7ac9865b9539166ebaf2abc362df4736580', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'vti', name: 'Vanguard Total Stock Market ETF', symbol: 'VTI', price: 342.70, change24h: 0.32, category: 'stocks', subcategory: 'etf', logo: CB + 'vanguard.com', providers: [
+    { provider: 'ondo', symbol: 'VTIon', address: '0x57b392146848c6321bb2a3d4358df1bdeacdc62a', chain: 'ethereum', decimals: 18 },
+  ] },
+  { id: 'vtv', name: 'Vanguard Value ETF', symbol: 'VTV', price: 206.39, change24h: 0.18, category: 'stocks', subcategory: 'etf', logo: CB + 'vanguard.com', providers: [
+    { provider: 'ondo', symbol: 'VTVon', address: '0x84e8f1b9b40dd1832925702459d12ffb14d97bf3', chain: 'ethereum', decimals: 18 },
+  ] },
 ]
 
 const crypto = [
   // Large Cap
-  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: CI + 'sol.svg' },
+  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png' },
   { id: 'btc', name: 'Bitcoin', symbol: 'BTC', price: 104250.00, change24h: 1.45, category: 'crypto', subcategory: 'large-cap', logo: CI + 'btc.svg', ethereumAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599' },
   { id: 'eth', name: 'Ethereum', symbol: 'ETH', price: 3890.50, change24h: 2.78, category: 'crypto', subcategory: 'large-cap', logo: CI + 'eth.svg', ethereumAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
   { id: 'bnb', name: 'BNB', symbol: 'BNB', price: 715.40, change24h: 0.89, category: 'crypto', subcategory: 'large-cap', logo: CI + 'bnb.svg', ethereumAddress: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605' },
   { id: 'link', name: 'Chainlink', symbol: 'LINK', price: 14.20, change24h: 1.85, category: 'crypto', subcategory: 'large-cap', logo: CI + 'link.svg', ethereumAddress: '0x514910771AF9Ca656af840dff83E8264EcF986CA' },
-  { id: 'trx', name: 'TRON', symbol: 'TRX', price: 0.276, change24h: 0.45, category: 'crypto', subcategory: 'large-cap', logo: CB + 'tron.network', ethereumAddress: '0x50327c6c5a14DCade707ABad2E27eB517dF87AB5' },
+  { id: 'trx', name: 'TRON', symbol: 'TRX', price: 0.276, change24h: 0.45, category: 'crypto', subcategory: 'large-cap', logo: CG + '1094/standard/tron-logo.png', ethereumAddress: '0x50327c6c5a14DCade707ABad2E27eB517dF87AB5' },
   { id: 'ton', name: 'Toncoin', symbol: 'TON', price: 1.35, change24h: -1.20, category: 'crypto', subcategory: 'large-cap', logo: CB + 'ton.org', ethereumAddress: '0x582d872A1B094FC48F5DE31D3B73F2D9bE47deF1' },
   { id: 'shib', name: 'Shiba Inu', symbol: 'SHIB', price: 0.000006, change24h: 3.45, category: 'crypto', subcategory: 'large-cap', logo: CG + '11939/large/shiba.png', ethereumAddress: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE' },
   { id: 'pepe', name: 'Pepe', symbol: 'PEPE', price: 0.0000037, change24h: 5.67, category: 'crypto', subcategory: 'large-cap', logo: CG + '29850/large/pepe-token.jpeg', ethereumAddress: '0x6982508145454Ce325dDbE47a25d4ec3d2311933' },
@@ -90,10 +234,10 @@ const crypto = [
   { id: 'qnt', name: 'Quant', symbol: 'QNT', price: 65.43, change24h: 0.56, category: 'crypto', subcategory: 'mid-cap', logo: CB + 'quant.network', ethereumAddress: '0x4a220E6096B25EADb88358cb44068A3248254675' },
   // Small Cap
   { id: 'ray', name: 'Raydium', symbol: 'RAY', price: 5.85, change24h: 3.12, category: 'crypto', subcategory: 'small-cap', logo: CI + 'ray.svg' },
-  { id: 'orca-token', name: 'Orca', symbol: 'ORCA', price: 4.20, change24h: 2.45, category: 'crypto', subcategory: 'small-cap', logo: CI + 'orca.svg' },
+  { id: 'orca-token', name: 'Orca', symbol: 'ORCA', price: 4.20, change24h: 2.45, category: 'crypto', subcategory: 'small-cap', logo: CG + '17547/standard/Orca_Logo.png' },
   { id: 'bonk', name: 'Bonk', symbol: 'BONK', price: 0.0000234, change24h: 7.89, category: 'crypto', subcategory: 'small-cap', logo: 'https://arweave.net/hQiPZOsRZXGXBJd_82PhVdlM_hACsT_q6wqwf5cSY7I' },
-  { id: 'pyth', name: 'Pyth Network', symbol: 'PYTH', price: 0.42, change24h: 1.67, category: 'crypto', subcategory: 'small-cap', logo: 'https://pyth.network/token.png' },
-  { id: 'trump', name: 'Official Trump', symbol: 'TRUMP', price: 3.29, change24h: 8.90, category: 'crypto', subcategory: 'small-cap', logo: CG + '53746/large/trump.jpg' },
+  { id: 'pyth', name: 'Pyth Network', symbol: 'PYTH', price: 0.42, change24h: 1.67, category: 'crypto', subcategory: 'small-cap', logo: CG + '31924/standard/pyth.png' },
+  { id: 'trump', name: 'Official Trump', symbol: 'TRUMP', price: 3.29, change24h: 8.90, category: 'crypto', subcategory: 'small-cap', logo: 'https://dd.dexscreener.com/ds-data/tokens/solana/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN.png' },
   { id: 'pump', name: 'Pump.fun', symbol: 'PUMP', price: 0.0021, change24h: 12.34, category: 'crypto', subcategory: 'small-cap', logo: CB + 'pump.fun' },
   { id: 'nexo', name: 'Nexo', symbol: 'NEXO', price: 0.81, change24h: 1.23, category: 'crypto', subcategory: 'small-cap', logo: CB + 'nexo.com', ethereumAddress: '0xB62132e35a6c13ee1EE0f84dC5d40bad8d815206' },
   { id: 'morpho', name: 'Morpho', symbol: 'MORPHO', price: 1.16, change24h: -0.45, category: 'crypto', subcategory: 'small-cap', logo: CB + 'morpho.org', ethereumAddress: '0x58D97B57BB95320F9a05dC918Aef65434969c2b2' },
@@ -379,11 +523,22 @@ const _solanaAliases = { XAU: 'PAXG' }
 
 export function getAssetChains(asset) {
   const chains = []
+  if (asset.providers) {
+    for (const p of asset.providers) {
+      if (p.address && !chains.includes(p.chain)) chains.push(p.chain)
+    }
+    return chains
+  }
   if (_solanaSymbols.has(asset.symbol) || _solanaSymbols.has(_solanaAliases[asset.symbol])) {
     chains.push('solana')
   }
   if (asset.ethereumAddress) chains.push('ethereum')
   return chains
+}
+
+export function getAssetProviders(asset) {
+  if (!asset.providers) return []
+  return asset.providers.filter(p => p.address != null)
 }
 
 export function getStocks(subcategory) {

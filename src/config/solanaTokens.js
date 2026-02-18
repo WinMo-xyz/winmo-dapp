@@ -1,8 +1,8 @@
 import { PublicKey } from '@solana/web3.js'
 
-const CB = 'https://logo.clearbit.com/'
+const CB = 'https://icon.horse/icon/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
-const CG = 'https://coin-images.coingecko.com/coins/images/'
+const CG = 'https://assets.coingecko.com/coins/images/'
 
 /**
  * SPL token list for portfolio balance reads.
@@ -78,7 +78,7 @@ export const SPL_TOKEN_LIST = [
   {
     symbol: 'ORCA',
     name: 'Orca',
-    logo: CI + 'orca.svg',
+    logo: 'https://assets.coingecko.com/coins/images/17547/standard/Orca_Logo.png',
     decimals: 6,
     mint: new PublicKey('orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE'),
   },
@@ -92,14 +92,14 @@ export const SPL_TOKEN_LIST = [
   {
     symbol: 'PYTH',
     name: 'Pyth Network',
-    logo: 'https://pyth.network/token.png',
+    logo: 'https://assets.coingecko.com/coins/images/31924/standard/pyth.png',
     decimals: 6,
     mint: new PublicKey('HZ1JovNiVvGrGNiiYvEozEVgZ58xaU3RKwX8eACQBCt3'),
   },
   {
     symbol: 'WSOL',
     name: 'Wrapped SOL',
-    logo: CI + 'sol.svg',
+    logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
     decimals: 9,
     mint: new PublicKey('So11111111111111111111111111111111111111112'),
   },
@@ -113,7 +113,7 @@ export const SPL_TOKEN_LIST = [
   {
     symbol: 'TRUMP',
     name: 'Official Trump',
-    logo: CG + '53746/large/trump.jpg',
+    logo: 'https://dd.dexscreener.com/ds-data/tokens/solana/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN.png',
     decimals: 6,
     mint: new PublicKey('6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN'),
   },

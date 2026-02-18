@@ -15,7 +15,7 @@ export const erc20Abi = [
   },
 ]
 
-const CB = 'https://logo.clearbit.com/'
+const CB = 'https://icon.horse/icon/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
 const CG = 'https://coin-images.coingecko.com/coins/images/'
 

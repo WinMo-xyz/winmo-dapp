@@ -32,8 +32,9 @@ export function fromSmallestUnit(raw, decimals) {
  * Resolve an asset to its Solana SPL mint address string.
  * Returns null when no SPL token exists.
  */
-export function resolveSolanaMint(asset) {
+export function resolveSolanaMint(asset, provider) {
   if (!asset) return null
+  if (provider?.chain === 'solana' && provider.address) return provider.address
   const match = SPL_TOKEN_LIST.find(t => t.symbol === asset.symbol)
   return match?.mint?.toBase58() || null
 }

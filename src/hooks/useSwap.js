@@ -38,7 +38,7 @@ const approveAbi = [
  * @param {object} asset — the target asset (from assets.js)
  * @param {'buy'|'sell'} mode — 'buy' swaps payment→asset, 'sell' swaps asset→payment
  */
-export function useSwap(asset, mode = 'buy') {
+export function useSwap(asset, mode = 'buy', provider) {
   const { evmAddress } = useWallet()
   const { sendTransactionAsync } = useSendTransaction()
 
@@ -51,8 +51,8 @@ export function useSwap(asset, mode = 'buy') {
   const routeRef = useRef(null) // stores routeSummary + routerAddress for executeSwap
 
   const isSell = mode === 'sell'
-  const assetAddress = resolveTokenAddress(asset)
-  const assetDecimals = getTokenDecimals(assetAddress)
+  const assetAddress = resolveTokenAddress(asset, provider)
+  const assetDecimals = provider?.decimals ?? getTokenDecimals(assetAddress)
 
   // For sell: use native ETH address when selling ETH
   const assetSwapAddress = asset?.symbol === 'ETH' ? NATIVE_ETH : assetAddress

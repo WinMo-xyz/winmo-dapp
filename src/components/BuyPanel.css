@@ -321,3 +321,58 @@
   background: rgba(243, 53, 56, 0.08);
   line-height: 1.4;
 }
+
+/* Provider selector */
+.buy-panel-provider-select {
+  display: flex;
+  gap: 6px;
+}
+
+.buy-panel-provider-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: var(--radius-3);
+  background: var(--light-5);
+  border: 1px solid var(--light-10);
+  color: var(--color-light-secondary);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.buy-panel-provider-btn:hover {
+  background: var(--light-10);
+}
+
+.buy-panel-provider-btn.active {
+  background: var(--light-10);
+  border-color: var(--accent);
+  color: var(--color-light);
+}
+
+.buy-panel-provider-btn img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.buy-panel-provider-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.buy-panel-provider-name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.buy-panel-provider-chain {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: capitalize;
+  opacity: 0.7;
+}
