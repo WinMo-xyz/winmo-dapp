@@ -47,7 +47,9 @@
       "WebFetch(domain:finance.yahoo.com)",
       "WebFetch(domain:stockanalysis.com)",
       "WebFetch(domain:station.jup.ag)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "WebFetch(domain:docs.kyberswap.com)",
+      "Bash(python3:*)"
     ]
   }
 }

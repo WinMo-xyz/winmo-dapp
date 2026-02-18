@@ -1,5 +1,7 @@
 exports.handler = async (event) => {
-  const path = event.path.replace(/^\/.netlify\/functions\/cmc-proxy/, '') || '/'
+  const path = event.path
+    .replace(/^\/.netlify\/functions\/cmc-proxy/, '')
+    .replace(/^\/api\/cmc/, '') || '/'
   const qs = event.rawQuery ? `?${event.rawQuery}` : ''
   const target = `https://pro-api.coinmarketcap.com${path}${qs}`
 

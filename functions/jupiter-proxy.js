@@ -1,5 +1,7 @@
 exports.handler = async (event) => {
-  const path = event.path.replace(/^\/.netlify\/functions\/jupiter-proxy/, '') || '/'
+  const path = event.path
+    .replace(/^\/.netlify\/functions\/jupiter-proxy/, '')
+    .replace(/^\/api\/jupiter/, '') || '/'
   const qs = event.rawQuery ? `?${event.rawQuery}` : ''
   const target = `https://api.jup.ag${path}${qs}`
 

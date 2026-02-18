@@ -1,5 +1,9 @@
 exports.handler = async (event) => {
-  const path = event.path.replace(/^\/.netlify\/functions\/kyberswap-proxy/, '') || '/'
+  // event.path is the original URL when called via Netlify redirect,
+  // or the function path when called directly
+  const path = event.path
+    .replace(/^\/.netlify\/functions\/kyberswap-proxy/, '')
+    .replace(/^\/api\/kyberswap/, '') || '/'
   const qs = event.rawQuery ? `?${event.rawQuery}` : ''
   const target = `https://aggregator-api.kyberswap.com${path}${qs}`
 
