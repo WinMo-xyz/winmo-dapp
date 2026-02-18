@@ -96,6 +96,7 @@ const crypto = [
   { id: 'pump', name: 'Pump.fun', symbol: 'PUMP', price: 0.0021, change24h: 12.34, category: 'crypto', subcategory: 'small-cap', logo: CB + 'pump.fun' },
   { id: 'nexo', name: 'Nexo', symbol: 'NEXO', price: 0.81, change24h: 1.23, category: 'crypto', subcategory: 'small-cap', logo: CB + 'nexo.com', ethereumAddress: '0xB62132e35a6c13ee1EE0f84dC5d40bad8d815206' },
   { id: 'morpho', name: 'Morpho', symbol: 'MORPHO', price: 1.16, change24h: -0.45, category: 'crypto', subcategory: 'small-cap', logo: CB + 'morpho.org', ethereumAddress: '0x58D97B57BB95320F9a05dC918Aef65434969c2b2' },
+  { id: 'edgen', name: 'Edgen', symbol: 'EDGEN', price: 0.00206, change24h: 0.00, category: 'crypto', subcategory: 'small-cap', logo: CG + '66227/large/-AlLx9IW_400x400.png', ethereumAddress: '0xAa9806c938836627Ed1a41Ae871c7E1889AE02Ca' },
 ]
 
 const commodities = [

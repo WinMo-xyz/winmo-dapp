@@ -17,8 +17,8 @@
   status = 200
 
 [[redirects]]
-  from = "/api/1inch/*"
-  to = "/.netlify/functions/oneinch-proxy/:splat"
+  from = "/api/kyberswap/*"
+  to = "/.netlify/functions/kyberswap-proxy/:splat"
   status = 200
 
 [[redirects]]

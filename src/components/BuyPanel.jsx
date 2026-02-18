@@ -28,7 +28,7 @@ export default function BuyPanel({ asset }) {
   const { setVisible: openSolanaModal } = useWalletModal()
   const { openConnectModal } = useConnectModal()
 
-  // EVM swap hook (1inch)
+  // EVM swap hook (KyberSwap)
   const evmSwap = useSwap(asset)
 
   // Solana swap hook (Jupiter)
@@ -152,7 +152,7 @@ export default function BuyPanel({ asset }) {
   }
 
   const isDisabled = (() => {
-    if (!amount || parseFloat(amount) <= 0 || isSwapping) return true
+    if (!amount || parseFloat(amount) <= 0 || isSwapping || quoteLoading) return true
     if (useSolana) return !isSolanaConnected || !solSwap.outputMint
     const isSol = payToken === 'SOL'
     if (isSol) return true

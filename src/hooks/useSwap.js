@@ -1,21 +1,38 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSendTransaction } from 'wagmi'
-import { waitForTransactionReceipt } from '@wagmi/core'
+import { readContract, waitForTransactionReceipt } from '@wagmi/core'
+import { encodeFunctionData, maxUint256 } from 'viem'
 import { config } from '../config/wagmi'
 import { useWallet } from '../context/WalletContext'
 import {
-  getQuote,
-  getSwapTx,
-  getAllowance,
-  getApprovalTx,
+  getRoute,
+  buildRoute,
   resolveTokenAddress,
+  getTokenDecimals,
   fromSmallestUnit,
   toSmallestUnit,
   PAYMENT_TOKEN_META,
-} from '../services/oneInchApi'
+} from '../services/kyberswapApi'
+
+const approveAbi = [
+  {
+    name: 'allowance',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    name: 'approve',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }],
+    outputs: [{ name: '', type: 'bool' }],
+  },
+]
 
 /**
- * Hook that manages 1inch swap lifecycle: quotes, approvals, and execution.
+ * Hook that manages KyberSwap swap lifecycle: quotes, approvals, and execution.
  * @param {object} asset — the destination asset (from assets.js)
  */
 export function useSwap(asset) {
@@ -28,8 +45,10 @@ export function useSwap(asset) {
   const [swapStatus, setSwapStatus] = useState('idle') // idle | approving | swapping | success | error
   const [swapError, setSwapError] = useState(null)
   const debounceRef = useRef(null)
+  const routeRef = useRef(null) // stores routeSummary + routerAddress for executeSwap
 
   const dstAddress = resolveTokenAddress(asset)
+  const dstDecimals = getTokenDecimals(dstAddress)
 
   // ── Quote ──────────────────────────────────────────────
 
@@ -40,6 +59,7 @@ export function useSwap(asset) {
       setQuote(null)
       setQuoteError(null)
       setQuoteLoading(false)
+      routeRef.current = null
       return
     }
 
@@ -48,20 +68,25 @@ export function useSwap(asset) {
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const q = await getQuote(srcSymbol, dstAddress, amount)
-        const decimals = q.dstToken?.decimals ?? 18
+        const route = await getRoute(srcSymbol, dstAddress, amount)
+        const { routeSummary, routerAddress } = route
+        routeRef.current = { routeSummary, routerAddress }
+
         setQuote({
-          ...q,
-          outputHuman: fromSmallestUnit(q.dstAmount, decimals),
+          routeSummary,
+          routerAddress,
+          dstAmount: routeSummary.amountOut,
+          outputHuman: fromSmallestUnit(routeSummary.amountOut, dstDecimals),
         })
       } catch (e) {
         setQuote(null)
+        routeRef.current = null
         setQuoteError(e.message)
       } finally {
         setQuoteLoading(false)
       }
     }, 500)
-  }, [dstAddress])
+  }, [dstAddress, dstDecimals])
 
   // ── Swap execution ─────────────────────────────────────
 
@@ -76,43 +101,80 @@ export function useSwap(asset) {
       setSwapStatus('error')
       return
     }
+    if (!routeRef.current) {
+      setSwapError('Fetch a quote first')
+      setSwapStatus('error')
+      return
+    }
 
     setSwapError(null)
     setSwapStatus('approving')
 
     try {
+      const { routerAddress } = routeRef.current
       const meta = PAYMENT_TOKEN_META[srcSymbol]
 
       // 1. Approve (ERC-20 only, skip for native ETH)
       if (srcSymbol !== 'ETH') {
-        const { allowance } = await getAllowance(meta.address, evmAddress)
-        const needed = toSmallestUnit(amount, meta.decimals)
+        const needed = BigInt(toSmallestUnit(amount, meta.decimals))
 
-        if (BigInt(allowance) < BigInt(needed)) {
-          const appTx = await getApprovalTx(meta.address)
+        // Check existing allowance; if the RPC call fails, assume zero and approve
+        let allowance = 0n
+        try {
+          allowance = await readContract(config, {
+            address: meta.address,
+            abi: approveAbi,
+            functionName: 'allowance',
+            args: [evmAddress, routerAddress],
+          })
+        } catch {
+          // RPC error — proceed with approval to be safe
+        }
+
+        if (allowance < needed) {
+          const data = encodeFunctionData({
+            abi: approveAbi,
+            functionName: 'approve',
+            args: [routerAddress, maxUint256],
+          })
           const appHash = await sendTransactionAsync({
-            to: appTx.to,
-            data: appTx.data,
-            value: BigInt(appTx.value || 0),
+            to: meta.address,
+            data,
           })
           await waitForTransactionReceipt(config, { hash: appHash })
         }
       }
 
-      // 2. Swap
+      // 2. Re-fetch a fresh route (the original route expires in ~10s and
+      //    the approval step above may have taken much longer)
       setSwapStatus('swapping')
-      const swap = await getSwapTx(srcSymbol, dstAddress, amount, evmAddress, slippage)
+      const freshRoute = await getRoute(srcSymbol, dstAddress, amount)
+      const freshSummary = freshRoute.routeSummary
+
+      // 3. Build & execute swap
+      const slippageBps = Math.round(slippage * 100) // convert percentage to bps
+      const built = await buildRoute(freshSummary, evmAddress, slippageBps)
+
+      // Use KyberSwap's gas estimate + 20% buffer for complex routes
+      const gasLimit = built.gas ? BigInt(Math.ceil(Number(built.gas) * 1.2)) : undefined
+
       const swapHash = await sendTransactionAsync({
-        to: swap.tx.to,
-        data: swap.tx.data,
-        value: BigInt(swap.tx.value || 0),
-        gas: swap.tx.gas ? BigInt(swap.tx.gas) : undefined,
+        to: built.routerAddress,
+        data: built.data,
+        value: BigInt(built.transactionValue || '0'),
+        gas: gasLimit,
       })
       await waitForTransactionReceipt(config, { hash: swapHash })
 
       setSwapStatus('success')
     } catch (e) {
-      setSwapError(e.shortMessage || e.message || 'Swap failed')
+      // Provide a friendlier message for common RPC errors
+      const msg = e.shortMessage || e.message || 'Swap failed'
+      if (msg.includes('Missing or invalid parameters')) {
+        setSwapError('Swap transaction reverted — you may have insufficient token balance')
+      } else {
+        setSwapError(msg)
+      }
       setSwapStatus('error')
     }
   }, [evmAddress, dstAddress, sendTransactionAsync])

@@ -170,6 +170,13 @@ const TOKEN_LIST = [
     decimals: 18,
     addresses: { 1: '0x58D97B57BB95320F9a05dC918Aef65434969c2b2' },
   },
+  {
+    symbol: 'EDGEN',
+    name: 'Edgen',
+    logo: 'https://coin-images.coingecko.com/coins/images/66227/large/-AlLx9IW_400x400.png',
+    decimals: 18,
+    addresses: { 1: '0xAa9806c938836627Ed1a41Ae871c7E1889AE02Ca' },
+  },
   // Crypto — Stables & Others
   {
     symbol: 'USDC',

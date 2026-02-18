@@ -9,7 +9,7 @@ WinMo is a multi-chain DeFi portfolio DApp supporting both Ethereum (EVM) and So
 ## Commands
 
 ```bash
-npm run dev       # Start Vite dev server (with API proxies for CMC, CoinGecko, 1inch)
+npm run dev       # Start Vite dev server (with API proxies for CMC, CoinGecko, KyberSwap)
 npm run build     # Production build
 npm run preview   # Preview production build locally
 ```
@@ -52,7 +52,7 @@ Pure CSS with CSS custom properties for theming. No Tailwind or CSS-in-JS. Each 
 
 ```
 VITE_CMC_API_KEY       # CoinMarketCap API key (required for live prices)
-VITE_1INCH_API_KEY     # 1inch DEX aggregator key
+VITE_KYBERSWAP_CLIENT_ID # KyberSwap aggregator client ID (optional, for rate-limit priority)
 VITE_SOLANA_RPC        # Custom Solana RPC (defaults to mainnet-beta)
 ```
 

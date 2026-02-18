@@ -10,6 +10,6 @@ export const config = getDefaultConfig({
   projectId: '861c3750c40fc4ec1ff2ad29ed455431',
   chains: [mainnet],
   transports: {
-    [mainnet.id]: http('https://rpc.ankr.com/eth'),
+    [mainnet.id]: http('https://ethereum-rpc.publicnode.com'),
   },
 })

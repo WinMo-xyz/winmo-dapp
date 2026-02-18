@@ -31,12 +31,12 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/gecko/, ''),
         },
-        '/api/1inch': {
-          target: 'https://api.1inch.dev',
+        '/api/kyberswap': {
+          target: 'https://aggregator-api.kyberswap.com',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/1inch/, ''),
+          rewrite: (path) => path.replace(/^\/api\/kyberswap/, ''),
           headers: {
-            'Authorization': `Bearer ${env.VITE_1INCH_API_KEY || ''}`,
+            ...(env.VITE_KYBERSWAP_CLIENT_ID && { 'x-client-id': env.VITE_KYBERSWAP_CLIENT_ID }),
           },
         },
         '/api/jupiter': {
