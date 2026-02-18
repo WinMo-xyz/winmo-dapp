@@ -1,5 +1,6 @@
 import { fetchCryptoPrices } from './cmcApi.js'
 import { SPL_TOKEN_LIST } from '../config/solanaTokens.js'
+import { FX_MARKETS, CURRENCY_META } from '../config/forex'
 
 const CB = 'https://logo.clearbit.com/'
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
@@ -100,31 +101,31 @@ const crypto = [
 ]
 
 const commodities = [
-  { id: 'gold', name: 'Gold', symbol: 'XAU', price: 2685.40, change24h: 0.34, category: 'commodities', logo: CB + 'gold.org' },
-  { id: 'gld', name: 'SPDR Gold Shares', symbol: 'GLD', price: 245.80, change24h: 0.42, category: 'commodities', logo: CB + 'ssga.com', ethereumAddress: '0x423d42e505e64f99b6e277eb7ed324cc5606f139' },
-  { id: 'slv', name: 'iShares Silver Trust', symbol: 'SLV', price: 28.95, change24h: 1.12, category: 'commodities', logo: CB + 'ishares.com', ethereumAddress: '0xf3e4872e6a4cf365888d93b6146a2baa7348f1a4' },
-  { id: 'uso', name: 'United States Oil Fund', symbol: 'USO', price: 72.40, change24h: -0.68, category: 'commodities', logo: CB + 'uscfinvestments.com', ethereumAddress: '0x1f5fc5c3c8b0f15c7e21af623936ff2b210b6415' },
-  { id: 'copx', name: 'Global X Copper Miners ETF', symbol: 'COPX', price: 42.15, change24h: 0.89, category: 'commodities', logo: CB + 'globalxetfs.com', ethereumAddress: '0x423a63dfe8d82cd9c6568c92210aa537d8ef6885' },
-  { id: 'dbc', name: 'Invesco DB Commodity Index', symbol: 'DBC', price: 23.60, change24h: -0.34, category: 'commodities', logo: CB + 'invesco.com', ethereumAddress: '0x20224080ad516769723c9a4a18325fc4e8c9ab5d' },
-  { id: 'ftgc', name: 'First Trust Global Tactical Commodity', symbol: 'FTGC', price: 22.85, change24h: 0.15, category: 'commodities', logo: CB + 'ftportfolios.com', ethereumAddress: '0xacf3fecaa787f268351a86409c3bd3b96ef924fb' },
-  { id: 'iau', name: 'iShares Gold Trust', symbol: 'IAU', price: 49.20, change24h: 0.38, category: 'commodities', logo: CB + 'ishares.com', ethereumAddress: '0x4f0ca3df1c2e6b943cf82e649d576ffe7b2fabcf' },
-  { id: 'nikl', name: 'Sprott Nickel Miners ETF', symbol: 'NIKL', price: 18.75, change24h: -1.23, category: 'commodities', logo: CB + 'sprott.com', ethereumAddress: '0xbf54eb503bb350583d11f4348086dc3608fa245c' },
-  { id: 'pall', name: 'abrdn Physical Palladium Shares ETF', symbol: 'PALL', price: 95.30, change24h: 0.56, category: 'commodities', logo: CB + 'abrdn.com', ethereumAddress: '0x0ce36d199bd6851788e03392568849394cbde722' },
-  { id: 'pdbc', name: 'Invesco Optimum Yield Diversified Commodity', symbol: 'PDBC', price: 14.85, change24h: -0.22, category: 'commodities', logo: CB + 'invesco.com', ethereumAddress: '0x46c0a02a877c1412cb32b57028b2f771c0364a7e' },
-  { id: 'remx', name: 'VanEck Rare Earth/Strategic Metals ETF', symbol: 'REMX', price: 38.40, change24h: 1.45, category: 'commodities', logo: CB + 'vaneck.com', ethereumAddress: '0x1140043f02d8ee34b10eae2e32ae921cda1459ee' },
+  { id: 'gold', name: 'Gold', symbol: 'XAU', price: 2685.40, change24h: 0.34, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'gold.org' },
+  { id: 'gld', name: 'SPDR Gold Shares', symbol: 'GLD', price: 245.80, change24h: 0.42, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ssga.com', ethereumAddress: '0x423d42e505e64f99b6e277eb7ed324cc5606f139' },
+  { id: 'slv', name: 'iShares Silver Trust', symbol: 'SLV', price: 28.95, change24h: 1.12, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', ethereumAddress: '0xf3e4872e6a4cf365888d93b6146a2baa7348f1a4' },
+  { id: 'iau', name: 'iShares Gold Trust', symbol: 'IAU', price: 49.20, change24h: 0.38, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', ethereumAddress: '0x4f0ca3df1c2e6b943cf82e649d576ffe7b2fabcf' },
+  { id: 'pall', name: 'abrdn Physical Palladium Shares ETF', symbol: 'PALL', price: 95.30, change24h: 0.56, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'abrdn.com', ethereumAddress: '0x0ce36d199bd6851788e03392568849394cbde722' },
+  { id: 'uso', name: 'United States Oil Fund', symbol: 'USO', price: 72.40, change24h: -0.68, category: 'commodities', subcategory: 'energy', logo: CB + 'uscfinvestments.com', ethereumAddress: '0x1f5fc5c3c8b0f15c7e21af623936ff2b210b6415' },
+  { id: 'copx', name: 'Global X Copper Miners ETF', symbol: 'COPX', price: 42.15, change24h: 0.89, category: 'commodities', subcategory: 'industrial', logo: CB + 'globalxetfs.com', ethereumAddress: '0x423a63dfe8d82cd9c6568c92210aa537d8ef6885' },
+  { id: 'nikl', name: 'Sprott Nickel Miners ETF', symbol: 'NIKL', price: 18.75, change24h: -1.23, category: 'commodities', subcategory: 'industrial', logo: CB + 'sprott.com', ethereumAddress: '0xbf54eb503bb350583d11f4348086dc3608fa245c' },
+  { id: 'remx', name: 'VanEck Rare Earth/Strategic Metals ETF', symbol: 'REMX', price: 38.40, change24h: 1.45, category: 'commodities', subcategory: 'industrial', logo: CB + 'vaneck.com', ethereumAddress: '0x1140043f02d8ee34b10eae2e32ae921cda1459ee' },
+  { id: 'dbc', name: 'Invesco DB Commodity Index', symbol: 'DBC', price: 23.60, change24h: -0.34, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', ethereumAddress: '0x20224080ad516769723c9a4a18325fc4e8c9ab5d' },
+  { id: 'ftgc', name: 'First Trust Global Tactical Commodity', symbol: 'FTGC', price: 22.85, change24h: 0.15, category: 'commodities', subcategory: 'broad', logo: CB + 'ftportfolios.com', ethereumAddress: '0xacf3fecaa787f268351a86409c3bd3b96ef924fb' },
+  { id: 'pdbc', name: 'Invesco Optimum Yield Diversified Commodity', symbol: 'PDBC', price: 14.85, change24h: -0.22, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', ethereumAddress: '0x46c0a02a877c1412cb32b57028b2f771c0364a7e' },
 ]
 
 const bonds = [
-  { id: 'tlt', name: 'iShares 20+ Year Treasury Bond ETF', symbol: 'TLT', price: 91.50, change24h: -0.22, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0x992651BFeB9A0DCC4457610E284ba66D86489d4d' },
-  { id: 'hyg', name: 'iShares iBoxx $ High Yield Corporate Bond ETF', symbol: 'HYG', price: 78.60, change24h: 0.15, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0xeD3618Bb8778F8eBBe2f241Da532227591771D04' },
-  { id: 'sgov', name: 'iShares 0-3 Month Treasury Bond ETF', symbol: 'SGOV', price: 100.12, change24h: 0.01, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0x8de5d49725550f7b318b2fa0f1b1f118e98e8d0f' },
-  { id: 'agg', name: 'iShares Core US Aggregate Bond ETF', symbol: 'AGG', price: 97.85, change24h: -0.08, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0xfF7CF16aA2fFc463b996DB2f7B7cf0130336899D' },
-  { id: 'binc', name: 'iShares Flexible Income Active ETF', symbol: 'BINC', price: 51.20, change24h: 0.12, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0x88703c1e71f44a2d329c99e8e112f7a4e7dd6312' },
-  { id: 'cloa', name: 'iShares AAA CLO Active ETF', symbol: 'CLOA', price: 50.85, change24h: 0.05, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0x8cefd49b703de9c0486d9bf6cb559f0895268ee8' },
-  { id: 'cloi', name: 'VanEck CLO ETF', symbol: 'CLOI', price: 25.40, change24h: 0.08, category: 'bonds', logo: CB + 'vaneck.com', ethereumAddress: '0xe8b09e8175aecb35a171fa059647434fe47f114c' },
-  { id: 'jaaa', name: 'Janus Henderson AAA CLO ETF', symbol: 'JAAA', price: 50.95, change24h: 0.03, category: 'bonds', logo: CB + 'janushenderson.com', ethereumAddress: '0x219a1b27baa08d72fac836665a3b752f3c9acbbc' },
-  { id: 'tip', name: 'iShares TIPS Bond ETF', symbol: 'TIP', price: 107.30, change24h: -0.15, category: 'bonds', logo: CB + 'ishares.com', ethereumAddress: '0x2df38ca485d01fc15e4fd85847ed26b7ef871c1c' },
-  { id: 'usfr', name: 'WisdomTree Floating Rate Treasury Fund', symbol: 'USFR', price: 50.35, change24h: 0.02, category: 'bonds', logo: CB + 'wisdomtree.com', ethereumAddress: '0xfb82561a955bf59b9263301126af490d3799e231' },
+  { id: 'tlt', name: 'iShares 20+ Year Treasury Bond ETF', symbol: 'TLT', price: 91.50, change24h: -0.22, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x992651BFeB9A0DCC4457610E284ba66D86489d4d' },
+  { id: 'sgov', name: 'iShares 0-3 Month Treasury Bond ETF', symbol: 'SGOV', price: 100.12, change24h: 0.01, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x8de5d49725550f7b318b2fa0f1b1f118e98e8d0f' },
+  { id: 'agg', name: 'iShares Core US Aggregate Bond ETF', symbol: 'AGG', price: 97.85, change24h: -0.08, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0xfF7CF16aA2fFc463b996DB2f7B7cf0130336899D' },
+  { id: 'tip', name: 'iShares TIPS Bond ETF', symbol: 'TIP', price: 107.30, change24h: -0.15, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x2df38ca485d01fc15e4fd85847ed26b7ef871c1c' },
+  { id: 'usfr', name: 'WisdomTree Floating Rate Treasury Fund', symbol: 'USFR', price: 50.35, change24h: 0.02, category: 'bonds', subcategory: 'treasury', logo: CB + 'wisdomtree.com', ethereumAddress: '0xfb82561a955bf59b9263301126af490d3799e231' },
+  { id: 'hyg', name: 'iShares iBoxx $ High Yield Corporate Bond ETF', symbol: 'HYG', price: 78.60, change24h: 0.15, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', ethereumAddress: '0xeD3618Bb8778F8eBBe2f241Da532227591771D04' },
+  { id: 'binc', name: 'iShares Flexible Income Active ETF', symbol: 'BINC', price: 51.20, change24h: 0.12, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', ethereumAddress: '0x88703c1e71f44a2d329c99e8e112f7a4e7dd6312' },
+  { id: 'cloa', name: 'iShares AAA CLO Active ETF', symbol: 'CLOA', price: 50.85, change24h: 0.05, category: 'bonds', subcategory: 'clo', logo: CB + 'ishares.com', ethereumAddress: '0x8cefd49b703de9c0486d9bf6cb559f0895268ee8' },
+  { id: 'cloi', name: 'VanEck CLO ETF', symbol: 'CLOI', price: 25.40, change24h: 0.08, category: 'bonds', subcategory: 'clo', logo: CB + 'vaneck.com', ethereumAddress: '0xe8b09e8175aecb35a171fa059647434fe47f114c' },
+  { id: 'jaaa', name: 'Janus Henderson AAA CLO ETF', symbol: 'JAAA', price: 50.95, change24h: 0.03, category: 'bonds', subcategory: 'clo', logo: CB + 'janushenderson.com', ethereumAddress: '0x219a1b27baa08d72fac836665a3b752f3c9acbbc' },
 ]
 
 const assetDetails = {
@@ -357,6 +358,18 @@ const defaultDetail = {
 
 const allAssets = [...stocks, ...crypto, ...commodities, ...bonds]
 
+/**
+ * Returns a static price map: symbol -> { price, change24h }
+ * Used as fallback for tokens without live CoinGecko prices (stocks, bonds, commodities).
+ */
+export function getStaticPriceMap() {
+  const map = {}
+  for (const asset of allAssets) {
+    map[asset.symbol] = { price: asset.price, change24h: asset.change24h }
+  }
+  return map
+}
+
 // Build set of symbols available on Solana from SPL token list
 const _solanaSymbols = new Set(SPL_TOKEN_LIST.map(t => t.symbol))
 _solanaSymbols.add('SOL') // Native SOL (WSOL is the wrapped SPL version)
@@ -383,12 +396,14 @@ export function getCrypto(subcategory) {
   return crypto.filter(c => c.subcategory === subcategory)
 }
 
-export function getCommodities() {
-  return commodities
+export function getCommodities(subcategory) {
+  if (!subcategory) return commodities
+  return commodities.filter(c => c.subcategory === subcategory)
 }
 
-export function getBonds() {
-  return bonds
+export function getBonds(subcategory) {
+  if (!subcategory) return bonds
+  return bonds.filter(b => b.subcategory === subcategory)
 }
 
 export function getAssetById(id) {
@@ -400,9 +415,30 @@ export function getAssetById(id) {
 
 export function searchAssets(query) {
   const q = query.toLowerCase()
-  return allAssets.filter(
+  const assetResults = allAssets.filter(
     a => a.name.toLowerCase().includes(q) || a.symbol.toLowerCase().includes(q)
   )
+  // Also search forex pairs
+  const fxResults = FX_MARKETS
+    .filter(m => {
+      const pair = m.pair.toLowerCase()
+      const pairFlat = pair.replace('/', '')
+      const baseName = CURRENCY_META[m.base]?.name?.toLowerCase() || ''
+      const quoteName = CURRENCY_META[m.quote]?.name?.toLowerCase() || ''
+      return pair.includes(q) || pairFlat.includes(q) || baseName.includes(q) || quoteName.includes(q)
+        || m.base.toLowerCase().includes(q) || m.quote.toLowerCase().includes(q)
+    })
+    .map(m => ({
+      id: `forex-${m.pair.replace('/', '')}`,
+      name: `${m.pair} Forex`,
+      symbol: m.pair,
+      price: null,
+      change24h: 0,
+      category: 'forex',
+      logo: null,
+      _forexPair: m.pair.replace('/', ''),
+    }))
+  return [...assetResults, ...fxResults]
 }
 
 /**

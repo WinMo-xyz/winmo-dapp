@@ -684,6 +684,6 @@ export function getTokensForChain(chainId) {
       name: t.name,
       logo: t.logo,
       decimals: t.decimals,
-      address: t.addresses[chainId],
+      address: t.addresses[chainId].toLowerCase(),
     }))
 }

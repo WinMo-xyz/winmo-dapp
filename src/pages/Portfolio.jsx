@@ -3,6 +3,7 @@ import DappNavbar from '../components/DappNavbar'
 import AssetLogo from '../components/AssetLogo'
 import { useWallet } from '../context/WalletContext'
 import { getAIInsights, getPortfolio } from '../services/portfolio'
+import { getStaticPriceMap } from '../services/assets'
 import { usePortfolio } from '../hooks/usePortfolio'
 import { useSolanaPortfolio } from '../hooks/useSolanaPortfolio'
 import { useLivePrices } from '../hooks/useLivePrices'
@@ -12,12 +13,21 @@ import './Portfolio.css'
 export default function Portfolio() {
   const { displayName, isEvmConnected, isSolanaConnected, evmAddress, solanaAddress, ensName } = useWallet()
   const { version } = useLivePrices()
-  const [priceMap, setPriceMap] = useState(null)
+  const [livePrices, setLivePrices] = useState(null)
   const insights = getAIInsights()
 
+  // Static prices for stocks, bonds, commodities (fallback)
+  const staticPrices = useMemo(() => getStaticPriceMap(), [])
+
   useEffect(() => {
-    fetchCryptoPrices().then(setPriceMap)
+    fetchCryptoPrices().then(setLivePrices)
   }, [version])
+
+  // Merge: live CoinGecko prices override static asset prices
+  const priceMap = useMemo(() => ({
+    ...staticPrices,
+    ...(livePrices || {}),
+  }), [staticPrices, livePrices])
 
   const { holdings: evmHoldings, totalValue: evmTotal, isLoading: evmLoading } = usePortfolio(priceMap)
   const { holdings: solHoldings, totalValue: solTotal, isLoading: solLoading } = useSolanaPortfolio(priceMap)
@@ -176,7 +186,7 @@ export default function Portfolio() {
                     </tr>
                   </thead>
                   <tbody>
-                    {holdings.map((h, i) => (
+                    {holdings.filter(h => parseFloat(h.balance) > 0).map((h, i) => (
                       <tr key={i}>
                         <td className="holding-asset">
                           <AssetLogo logo={h.logo} name={h.asset} size={32} />

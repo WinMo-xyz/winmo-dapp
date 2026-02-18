@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import DappNavbar from '../components/DappNavbar'
 import AssetLogo from '../components/AssetLogo'
 import BuyModal from '../components/BuyModal'
-import { getYieldProtocols } from '../services/yield'
+import { useLiveYield } from '../hooks/useLiveYield'
 import './Yield.css'
 
 const RISK_LEVELS = [
@@ -14,23 +14,27 @@ const RISK_LEVELS = [
 
 export default function Yield() {
   const [selectedId, setSelectedId] = useState('jitosol')
-  const [depositId, setDepositId] = useState(null)
+  const [modalId, setModalId] = useState(null)
+  const [modalMode, setModalMode] = useState('buy') // 'buy' = deposit, 'sell' = withdraw
 
-  const allProtocols = getYieldProtocols()
+  const { protocols: allProtocols, isLoading: apyLoading } = useLiveYield()
   const selected = allProtocols.find(p => p.id === selectedId) || allProtocols[0]
-  const depositProtocol = depositId ? allProtocols.find(p => p.id === depositId) : null
+  const modalProtocol = modalId ? allProtocols.find(p => p.id === modalId) : null
 
   // Build a synthetic asset object compatible with BuyModal
-  const depositAsset = useMemo(() => {
-    if (!depositProtocol) return null
+  const modalAsset = useMemo(() => {
+    if (!modalProtocol) return null
     return {
-      name: depositProtocol.name,
-      symbol: depositProtocol.tokenSymbol,
+      name: modalProtocol.name,
+      symbol: modalProtocol.tokenSymbol,
       price: 0,
-      logo: depositProtocol.logo,
-      ethereumAddress: depositProtocol.ethereumAddress || undefined,
+      logo: modalProtocol.logo,
+      ethereumAddress: modalProtocol.ethereumAddress || undefined,
     }
-  }, [depositProtocol])
+  }, [modalProtocol])
+
+  const openDeposit = (id) => { setModalId(id); setModalMode('buy') }
+  const openWithdraw = (id) => { setModalId(id); setModalMode('sell') }
 
   return (
     <>
@@ -45,7 +49,7 @@ export default function Yield() {
                 {/* Left sidebar: risk categories */}
                 <div className="yield-sidebar">
                   {RISK_LEVELS.map((risk) => {
-                    const protocols = getYieldProtocols(risk.key)
+                    const protocols = allProtocols.filter(p => p.riskLevel === risk.key)
                     return (
                       <div key={risk.key} className="yield-risk-group">
                         <div className="yield-risk-header">
@@ -61,7 +65,7 @@ export default function Yield() {
                             >
                               <AssetLogo logo={p.logo} name={p.protocol} size={20} />
                               <span className="yield-item-name">{p.name}</span>
-                              <span className="yield-item-apy">{p.apy}%</span>
+                              <span className={`yield-item-apy ${apyLoading && p.llamaPoolId ? 'apy-loading' : ''}`}>{p.apy}%</span>
                             </button>
                           ))}
                         </div>
@@ -90,8 +94,8 @@ export default function Yield() {
 
                   <div className="yield-detail-stats">
                     <div className="yield-stat">
-                      <span className="yield-stat-label">Current APY</span>
-                      <span className="yield-stat-value gradient-text">{selected.apy}%</span>
+                      <span className="yield-stat-label">Current APY {selected.llamaPoolId && <span className="yield-live-dot" />}</span>
+                      <span className={`yield-stat-value gradient-text ${apyLoading && selected.llamaPoolId ? 'apy-loading' : ''}`}>{selected.apy}%</span>
                     </div>
                     <div className="yield-stat">
                       <span className="yield-stat-label">Total Deposits</span>
@@ -107,12 +111,20 @@ export default function Yield() {
                         <span>{selected.asset}</span>
                       </div>
                     </div>
-                    <button
-                      className="btn btn-accent yield-deposit-btn"
-                      onClick={() => setDepositId(selected.id)}
-                    >
-                      Deposit
-                    </button>
+                    <div className="yield-action-buttons">
+                      <button
+                        className="btn btn-accent yield-deposit-btn"
+                        onClick={() => openDeposit(selected.id)}
+                      >
+                        Deposit
+                      </button>
+                      <button
+                        className="btn btn-outline yield-withdraw-btn"
+                        onClick={() => openWithdraw(selected.id)}
+                      >
+                        Withdraw
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -120,8 +132,8 @@ export default function Yield() {
         </div>
       </main>
 
-      {depositAsset && (
-        <BuyModal asset={depositAsset} onClose={() => setDepositId(null)} />
+      {modalAsset && (
+        <BuyModal asset={modalAsset} mode={modalMode} onClose={() => setModalId(null)} />
       )}
     </>
   )

@@ -259,9 +259,50 @@
   color: var(--color-light);
 }
 
-.yield-deposit-btn {
-  padding: 14px 32px;
+/* Action buttons */
+.yield-action-buttons {
+  display: flex;
+  gap: 10px;
   flex-shrink: 0;
+}
+
+.yield-deposit-btn,
+.yield-withdraw-btn {
+  padding: 14px 28px;
+  flex-shrink: 0;
+}
+
+.yield-withdraw-btn {
+  border: 1px solid var(--light-10);
+  color: var(--color-light);
+  background: transparent;
+}
+
+.yield-withdraw-btn:hover {
+  background: var(--light-5);
+  border-color: var(--light-20);
+}
+
+/* Live APY indicator */
+.yield-live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.apy-loading {
+  opacity: 0.4;
+  animation: pulse-dot 1s ease-in-out infinite;
 }
 
 @media (max-width: 900px) {
@@ -297,7 +338,12 @@
     align-items: stretch;
   }
 
-  .yield-deposit-btn {
+  .yield-action-buttons {
     width: 100%;
+  }
+
+  .yield-deposit-btn,
+  .yield-withdraw-btn {
+    flex: 1;
   }
 }

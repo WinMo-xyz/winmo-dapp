@@ -15,6 +15,7 @@ const protocols = [
     riskLevel: 'safe',
     logo: CB + 'sky.money',
     ethereumAddress: '0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD',
+    llamaPoolId: 'd8c4eff5-c8a9-46fc-a888-057c4c668e72',
   },
   {
     id: 'jitosol',
@@ -28,6 +29,7 @@ const protocols = [
     strategy: 'Stake SOL with Jito and get JitoSOL back. Earns staking rewards plus MEV tips from Jito\'s validator network. Liquid — use it across Solana DeFi.',
     riskLevel: 'safe',
     logo: CB + 'jito.network',
+    llamaPoolId: '0e7d0722-9054-4907-8593-567b353c0900',
   },
   {
     id: 'wsteth',
@@ -42,6 +44,7 @@ const protocols = [
     riskLevel: 'safe',
     logo: CB + 'lido.fi',
     ethereumAddress: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0',
+    llamaPoolId: '747c1d2a-c668-4682-b9f9-296708a3dd90',
   },
   {
     id: 'sdai',
@@ -56,6 +59,7 @@ const protocols = [
     riskLevel: 'safe',
     logo: CB + 'sky.money',
     ethereumAddress: '0x83F20F44975D03b1b09e64809B757c47f942BEeA',
+    llamaPoolId: 'c8a24fee-ec00-4f38-86c0-9f6daebc4225',
   },
   // LOW RISK
   {
@@ -71,6 +75,7 @@ const protocols = [
     riskLevel: 'low',
     logo: CB + 'ethena.fi',
     ethereumAddress: '0x9D39A5DE30e57443BfF2A8307A4256c8797A3497',
+    llamaPoolId: '66985a81-9c51-46ca-9977-42b4fe7dd6df',
   },
   {
     id: 'wstusr',
@@ -85,6 +90,7 @@ const protocols = [
     riskLevel: 'low',
     logo: CB + 'resolv.xyz',
     ethereumAddress: '0x1202F5C7b4B9E47a1A484E8B270be34dbbC75055',
+    llamaPoolId: '0aedb3f6-9298-49de-8bb0-2f611a4df784',
   },
   // HIGH YIELD
   {
@@ -100,6 +106,7 @@ const protocols = [
     riskLevel: 'high-yield',
     logo: CB + 'maple.finance',
     ethereumAddress: '0x80ac24aA929eaF5013f6436cdA2a7ba190f5Cc0b',
+    llamaPoolId: '43641cf5-a92e-416b-bce9-27113d3c0db6',
   },
   {
     id: 'rlp',
@@ -114,6 +121,7 @@ const protocols = [
     riskLevel: 'high-yield',
     logo: CB + 'resolv.xyz',
     ethereumAddress: '0x4956b52aE2fF65D74CA2d61207523288e4528f96',
+    llamaPoolId: '2ad8497d-c855-4840-85ad-cdc536b92ced',
   },
   // SPECULATIVE
   {

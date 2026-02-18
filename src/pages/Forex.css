@@ -1,0 +1,959 @@
+/* ── Page ──────────────────────────────────────────────────────────── */
+
+.forex-page {
+  padding-top: 100px;
+  padding-bottom: 80px;
+  min-height: 100vh;
+}
+
+.forex-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1;
+  animation: slide-up 0.5s var(--ease-out) both;
+}
+
+.forex-subtitle {
+  font-size: 15px;
+  color: var(--color-light-secondary);
+  margin-bottom: 24px;
+  animation: slide-up 0.5s var(--ease-out) 0.06s both;
+}
+
+/* ── Tabs ──────────────────────────────────────────────────────────── */
+
+.forex-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--light-3);
+  padding: 4px;
+  border-radius: var(--radius-rounded);
+  margin-bottom: 24px;
+  width: fit-content;
+  animation: slide-up 0.5s var(--ease-out) 0.12s both;
+}
+
+.forex-tab {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-rounded);
+  background: transparent;
+  color: var(--color-light-secondary);
+  transition: all 0.2s var(--ease-out);
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+}
+
+.forex-tab:hover { color: var(--color-light); }
+.forex-tab.active { background: var(--accent); color: var(--bg-dark); }
+
+.forex-content {
+  animation: slide-up 0.5s var(--ease-out) 0.18s both;
+}
+
+/* ── Markets Table ────────────────────────────────────────────────── */
+
+.forex-markets-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.forex-filter-btn {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-rounded);
+  background: var(--light-3);
+  color: var(--color-light-secondary);
+  border: 1px solid var(--light-5);
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forex-filter-btn:hover { border-color: var(--light-20); }
+.forex-filter-btn.active { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+
+.forex-search {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: var(--radius-rounded);
+  background: var(--light-3);
+  border: 1px solid var(--light-5);
+  color: var(--color-light);
+  outline: none;
+  font-family: var(--font-main);
+  min-width: 200px;
+  margin-left: auto;
+}
+
+.forex-search::placeholder { color: var(--color-light-secondary); }
+.forex-search:focus { border-color: var(--accent); }
+
+.forex-table-wrap { border-radius: var(--radius-2); overflow: hidden; }
+
+.forex-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.forex-table th {
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-light-secondary);
+  text-align: left;
+  background: var(--light-3);
+  border-bottom: 1px solid var(--light-5);
+}
+
+.forex-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--light-3);
+}
+
+.forex-table tr:last-child td { border-bottom: none; }
+.forex-table tr:hover { background: var(--light-3); }
+
+.forex-pair-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.forex-pair-flags { font-size: 16px; line-height: 1; }
+.forex-pair-name { font-size: 14px; }
+
+.forex-rate-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.forex-volume-cell {
+  color: var(--color-light-secondary);
+  font-size: 13px;
+}
+
+.forex-category {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forex-category.major { background: rgba(101, 217, 120, 0.1); color: var(--success); }
+.forex-category.cross { background: rgba(91, 156, 245, 0.1); color: #5b9cf5; }
+.forex-category.exotic { background: rgba(240, 160, 48, 0.1); color: #f0a030; }
+
+.forex-tradeable {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  background: rgba(153, 69, 255, 0.12);
+  color: #9945FF;
+  letter-spacing: 0.05em;
+}
+
+.forex-view-only {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: var(--radius-rounded);
+  background: var(--light-5);
+  color: var(--color-light-secondary);
+  letter-spacing: 0.05em;
+}
+
+.forex-pair-link {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.forex-pair-link:hover {
+  color: var(--accent);
+}
+
+.forex-view-btn {
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  background: var(--light-5);
+  color: var(--color-light-secondary);
+  border: 1px solid var(--light-10);
+  cursor: pointer;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.forex-view-btn:hover {
+  color: var(--color-light);
+  border-color: var(--light-20);
+}
+
+.forex-trade-btn {
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  background: rgba(153, 69, 255, 0.12);
+  color: #9945FF;
+  border: 1px solid rgba(153, 69, 255, 0.25);
+  cursor: pointer;
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.forex-trade-btn:hover {
+  background: #9945FF;
+  color: #fff;
+  border-color: #9945FF;
+}
+
+.forex-table-footer {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--color-light-secondary);
+}
+
+/* ── Cross Rates Matrix ───────────────────────────────────────────── */
+
+.forex-matrix-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.forex-matrix-subtitle {
+  font-size: 14px;
+  color: var(--color-light-secondary);
+  margin-bottom: 4px;
+}
+
+.forex-matrix-meta {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+}
+
+.forex-matrix-pyth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  background: rgba(101, 217, 120, 0.08);
+  color: var(--success);
+  border: 1px solid rgba(101, 217, 120, 0.2);
+  letter-spacing: 0.03em;
+}
+
+.pyth-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pyth-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pyth-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(101, 217, 120, 0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(101, 217, 120, 0); }
+}
+
+.forex-matrix-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-2);
+}
+
+.forex-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.forex-matrix th {
+  padding: 10px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--light-3);
+  border: 1px solid var(--light-5);
+  white-space: nowrap;
+}
+
+.forex-matrix td {
+  padding: 8px 6px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid var(--light-3);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.forex-matrix tr:hover td { background: rgba(var(--light), 0.02); }
+.forex-matrix td:hover { background: var(--light-5); }
+
+.matrix-diagonal {
+  background: var(--light-3) !important;
+  color: var(--color-light-secondary);
+  font-weight: 500;
+}
+
+.matrix-header-cell {
+  font-weight: 700 !important;
+  background: var(--light-3) !important;
+  text-align: center;
+  font-size: 12px !important;
+  font-family: var(--font-main) !important;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  border: 1px solid var(--light-5) !important;
+  white-space: nowrap;
+}
+
+/* ── Arbitrage Panel ──────────────────────────────────────────────── */
+
+.forex-arb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.forex-arb-subtitle {
+  font-size: 14px;
+  color: var(--color-light-secondary);
+}
+
+.forex-arb-count {
+  font-size: 13px;
+  color: var(--color-light-secondary);
+}
+
+.forex-arb-count strong { color: var(--success); }
+
+.forex-arb-timer {
+  text-align: right;
+  min-width: 160px;
+}
+
+.forex-arb-scanning {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.forex-arb-next {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+}
+
+.forex-arb-next strong {
+  color: var(--color-light);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.forex-arb-progress {
+  height: 3px;
+  background: var(--light-5);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.forex-arb-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.forex-arb-arrow {
+  color: var(--color-light-secondary);
+  margin: 0 6px;
+  font-size: 13px;
+}
+
+.forex-arb-ccy {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-light-secondary);
+  white-space: nowrap;
+}
+
+.forex-spread { font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.forex-spread.premium { color: var(--success); }
+.forex-spread.discount { color: var(--red); }
+.forex-spread.par { color: var(--color-light-secondary); }
+
+.forex-direction-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forex-direction-badge.premium { background: rgba(101, 217, 120, 0.1); color: var(--success); }
+.forex-direction-badge.discount { background: rgba(243, 53, 56, 0.1); color: var(--red); }
+.forex-direction-badge.par { background: var(--light-5); color: var(--color-light-secondary); }
+
+.forex-loading-dot {
+  color: var(--color-light-secondary);
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+
+.forex-arb-loading-text {
+  text-align: center;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--color-light-secondary);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* ── Swap Card ────────────────────────────────────────────────────── */
+
+.forex-swap-wrap { max-width: 480px; }
+
+.forex-swap-card { padding: 28px; }
+
+.forex-swap-field { margin-bottom: 16px; }
+
+.forex-swap-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-light-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.forex-swap-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.forex-swap-select {
+  padding: 12px 16px;
+  background: var(--light-3);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-3);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-light);
+  cursor: pointer;
+  font-family: var(--font-main);
+  min-width: 130px;
+  appearance: none;
+}
+
+.forex-swap-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--light-3);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-3);
+  font-size: 16px;
+  color: var(--color-light);
+  font-family: var(--font-main);
+  outline: none;
+  min-width: 0;
+}
+
+.forex-swap-input:focus { border-color: var(--accent); }
+.forex-swap-input::-webkit-inner-spin-button { display: none; }
+
+.forex-swap-balance {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.forex-max-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-main);
+}
+
+.forex-max-btn:hover { text-decoration: underline; }
+
+.forex-swap-flip {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 12px;
+}
+
+.forex-swap-flip-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--light-5);
+  border: 1px solid var(--light-10);
+  color: var(--color-light);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.forex-swap-flip-btn:hover {
+  background: var(--accent);
+  color: var(--bg-dark);
+  border-color: var(--accent);
+}
+
+.forex-swap-rates {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  background: var(--light-3);
+  border-radius: var(--radius-2);
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.forex-swap-rate-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forex-swap-rate-label { color: var(--color-light-secondary); }
+
+.forex-swap-rate-value {
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.spread-premium { color: var(--success); }
+.spread-discount { color: var(--red); }
+
+.forex-swap-quoting {
+  font-size: 13px;
+  color: var(--color-light-secondary);
+  margin-bottom: 12px;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.forex-swap-error {
+  color: var(--red);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.forex-swap-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+}
+
+.forex-swap-btn.swap-success {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+}
+
+.forex-swap-powered {
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-light-secondary);
+  margin-top: 12px;
+}
+
+/* ── Swap History ─────────────────────────────────────────────────── */
+
+.forex-swap-history { margin-top: 24px; }
+
+.forex-swap-history h3 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--color-light-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.forex-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-3);
+  font-size: 13px;
+}
+
+.forex-history-item:last-child { border-bottom: none; }
+
+.forex-history-link {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.forex-history-link:hover { text-decoration: underline; }
+
+/* ── Tools Panel ──────────────────────────────────────────────────── */
+
+.forex-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.forex-tool-card { padding: 24px; }
+
+.forex-tool-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.forex-tool-field { margin-bottom: 12px; }
+
+.forex-tool-row {
+  display: flex;
+  gap: 12px;
+}
+
+.forex-tool-half { flex: 1; }
+
+.forex-tool-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-light-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.forex-tool-input,
+.forex-tool-select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--light-3);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-3);
+  font-size: 14px;
+  color: var(--color-light);
+  font-family: var(--font-main);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.forex-tool-select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.forex-tool-input:focus,
+.forex-tool-select:focus {
+  border-color: var(--accent);
+}
+
+.forex-tool-input::-webkit-inner-spin-button { display: none; }
+
+.forex-tool-result {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--light-5);
+  border-radius: var(--radius-2);
+}
+
+.forex-tool-result-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-light-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.forex-tool-result-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--color-light);
+  line-height: 1.2;
+}
+
+.forex-tool-result-rate {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+  margin-top: 4px;
+}
+
+/* ── Inline Arb Swap ─────────────────────────────────────────────── */
+
+.arb-row-active td { background: var(--light-3); border-bottom-color: transparent !important; }
+
+.arb-swap-row td { background: transparent !important; }
+.arb-swap-row:hover { background: transparent !important; }
+
+.arb-inline-swap {
+  background: var(--light-3);
+  border-top: 1px solid var(--light-5);
+  border-bottom: 1px solid var(--light-5);
+  padding: 20px 24px;
+  animation: arb-expand 0.25s var(--ease-out);
+}
+
+@keyframes arb-expand {
+  from { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; }
+  to { opacity: 1; max-height: 400px; padding-top: 20px; padding-bottom: 20px; }
+}
+
+.arb-inline-swap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.arb-inline-swap-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arb-inline-swap-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-light);
+}
+
+.arb-flip-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--light-5);
+  border: 1px solid var(--light-10);
+  color: var(--color-light-secondary);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.arb-flip-btn:hover {
+  background: var(--accent);
+  color: var(--bg-dark);
+  border-color: var(--accent);
+}
+
+.arb-inline-close {
+  background: none;
+  border: none;
+  color: var(--color-light-secondary);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.arb-inline-close:hover { color: var(--color-light); }
+
+.arb-inline-swap-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.arb-inline-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.arb-inline-input-row {
+  display: flex;
+  align-items: center;
+  background: var(--light-5);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-3);
+  overflow: hidden;
+}
+
+.arb-inline-input {
+  flex: 1;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: var(--color-light);
+  font-family: var(--font-main);
+  outline: none;
+  min-width: 0;
+}
+
+.arb-inline-input::-webkit-inner-spin-button { display: none; }
+
+.arb-inline-token {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-light-secondary);
+  background: var(--light-3);
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.arb-inline-presets {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.arb-preset-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-rounded);
+  background: var(--light-5);
+  color: var(--color-light-secondary);
+  border: 1px solid var(--light-10);
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: all 0.2s;
+}
+
+.arb-preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+.arb-preset-btn.active { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+
+.arb-inline-balance {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--color-light-secondary);
+}
+
+.arb-inline-quoting {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-light-secondary);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.arb-inline-error {
+  color: var(--red);
+  font-size: 12px;
+  width: 100%;
+  margin: 0;
+}
+
+.arb-inline-swap-btn {
+  align-self: flex-end;
+  padding: 12px 28px;
+  font-size: 14px;
+  white-space: nowrap;
+  min-width: 160px;
+  margin-top: 18px;
+}
+
+.arb-inline-swap-btn.swap-success {
+  background: var(--success) !important;
+  border-color: var(--success) !important;
+}
+
+.forex-trade-btn.active {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+/* ── Loading ──────────────────────────────────────────────────────── */
+
+.forex-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.forex-loading-text {
+  font-size: 14px;
+  color: var(--color-light-secondary);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .forex-tabs {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .forex-tab { white-space: nowrap; padding: 8px 14px; font-size: 12px; }
+
+  .forex-swap-wrap { max-width: 100%; }
+
+  .forex-tools-grid { grid-template-columns: 1fr; }
+
+  .forex-markets-filters { flex-direction: column; align-items: stretch; }
+  .forex-search { min-width: 100%; margin-left: 0; }
+
+  .forex-tool-row { flex-direction: column; gap: 0; }
+
+  .forex-table td, .forex-table th { padding: 10px 12px; font-size: 12px; }
+
+  .forex-arb-header { flex-direction: column; align-items: flex-start; }
+
+  .arb-inline-swap-body { flex-direction: column; }
+  .arb-inline-swap-btn { width: 100%; margin-top: 8px; }
+  .arb-inline-swap { padding: 16px; }
+}

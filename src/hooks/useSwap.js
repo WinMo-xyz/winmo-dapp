@@ -6,12 +6,14 @@ import { config } from '../config/wagmi'
 import { useWallet } from '../context/WalletContext'
 import {
   getRoute,
+  getRouteRaw,
   buildRoute,
   resolveTokenAddress,
   getTokenDecimals,
   fromSmallestUnit,
   toSmallestUnit,
   PAYMENT_TOKEN_META,
+  NATIVE_ETH,
 } from '../services/kyberswapApi'
 
 const approveAbi = [
@@ -33,9 +35,10 @@ const approveAbi = [
 
 /**
  * Hook that manages KyberSwap swap lifecycle: quotes, approvals, and execution.
- * @param {object} asset — the destination asset (from assets.js)
+ * @param {object} asset — the target asset (from assets.js)
+ * @param {'buy'|'sell'} mode — 'buy' swaps payment→asset, 'sell' swaps asset→payment
  */
-export function useSwap(asset) {
+export function useSwap(asset, mode = 'buy') {
   const { evmAddress } = useWallet()
   const { sendTransactionAsync } = useSendTransaction()
 
@@ -47,15 +50,19 @@ export function useSwap(asset) {
   const debounceRef = useRef(null)
   const routeRef = useRef(null) // stores routeSummary + routerAddress for executeSwap
 
-  const dstAddress = resolveTokenAddress(asset)
-  const dstDecimals = getTokenDecimals(dstAddress)
+  const isSell = mode === 'sell'
+  const assetAddress = resolveTokenAddress(asset)
+  const assetDecimals = getTokenDecimals(assetAddress)
+
+  // For sell: use native ETH address when selling ETH
+  const assetSwapAddress = asset?.symbol === 'ETH' ? NATIVE_ETH : assetAddress
 
   // ── Quote ──────────────────────────────────────────────
 
-  const fetchQuote = useCallback((srcSymbol, amount) => {
+  const fetchQuote = useCallback((tokenSymbol, amount) => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
-    if (!amount || parseFloat(amount) <= 0 || !dstAddress || !PAYMENT_TOKEN_META[srcSymbol]) {
+    if (!amount || parseFloat(amount) <= 0 || !assetAddress || !PAYMENT_TOKEN_META[tokenSymbol]) {
       setQuote(null)
       setQuoteError(null)
       setQuoteLoading(false)
@@ -68,15 +75,26 @@ export function useSwap(asset) {
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const route = await getRoute(srcSymbol, dstAddress, amount)
+        let route
+        if (isSell) {
+          // Sell: asset → payment token
+          const payMeta = PAYMENT_TOKEN_META[tokenSymbol]
+          const amountInRaw = toSmallestUnit(amount, assetDecimals)
+          route = await getRouteRaw(assetSwapAddress, payMeta.address, amountInRaw)
+        } else {
+          // Buy: payment token → asset
+          route = await getRoute(tokenSymbol, assetAddress, amount)
+        }
+
         const { routeSummary, routerAddress } = route
         routeRef.current = { routeSummary, routerAddress }
 
+        const outDecimals = isSell ? PAYMENT_TOKEN_META[tokenSymbol].decimals : assetDecimals
         setQuote({
           routeSummary,
           routerAddress,
           dstAmount: routeSummary.amountOut,
-          outputHuman: fromSmallestUnit(routeSummary.amountOut, dstDecimals),
+          outputHuman: fromSmallestUnit(routeSummary.amountOut, outDecimals),
         })
       } catch (e) {
         setQuote(null)
@@ -86,17 +104,17 @@ export function useSwap(asset) {
         setQuoteLoading(false)
       }
     }, 500)
-  }, [dstAddress, dstDecimals])
+  }, [assetAddress, assetSwapAddress, assetDecimals, isSell])
 
   // ── Swap execution ─────────────────────────────────────
 
-  const executeSwap = useCallback(async (srcSymbol, amount, slippage = 1) => {
+  const executeSwap = useCallback(async (tokenSymbol, amount, slippage = 1) => {
     if (!evmAddress) {
       setSwapError('Connect an EVM wallet first')
       setSwapStatus('error')
       return
     }
-    if (!dstAddress) {
+    if (!assetAddress) {
       setSwapError('This asset has no on-chain swap route')
       setSwapStatus('error')
       return
@@ -112,59 +130,104 @@ export function useSwap(asset) {
 
     try {
       const { routerAddress } = routeRef.current
-      const meta = PAYMENT_TOKEN_META[srcSymbol]
 
-      // 1. Approve (ERC-20 only, skip for native ETH)
-      if (srcSymbol !== 'ETH') {
-        const needed = BigInt(toSmallestUnit(amount, meta.decimals))
+      if (isSell) {
+        // ── Sell: asset → payment token ──
+        const isNativeEth = asset?.symbol === 'ETH'
 
-        // Check existing allowance; if the RPC call fails, assume zero and approve
-        let allowance = 0n
-        try {
-          allowance = await readContract(config, {
-            address: meta.address,
-            abi: approveAbi,
-            functionName: 'allowance',
-            args: [evmAddress, routerAddress],
-          })
-        } catch {
-          // RPC error — proceed with approval to be safe
+        // 1. Approve asset token (skip for native ETH)
+        if (!isNativeEth) {
+          const needed = BigInt(toSmallestUnit(amount, assetDecimals))
+          let allowance = 0n
+          try {
+            allowance = await readContract(config, {
+              address: assetAddress,
+              abi: approveAbi,
+              functionName: 'allowance',
+              args: [evmAddress, routerAddress],
+            })
+          } catch {}
+
+          if (allowance < needed) {
+            const data = encodeFunctionData({
+              abi: approveAbi,
+              functionName: 'approve',
+              args: [routerAddress, maxUint256],
+            })
+            const appHash = await sendTransactionAsync({ to: assetAddress, data })
+            await waitForTransactionReceipt(config, { hash: appHash })
+          }
         }
 
-        if (allowance < needed) {
-          const data = encodeFunctionData({
-            abi: approveAbi,
-            functionName: 'approve',
-            args: [routerAddress, maxUint256],
-          })
-          const appHash = await sendTransactionAsync({
-            to: meta.address,
-            data,
-          })
-          await waitForTransactionReceipt(config, { hash: appHash })
+        // 2. Re-fetch fresh route
+        setSwapStatus('swapping')
+        const payMeta = PAYMENT_TOKEN_META[tokenSymbol]
+        const amountInRaw = toSmallestUnit(amount, assetDecimals)
+        const freshRoute = await getRouteRaw(assetSwapAddress, payMeta.address, amountInRaw)
+        const freshSummary = freshRoute.routeSummary
+
+        // 3. Build & execute swap
+        const slippageBps = Math.round(slippage * 100)
+        const built = await buildRoute(freshSummary, evmAddress, slippageBps)
+        const gasLimit = built.gas ? BigInt(Math.ceil(Number(built.gas) * 1.2)) : undefined
+
+        const swapHash = await sendTransactionAsync({
+          to: built.routerAddress,
+          data: built.data,
+          value: BigInt(built.transactionValue || '0'),
+          gas: gasLimit,
+        })
+        await waitForTransactionReceipt(config, { hash: swapHash })
+      } else {
+        // ── Buy: payment token → asset ──
+        const meta = PAYMENT_TOKEN_META[tokenSymbol]
+
+        // 1. Approve (ERC-20 only, skip for native ETH)
+        if (tokenSymbol !== 'ETH') {
+          const needed = BigInt(toSmallestUnit(amount, meta.decimals))
+
+          let allowance = 0n
+          try {
+            allowance = await readContract(config, {
+              address: meta.address,
+              abi: approveAbi,
+              functionName: 'allowance',
+              args: [evmAddress, routerAddress],
+            })
+          } catch {}
+
+          if (allowance < needed) {
+            const data = encodeFunctionData({
+              abi: approveAbi,
+              functionName: 'approve',
+              args: [routerAddress, maxUint256],
+            })
+            const appHash = await sendTransactionAsync({
+              to: meta.address,
+              data,
+            })
+            await waitForTransactionReceipt(config, { hash: appHash })
+          }
         }
+
+        // 2. Re-fetch a fresh route
+        setSwapStatus('swapping')
+        const freshRoute = await getRoute(tokenSymbol, assetAddress, amount)
+        const freshSummary = freshRoute.routeSummary
+
+        // 3. Build & execute swap
+        const slippageBps = Math.round(slippage * 100)
+        const built = await buildRoute(freshSummary, evmAddress, slippageBps)
+        const gasLimit = built.gas ? BigInt(Math.ceil(Number(built.gas) * 1.2)) : undefined
+
+        const swapHash = await sendTransactionAsync({
+          to: built.routerAddress,
+          data: built.data,
+          value: BigInt(built.transactionValue || '0'),
+          gas: gasLimit,
+        })
+        await waitForTransactionReceipt(config, { hash: swapHash })
       }
-
-      // 2. Re-fetch a fresh route (the original route expires in ~10s and
-      //    the approval step above may have taken much longer)
-      setSwapStatus('swapping')
-      const freshRoute = await getRoute(srcSymbol, dstAddress, amount)
-      const freshSummary = freshRoute.routeSummary
-
-      // 3. Build & execute swap
-      const slippageBps = Math.round(slippage * 100) // convert percentage to bps
-      const built = await buildRoute(freshSummary, evmAddress, slippageBps)
-
-      // Use KyberSwap's gas estimate + 20% buffer for complex routes
-      const gasLimit = built.gas ? BigInt(Math.ceil(Number(built.gas) * 1.2)) : undefined
-
-      const swapHash = await sendTransactionAsync({
-        to: built.routerAddress,
-        data: built.data,
-        value: BigInt(built.transactionValue || '0'),
-        gas: gasLimit,
-      })
-      await waitForTransactionReceipt(config, { hash: swapHash })
 
       setSwapStatus('success')
     } catch (e) {
@@ -177,7 +240,7 @@ export function useSwap(asset) {
       }
       setSwapStatus('error')
     }
-  }, [evmAddress, dstAddress, sendTransactionAsync])
+  }, [evmAddress, assetAddress, assetSwapAddress, assetDecimals, isSell, asset?.symbol, sendTransactionAsync])
 
   // ── Reset ──────────────────────────────────────────────
 
@@ -199,6 +262,6 @@ export function useSwap(asset) {
     fetchQuote,
     executeSwap,
     reset,
-    dstAddress,
+    dstAddress: assetAddress,
   }
 }

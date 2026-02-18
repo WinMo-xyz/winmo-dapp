@@ -15,8 +15,10 @@ import {
 /**
  * Hook that manages Jupiter swap lifecycle: quotes and execution on Solana.
  * Mirrors the useSwap hook interface for consistency.
+ * @param {object} asset — the target asset (from assets.js)
+ * @param {'buy'|'sell'} mode — 'buy' swaps payment→asset, 'sell' swaps asset→payment
  */
-export function useSolanaSwap(asset) {
+export function useSolanaSwap(asset, mode = 'buy') {
   const { publicKey, signTransaction } = useWallet()
   const { connection } = useConnection()
 
@@ -27,15 +29,17 @@ export function useSolanaSwap(asset) {
   const [swapError, setSwapError] = useState(null)
   const debounceRef = useRef(null)
 
-  const outputMint = resolveSolanaMint(asset)
+  const isSell = mode === 'sell'
+  const assetMint = resolveSolanaMint(asset)
+  const assetDecimals = assetMint ? getSplDecimals(assetMint) : 6
 
   // ── Quote ──────────────────────────────────────────────
 
-  const fetchQuote = useCallback((srcSymbol, amount) => {
+  const fetchQuote = useCallback((tokenSymbol, amount) => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
-    const payMeta = SOLANA_PAYMENT_META[srcSymbol]
-    if (!amount || parseFloat(amount) <= 0 || !payMeta || !outputMint) {
+    const payMeta = SOLANA_PAYMENT_META[tokenSymbol]
+    if (!amount || parseFloat(amount) <= 0 || !payMeta || !assetMint) {
       setQuote(null)
       setQuoteError(null)
       setQuoteLoading(false)
@@ -45,16 +49,28 @@ export function useSolanaSwap(asset) {
     setQuoteLoading(true)
     setQuoteError(null)
 
-    const amountRaw = toSmallestUnit(amount, payMeta.decimals)
-
     debounceRef.current = setTimeout(async () => {
       try {
-        const q = await getQuote(payMeta.mint, outputMint, amountRaw)
-        const outDecimals = getSplDecimals(outputMint)
-        setQuote({
-          ...q,
-          outputHuman: fromSmallestUnit(q.outAmount, outDecimals),
-        })
+        let q
+        if (isSell) {
+          // Sell: asset → payment token
+          const amountRaw = toSmallestUnit(amount, assetDecimals)
+          q = await getQuote(assetMint, payMeta.mint, amountRaw)
+          const outDecimals = payMeta.decimals
+          setQuote({
+            ...q,
+            outputHuman: fromSmallestUnit(q.outAmount, outDecimals),
+          })
+        } else {
+          // Buy: payment token → asset
+          const amountRaw = toSmallestUnit(amount, payMeta.decimals)
+          q = await getQuote(payMeta.mint, assetMint, amountRaw)
+          const outDecimals = assetDecimals
+          setQuote({
+            ...q,
+            outputHuman: fromSmallestUnit(q.outAmount, outDecimals),
+          })
+        }
       } catch (e) {
         setQuote(null)
         setQuoteError(e.message)
@@ -62,17 +78,17 @@ export function useSolanaSwap(asset) {
         setQuoteLoading(false)
       }
     }, 500)
-  }, [outputMint])
+  }, [assetMint, assetDecimals, isSell])
 
   // ── Swap execution ─────────────────────────────────────
 
-  const executeSwap = useCallback(async (srcSymbol, amount) => {
+  const executeSwap = useCallback(async (tokenSymbol, amount) => {
     if (!publicKey) {
       setSwapError('Connect a Solana wallet first')
       setSwapStatus('error')
       return
     }
-    if (!outputMint) {
+    if (!assetMint) {
       setSwapError('No Solana swap route for this asset')
       setSwapStatus('error')
       return
@@ -82,11 +98,18 @@ export function useSolanaSwap(asset) {
     setSwapStatus('swapping')
 
     try {
-      const payMeta = SOLANA_PAYMENT_META[srcSymbol]
-      const amountRaw = toSmallestUnit(amount, payMeta.decimals)
+      const payMeta = SOLANA_PAYMENT_META[tokenSymbol]
+      let quoteResponse
 
-      // 1. Get fresh quote
-      const quoteResponse = await getQuote(payMeta.mint, outputMint, amountRaw)
+      if (isSell) {
+        // Sell: asset → payment token
+        const amountRaw = toSmallestUnit(amount, assetDecimals)
+        quoteResponse = await getQuote(assetMint, payMeta.mint, amountRaw)
+      } else {
+        // Buy: payment token → asset
+        const amountRaw = toSmallestUnit(amount, payMeta.decimals)
+        quoteResponse = await getQuote(payMeta.mint, assetMint, amountRaw)
+      }
 
       // 2. Get serialized swap transaction
       const { swapTransaction } = await getSwapTransaction(quoteResponse, publicKey)
@@ -110,7 +133,7 @@ export function useSolanaSwap(asset) {
       setSwapError(e.message || 'Swap failed')
       setSwapStatus('error')
     }
-  }, [publicKey, outputMint, signTransaction, connection])
+  }, [publicKey, assetMint, assetDecimals, isSell, signTransaction, connection])
 
   // ── Reset ──────────────────────────────────────────────
 
@@ -132,6 +155,6 @@ export function useSolanaSwap(asset) {
     fetchQuote,
     executeSwap,
     reset,
-    outputMint,
+    outputMint: assetMint,
   }
 }

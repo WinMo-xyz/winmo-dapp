@@ -310,6 +310,24 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.3);
 }
 
+.btn-buy {
+  background: var(--success);
+  color: var(--color-dark);
+}
+
+.btn-buy:hover {
+  box-shadow: 0 0 32px rgba(101, 217, 120, 0.3);
+}
+
+.btn-sell {
+  background: var(--red);
+  color: #fff;
+}
+
+.btn-sell:hover {
+  box-shadow: 0 0 32px rgba(243, 53, 56, 0.3);
+}
+
 /* Gradient text helper */
 .gradient-text {
   background: var(--gradient-1);

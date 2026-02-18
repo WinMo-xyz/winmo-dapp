@@ -62,7 +62,11 @@ export default function SearchBar({ onSelect }) {
               className="search-result"
               onClick={() => handleSelect(asset)}
             >
-              <AssetLogo logo={asset.logo} name={asset.name} size={20} />
+              {asset.category === 'forex' ? (
+                <span className="search-result-fx-icon">FX</span>
+              ) : (
+                <AssetLogo logo={asset.logo} name={asset.name} size={20} />
+              )}
               <span className="search-result-name">{asset.name}</span>
               <span className="search-result-symbol">{asset.symbol}</span>
             </button>

@@ -91,6 +91,21 @@
   letter-spacing: 0.05em;
 }
 
+.search-result-fx-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(153, 69, 255, 0.15);
+  color: #9945FF;
+  font-size: 9px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
+
 @media (max-width: 900px) {
   .search-input {
     width: 100%;

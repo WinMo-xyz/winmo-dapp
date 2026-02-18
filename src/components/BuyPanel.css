@@ -4,6 +4,45 @@
   top: 100px;
 }
 
+.buy-panel-mode-toggle {
+  display: flex;
+  gap: 4px;
+  background: var(--light-3);
+  border-radius: var(--radius-rounded);
+  padding: 3px;
+  border: 1px solid var(--light-5);
+  margin-bottom: 20px;
+}
+
+.buy-panel-mode-btn {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-light-secondary);
+  border-radius: var(--radius-rounded);
+  transition: all 0.3s var(--ease-out);
+  text-align: center;
+}
+
+.buy-panel-mode-btn:hover {
+  color: var(--color-light);
+}
+
+.buy-panel-mode-btn.active {
+  color: var(--color-light);
+  background: var(--light-7);
+  box-shadow: 0 1px 4px rgba(var(--shadow-color), 0.1);
+}
+
+.buy-panel-mode-btn.active.buy-panel-mode-buy {
+  color: var(--success);
+}
+
+.buy-panel-mode-btn.active.buy-panel-mode-sell {
+  color: var(--red);
+}
+
 .buy-panel-title {
   font-family: var(--font-display);
   font-size: 20px;
@@ -66,6 +105,55 @@
   color: var(--color-light);
 }
 
+.buy-panel-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.buy-panel-label-row .buy-panel-label {
+  margin-bottom: 0;
+}
+
+.buy-panel-balance {
+  font-size: 12px;
+  color: var(--color-light-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buy-panel-pct-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.buy-panel-pct-btn {
+  flex: 1;
+  padding: 5px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
+  border-radius: var(--radius-rounded);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  text-align: center;
+}
+
+.buy-panel-pct-btn:hover:not(:disabled) {
+  background: rgba(var(--accent-rgb), 0.2);
+  border-color: rgba(var(--accent-rgb), 0.3);
+}
+
+.buy-panel-pct-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .buy-panel-input {
   width: 100%;
   padding: 12px 14px;
@@ -114,16 +202,43 @@
   color: var(--color-light-secondary);
 }
 
-.buy-panel-output-value {
+.buy-panel-output-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buy-panel-output-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-main);
   font-size: 15px;
   font-weight: 600;
   color: var(--color-light);
+  text-align: right;
+  padding: 0;
+}
+
+.buy-panel-output-input::placeholder {
+  color: var(--color-light-secondary);
+}
+
+.buy-panel-output-input::-webkit-outer-spin-button,
+.buy-panel-output-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.buy-panel-output-input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .buy-panel-output-symbol {
   font-size: 12px;
   color: var(--color-light-secondary);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .buy-panel-price-info {

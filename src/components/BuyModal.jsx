@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import AssetLogo from './AssetLogo'
 import { useSwap } from '../hooks/useSwap'
 import { useSolanaSwap } from '../hooks/useSolanaSwap'
+import { useEvmAssetBalance, useSolanaAssetBalance, useEvmPaymentBalance, useSolanaPaymentBalance } from '../hooks/useAssetBalance'
 import { useWallet } from '../context/WalletContext'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -23,16 +24,35 @@ const SOLANA_PAYMENT_TOKENS = [
   { symbol: 'USDT', name: 'Tether', logo: CI + 'usdt.svg' },
 ]
 
-export default function BuyModal({ asset, onClose }) {
+function estimateReceive(amount, price, isSell) {
+  if (!amount || !price || price <= 0) return ''
+  const v = parseFloat(amount)
+  if (!v || v <= 0) return ''
+  return isSell ? (v * price).toFixed(2) : (v / price).toFixed(6)
+}
+
+function reverseEstimate(receive, price, isSell) {
+  if (!receive || !price || price <= 0) return ''
+  const v = parseFloat(receive)
+  if (!v || v <= 0) return ''
+  return isSell ? (v / price).toString() : (v * price).toString()
+}
+
+export default function BuyModal({ asset, mode = 'buy', onClose }) {
+  const isSell = mode === 'sell'
   const { isEvmConnected, isSolanaConnected } = useWallet()
   const { setVisible: openSolanaModal } = useWalletModal()
   const { openConnectModal } = useConnectModal()
 
   // EVM swap hook (KyberSwap)
-  const evmSwap = useSwap(asset)
+  const evmSwap = useSwap(asset, mode)
 
   // Solana swap hook (Jupiter)
-  const solSwap = useSolanaSwap(asset)
+  const solSwap = useSolanaSwap(asset, mode)
+
+  // Asset balance (for sell mode)
+  const evmAssetBal = useEvmAssetBalance(asset)
+  const solAssetBal = useSolanaAssetBalance(asset)
 
   const chains = asset ? getAssetChains(asset) : []
   const hasSolanaRoute = chains.includes('solana')
@@ -63,6 +83,16 @@ export default function BuyModal({ asset, onClose }) {
 
   const [payToken, setPayToken] = useState(paymentTokens[0].symbol)
   const [amount, setAmount] = useState('')
+  const [receive, setReceive] = useState('')
+
+  // Payment token balance (for buy mode) — hooks must be called unconditionally
+  const evmPayBal = useEvmPaymentBalance(payToken)
+  const solPayBal = useSolanaPaymentBalance(payToken)
+
+  // Active balance: sell mode → asset balance, buy mode → payment token balance
+  const activeBalance = isSell
+    ? (useSolana ? solAssetBal : evmAssetBal)
+    : (useSolana ? solPayBal : evmPayBal)
 
   // Reset override + payToken when asset changes
   useEffect(() => { setChainOverride(null) }, [asset?.id])
@@ -81,6 +111,13 @@ export default function BuyModal({ asset, onClose }) {
     }
   }, [payToken, amount, fetchQuote, useSolana])
 
+  // Sync receive from quote
+  useEffect(() => {
+    if (quote?.outputHuman) {
+      setReceive(quote.outputHuman)
+    }
+  }, [quote?.outputHuman])
+
   // Auto-close on success after 2 s
   useEffect(() => {
     if (swapStatus === 'success') {
@@ -90,6 +127,41 @@ export default function BuyModal({ asset, onClose }) {
   }, [swapStatus, onClose])
 
   if (!asset) return null
+
+  const actionLabel = isSell ? 'Sell' : 'Buy'
+  const outputSymbol = isSell ? payToken : asset.symbol
+
+  // Clamp amount to balance
+  const handleAmountChange = (val) => {
+    let finalVal = val
+    if (activeBalance != null && parseFloat(val) > activeBalance) {
+      finalVal = String(activeBalance)
+    }
+    setAmount(finalVal)
+    setReceive(estimateReceive(finalVal, asset.price, isSell))
+    if (swapStatus !== 'idle') reset()
+  }
+
+  const handleReceiveChange = (val) => {
+    setReceive(val)
+    let reverseAmt = reverseEstimate(val, asset.price, isSell)
+    // Clamp to balance
+    if (reverseAmt && activeBalance != null && parseFloat(reverseAmt) > activeBalance) {
+      reverseAmt = String(activeBalance)
+      setReceive(estimateReceive(reverseAmt, asset.price, isSell))
+    }
+    setAmount(reverseAmt)
+    if (swapStatus !== 'idle') reset()
+  }
+
+  const handlePercent = (pct) => {
+    if (activeBalance != null && activeBalance > 0) {
+      const newAmt = String(activeBalance * pct)
+      setAmount(newAmt)
+      setReceive(estimateReceive(newAmt, asset.price, isSell))
+      if (swapStatus !== 'idle') reset()
+    }
+  }
 
   // Not connected to the required chain: show connect prompt
   const needsConnect = (useSolana && !isSolanaConnected) || (!useSolana && !isEvmConnected)
@@ -101,7 +173,7 @@ export default function BuyModal({ asset, onClose }) {
           <button className="modal-close" onClick={onClose}>&times;</button>
 
           <h3 className="modal-title">
-            Buy {asset.name}
+            {actionLabel} {asset.name}
             <span className="modal-symbol">{asset.symbol}</span>
           </h3>
 
@@ -128,10 +200,8 @@ export default function BuyModal({ asset, onClose }) {
 
   // Shared logic for both chains
   const isSwapping = swapStatus === 'swapping' || swapStatus === 'approving'
-  const outputAmount = quote?.outputHuman
-    || (amount && asset.price > 0 ? (parseFloat(amount) / asset.price).toFixed(6) : '0.000000')
 
-  const handleBuy = () => {
+  const handleAction = () => {
     if (swapStatus === 'error') reset()
     if (swapStatus === 'success') { onClose(); return }
     executeSwap(payToken, amount)
@@ -142,21 +212,24 @@ export default function BuyModal({ asset, onClose }) {
     if (swapStatus === 'swapping') return 'Swapping...'
     if (swapStatus === 'success') return 'Done!'
     if (swapStatus === 'error') return 'Retry'
+    if (activeBalance != null && activeBalance <= 0) return 'No balance'
     if (useSolana) {
       if (!isSolanaConnected) return 'Connect Solana wallet'
       if (!solSwap.outputMint) return 'No swap route'
-      return `Buy ${asset.symbol}`
+      return `${actionLabel} ${asset.symbol}`
     }
     // EVM
     const isSol = payToken === 'SOL'
     if (isSol) return 'SOL swaps coming soon'
     if (!isEvmConnected) return 'Connect EVM wallet'
     if (!evmSwap.dstAddress) return 'No swap route'
-    return `Buy ${asset.symbol}`
+    return `${actionLabel} ${asset.symbol}`
   }
 
   const isDisabled = (() => {
     if (!amount || parseFloat(amount) <= 0 || isSwapping || quoteLoading) return true
+    if (activeBalance != null && parseFloat(amount) > activeBalance) return true
+    if (activeBalance != null && activeBalance <= 0) return true
     if (useSolana) return !isSolanaConnected || !solSwap.outputMint
     const isSol = payToken === 'SOL'
     if (isSol) return true
@@ -164,6 +237,16 @@ export default function BuyModal({ asset, onClose }) {
     if (!evmSwap.dstAddress && isEvmConnected) return true
     return false
   })()
+
+  // Format balance for display
+  const formatBalance = (bal) => {
+    if (bal == null) return '...'
+    if (bal === 0) return '0'
+    if (bal >= 1) return bal.toLocaleString(undefined, { maximumFractionDigits: 4 })
+    return bal.toFixed(6)
+  }
+
+  const balanceTokenLabel = isSell ? asset.symbol : payToken
 
   return (
     <div className="modal-overlay" onClick={isSwapping ? undefined : onClose}>
@@ -173,12 +256,12 @@ export default function BuyModal({ asset, onClose }) {
         )}
 
         <h3 className="modal-title">
-          Buy {asset.name}
+          {actionLabel} {asset.name}
           <span className="modal-symbol">{asset.symbol}</span>
         </h3>
 
         <div className="modal-field">
-          <label className="modal-label">Pay with</label>
+          <label className="modal-label">{isSell ? 'Receive in' : 'Pay with'}</label>
           <div className="modal-token-select">
             {paymentTokens.map((t) => (
               <button
@@ -195,26 +278,56 @@ export default function BuyModal({ asset, onClose }) {
         </div>
 
         <div className="modal-field">
-          <label className="modal-label">Amount ({payToken})</label>
+          <div className="modal-label-row">
+            <label className="modal-label">
+              Amount ({isSell ? asset.symbol : payToken})
+            </label>
+            <span className="modal-balance">
+              Bal: {formatBalance(activeBalance)} {balanceTokenLabel}
+            </span>
+          </div>
           <input
             type="number"
             className="modal-input"
             placeholder="0.00"
             value={amount}
-            onChange={(e) => { setAmount(e.target.value); if (swapStatus !== 'idle') reset() }}
+            onChange={(e) => handleAmountChange(e.target.value)}
             min="0"
+            max={activeBalance != null ? activeBalance : undefined}
             step="any"
             disabled={isSwapping}
           />
+          <div className="modal-pct-row">
+            {[0.25, 0.5, 0.75, 1].map((pct) => (
+              <button
+                key={pct}
+                className="modal-pct-btn"
+                onClick={() => handlePercent(pct)}
+                disabled={isSwapping || !activeBalance}
+              >
+                {pct === 1 ? 'Max' : `${pct * 100}%`}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="modal-output">
           <span className="modal-output-label">
             {quoteLoading ? 'Fetching quote...' : 'You receive'}
           </span>
-          <span className="modal-output-value">
-            {outputAmount} <span className="modal-output-symbol">{asset.symbol}</span>
-          </span>
+          <div className="modal-output-input-wrap">
+            <input
+              type="number"
+              className="modal-output-input"
+              placeholder="0.00"
+              value={receive}
+              onChange={(e) => handleReceiveChange(e.target.value)}
+              min="0"
+              step="any"
+              disabled={isSwapping}
+            />
+            <span className="modal-output-symbol">{outputSymbol}</span>
+          </div>
         </div>
 
         <div className="modal-price-info">
@@ -236,8 +349,8 @@ export default function BuyModal({ asset, onClose }) {
         )}
 
         <button
-          className={`btn btn-accent modal-buy-btn ${swapStatus === 'success' ? 'swap-success' : ''}`}
-          onClick={handleBuy}
+          className={`btn ${isSell ? 'btn-sell' : 'btn-buy'} modal-buy-btn ${swapStatus === 'success' ? 'swap-success' : ''}`}
+          onClick={handleAction}
           disabled={isDisabled && swapStatus !== 'success'}
         >
           {buttonLabel()}

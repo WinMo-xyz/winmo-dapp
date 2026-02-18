@@ -3,8 +3,10 @@ import { useAccount, useBalance, useReadContracts, useChainId } from 'wagmi'
 import { formatUnits } from 'viem'
 import { getTokensForChain, erc20Abi } from '../config/tokens'
 
+// Map token symbols to their price lookup symbol
 const PRICE_SYMBOL_MAP = {
   WETH: 'ETH',
+  WBTC: 'BTC',
 }
 
 const CHAIN_NAMES = {
@@ -47,8 +49,8 @@ export function usePortfolio(priceMap) {
     const chain = CHAIN_NAMES[chainId] || `Chain ${chainId}`
 
     // Native ETH
-    if (nativeBalance && parseFloat(nativeBalance.formatted) > 0) {
-      const balance = parseFloat(nativeBalance.formatted)
+    {
+      const balance = nativeBalance ? parseFloat(nativeBalance.formatted) : 0
       const price = priceMap?.ETH?.price ?? 0
       const value = balance * price
       total += value
@@ -63,31 +65,31 @@ export function usePortfolio(priceMap) {
       })
     }
 
-    // ERC-20 tokens
-    if (tokenBalances) {
-      tokens.forEach((token, i) => {
+    // All ERC-20 tokens (show all registered tokens)
+    tokens.forEach((token, i) => {
+      let balance = 0
+      if (tokenBalances) {
         const raw = tokenBalances[i]
-        if (!raw || raw.status === 'failure') return
+        if (raw && raw.status !== 'failure') {
+          balance = parseFloat(formatUnits(raw.result, token.decimals))
+        }
+      }
 
-        const balance = parseFloat(formatUnits(raw.result, token.decimals))
-        if (balance <= 0) return
+      const lookupSymbol = PRICE_SYMBOL_MAP[token.symbol] || token.symbol
+      const price = priceMap?.[lookupSymbol]?.price ?? 0
+      const value = balance * price
+      total += value
 
-        const lookupSymbol = PRICE_SYMBOL_MAP[token.symbol] || token.symbol
-        const price = priceMap?.[lookupSymbol]?.price ?? 0
-        const value = balance * price
-        total += value
-
-        result.push({
-          asset: token.name,
-          symbol: token.symbol,
-          balance: balance.toFixed(token.decimals <= 6 ? 2 : 6),
-          price,
-          value,
-          chain,
-          logo: token.logo,
-        })
+      result.push({
+        asset: token.name,
+        symbol: token.symbol,
+        balance: balance.toFixed(token.decimals <= 6 ? 2 : 6),
+        price,
+        value,
+        chain,
+        logo: token.logo,
       })
-    }
+    })
 
     result.sort((a, b) => b.value - a.value)
     return { holdings: result, totalValue: total }

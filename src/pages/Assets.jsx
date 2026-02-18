@@ -3,25 +3,49 @@ import { useNavigate } from 'react-router-dom'
 import DappNavbar from '../components/DappNavbar'
 import BuyModal from '../components/BuyModal'
 import AssetLogo from '../components/AssetLogo'
-import { getStocks, getCrypto, getCommodities, getBonds } from '../services/assets'
+import { getStocks, getCrypto, getCommodities, getBonds, getAssetChains } from '../services/assets'
 import { useLivePrices } from '../hooks/useLivePrices'
 import './Assets.css'
 
-const TABS = ['Stocks', 'Crypto', 'Commodities', 'Bonds']
+const SUB_TABS = {
+  Stocks: [
+    { key: 'pre-ipo', label: 'Pre-IPO' },
+    { key: 'large-cap', label: 'Large Cap' },
+    { key: 'mid-cap', label: 'Mid Cap' },
+    { key: 'small-cap', label: 'Small Cap' },
+    { key: 'etf', label: 'ETF' },
+  ],
+  Crypto: [
+    { key: 'large-cap', label: 'Large Cap' },
+    { key: 'mid-cap', label: 'Mid Cap' },
+    { key: 'small-cap', label: 'Small Cap' },
+  ],
+  Commodities: [
+    { key: 'precious-metals', label: 'Precious Metals' },
+    { key: 'energy', label: 'Energy' },
+    { key: 'industrial', label: 'Industrial' },
+    { key: 'broad', label: 'Broad' },
+  ],
+  Bonds: [
+    { key: 'treasury', label: 'Treasury' },
+    { key: 'corporate', label: 'Corporate' },
+    { key: 'clo', label: 'CLO' },
+  ],
+}
 
-const STOCK_SUBS = [
-  { key: 'pre-ipo', label: 'Pre-IPO' },
-  { key: 'large-cap', label: 'Large Cap' },
-  { key: 'mid-cap', label: 'Mid Cap' },
-  { key: 'small-cap', label: 'Small Cap' },
-  { key: 'etf', label: 'ETF' },
-]
+const DEFAULT_SUB = {
+  Stocks: 'pre-ipo',
+  Crypto: 'large-cap',
+  Commodities: 'precious-metals',
+  Bonds: 'treasury',
+}
 
-const CRYPTO_SUBS = [
-  { key: 'large-cap', label: 'Large Cap' },
-  { key: 'mid-cap', label: 'Mid Cap' },
-  { key: 'small-cap', label: 'Small Cap' },
-]
+const FETCHERS = {
+  Stocks: getStocks,
+  Crypto: getCrypto,
+  Commodities: getCommodities,
+  Bonds: getBonds,
+}
 
 function formatPrice(price) {
   if (price >= 1) return price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -29,52 +53,21 @@ function formatPrice(price) {
   return price.toFixed(6)
 }
 
-export default function Assets() {
-  const [activeTab, setActiveTab] = useState('Crypto')
-  const [stockSub, setStockSub] = useState('pre-ipo')
-  const [cryptoSub, setCryptoSub] = useState('large-cap')
+export default function Assets({ defaultTab = 'Crypto' }) {
+  const [subSelections, setSubSelections] = useState(DEFAULT_SUB)
   const [buyAsset, setBuyAsset] = useState(null)
+  const [sellAsset, setSellAsset] = useState(null)
   const navigate = useNavigate()
   const { version } = useLivePrices()
   void version
 
-  let assets = []
-  let subTabs = null
+  const activeSub = subSelections[defaultTab]
+  const tabs = SUB_TABS[defaultTab] || []
+  const fetcher = FETCHERS[defaultTab]
+  const assets = fetcher ? fetcher(activeSub) : []
 
-  if (activeTab === 'Stocks') {
-    assets = getStocks(stockSub)
-    subTabs = (
-      <div className="assets-subtabs">
-        {STOCK_SUBS.map((s) => (
-          <button
-            key={s.key}
-            className={`assets-subtab ${stockSub === s.key ? 'active' : ''}`}
-            onClick={() => setStockSub(s.key)}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-    )
-  } else if (activeTab === 'Crypto') {
-    assets = getCrypto(cryptoSub)
-    subTabs = (
-      <div className="assets-subtabs">
-        {CRYPTO_SUBS.map((s) => (
-          <button
-            key={s.key}
-            className={`assets-subtab ${cryptoSub === s.key ? 'active' : ''}`}
-            onClick={() => setCryptoSub(s.key)}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-    )
-  } else if (activeTab === 'Commodities') {
-    assets = getCommodities()
-  } else {
-    assets = getBonds()
+  const handleSubChange = (key) => {
+    setSubSelections(prev => ({ ...prev, [defaultTab]: key }))
   }
 
   return (
@@ -82,19 +75,19 @@ export default function Assets() {
       <DappNavbar />
       <main className="assets-page">
         <div className="container">
-          <div className="assets-tabs">
-            {TABS.map((tab) => (
-              <button
-                key={tab}
-                className={`assets-tab ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-
-          {subTabs}
+          {tabs.length > 0 && (
+            <div className="assets-subtabs">
+              {tabs.map((s) => (
+                <button
+                  key={s.key}
+                  className={`assets-subtab ${activeSub === s.key ? 'active' : ''}`}
+                  onClick={() => handleSubChange(s.key)}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="assets-table-wrap glass-card">
             <table className="assets-table">
@@ -120,9 +113,14 @@ export default function Assets() {
                       {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
                     </td>
                     <td className="asset-actions">
-                      <button className="btn btn-accent asset-buy-btn" onClick={() => setBuyAsset(asset)}>
+                      <button className="btn btn-buy asset-buy-btn" onClick={() => setBuyAsset(asset)}>
                         Buy
                       </button>
+                      {getAssetChains(asset).length > 0 && (
+                        <button className="btn btn-sell asset-sell-btn" onClick={() => setSellAsset(asset)}>
+                          Sell
+                        </button>
+                      )}
                       <button className="btn btn-outline asset-detail-btn" onClick={() => navigate(`/assets/${asset.id}`)}>
                         Details
                       </button>
@@ -135,7 +133,8 @@ export default function Assets() {
         </div>
       </main>
 
-      {buyAsset && <BuyModal asset={buyAsset} onClose={() => setBuyAsset(null)} />}
+      {buyAsset && <BuyModal asset={buyAsset} mode="buy" onClose={() => setBuyAsset(null)} />}
+      {sellAsset && <BuyModal asset={sellAsset} mode="sell" onClose={() => setSellAsset(null)} />}
     </>
   )
 }

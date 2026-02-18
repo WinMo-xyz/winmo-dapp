@@ -1,0 +1,158 @@
+.balance-chart {
+  padding: 28px;
+  margin-bottom: 0;
+  animation: slide-up 0.6s var(--ease-out) 0.04s both;
+}
+
+.balance-chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.balance-chart-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.balance-chart-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-light-secondary);
+  margin-bottom: 4px;
+}
+
+.balance-chart-value {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--color-light);
+  margin-bottom: 4px;
+}
+
+.balance-chart-change {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.balance-chart-change.positive {
+  color: var(--success);
+}
+
+.balance-chart-change.negative {
+  color: var(--red);
+}
+
+.balance-chart-range-label {
+  color: var(--color-light-secondary);
+  font-weight: 400;
+}
+
+.balance-chart-loading {
+  font-size: 13px;
+  color: var(--color-light-secondary);
+  margin-top: 2px;
+}
+
+.balance-chart-ranges {
+  display: flex;
+  gap: 2px;
+  background: var(--light-3);
+  border-radius: var(--radius-rounded);
+  padding: 3px;
+  border: 1px solid var(--light-5);
+  flex-shrink: 0;
+}
+
+.balance-range-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-light-secondary);
+  border-radius: var(--radius-rounded);
+  transition: all 0.25s var(--ease-out);
+  white-space: nowrap;
+}
+
+.balance-range-btn:hover {
+  color: var(--color-light);
+}
+
+.balance-range-btn.active {
+  color: var(--color-light);
+  background: var(--light-7);
+  box-shadow: 0 1px 4px rgba(var(--shadow-color), 0.1);
+}
+
+.balance-chart-svg-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.balance-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 800 / 240;
+  cursor: crosshair;
+}
+
+.balance-chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -110%);
+  pointer-events: none;
+  background: var(--color-dark);
+  border: 1px solid var(--light-10);
+  border-radius: var(--radius-2);
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.tooltip-price {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-light);
+}
+
+.tooltip-date {
+  font-size: 11px;
+  color: var(--color-light-secondary);
+}
+
+@media (max-width: 768px) {
+  .balance-chart {
+    padding: 20px 16px;
+  }
+
+  .balance-chart-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .balance-chart-ranges {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .balance-range-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .balance-range-btn {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+}

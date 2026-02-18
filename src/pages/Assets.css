@@ -4,38 +4,6 @@
   min-height: 100vh;
 }
 
-/* Tabs */
-.assets-tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--light-3);
-  border-radius: var(--radius-rounded);
-  padding: 4px;
-  border: 1px solid var(--light-5);
-  margin-bottom: 16px;
-  width: fit-content;
-  animation: slide-up 0.5s var(--ease-out) both;
-}
-
-.assets-tab {
-  padding: 10px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-light-secondary);
-  border-radius: var(--radius-rounded);
-  transition: all 0.3s var(--ease-out);
-}
-
-.assets-tab:hover {
-  color: var(--color-light);
-}
-
-.assets-tab.active {
-  color: var(--color-light);
-  background: var(--light-7);
-  box-shadow: 0 1px 4px rgba(var(--shadow-color), 0.1);
-}
-
 /* Sub-tabs */
 .assets-subtabs {
   display: flex;
@@ -165,22 +133,17 @@
   font-size: 12px;
 }
 
+.asset-sell-btn {
+  padding: 6px 16px;
+  font-size: 12px;
+}
+
 .asset-detail-btn {
   padding: 6px 16px;
   font-size: 12px;
 }
 
 @media (max-width: 768px) {
-  .assets-tabs {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .assets-tab {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-
   .assets-subtabs {
     flex-wrap: wrap;
   }

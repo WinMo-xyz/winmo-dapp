@@ -23,6 +23,32 @@ const SYMBOL_TO_GECKO_ID = {
   BONK: 'bonk',
   PYTH: 'pyth-network',
   WIF: 'dogwifcoin',
+  // Stablecoins
+  USDT: 'tether',
+  USDC: 'usd-coin',
+  DAI: 'dai',
+  // Additional crypto
+  USDS: 'usds',
+  MNT: 'mantle',
+  TRX: 'tron',
+  TON: 'the-open-network',
+  SHIB: 'shiba-inu',
+  PEPE: 'pepe',
+  CRO: 'crypto-com-chain',
+  LEO: 'leo-token',
+  AAVE: 'aave',
+  OKB: 'okb',
+  NEAR: 'near',
+  RENDER: 'render-token',
+  ARB: 'arbitrum',
+  ONDO: 'ondo-finance',
+  WLD: 'worldcoin-wld',
+  ENA: 'ethena',
+  QNT: 'quant-network',
+  NEXO: 'nexo',
+  MORPHO: 'morpho',
+  EDGEN: 'edgen',
+  PAXG: 'pax-gold',
 }
 
 const GECKO_ID_TO_SYMBOL = Object.fromEntries(

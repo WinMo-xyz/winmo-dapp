@@ -6,7 +6,7 @@ const CHAIN_ID = 1
 const BASE = `/api/kyberswap/${CHAIN}/api/v1`
 
 // Native ETH placeholder (same as 1inch convention)
-const NATIVE_ETH = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+export const NATIVE_ETH = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
 
 // Source (payment) tokens on Ethereum mainnet
 export const PAYMENT_TOKEN_META = {
@@ -85,6 +85,7 @@ export async function getRoute(srcSymbol, dstAddress, amount) {
     tokenOut: dstAddress,
     amountIn: toSmallestUnit(amount, src.decimals),
     gasInclude: 'true',
+    excludedSources: 'pmm',
   })
 
   const res = await fetch(`${BASE}/routes?${params}`, { headers })
@@ -97,6 +98,31 @@ export async function getRoute(srcSymbol, dstAddress, amount) {
   const data = json.data
   if (!data?.routeSummary) throw new Error('No route found')
   return data // { routeSummary, routerAddress }
+}
+
+/**
+ * GET /routes — generic route fetch with raw token addresses and raw amount.
+ * Used for sell operations where the input token is an asset (not a payment token).
+ */
+export async function getRouteRaw(tokenIn, tokenOut, amountInRaw) {
+  const params = new URLSearchParams({
+    tokenIn,
+    tokenOut,
+    amountIn: amountInRaw,
+    gasInclude: 'true',
+    excludedSources: 'pmm',
+  })
+
+  const res = await fetch(`${BASE}/routes?${params}`, { headers })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.message || body.error || `KyberSwap error ${res.status}`)
+  }
+
+  const json = await res.json()
+  const data = json.data
+  if (!data?.routeSummary) throw new Error('No route found')
+  return data
 }
 
 /**

@@ -1,14 +1,30 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { PublicKey } from '@solana/web3.js'
-import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { SPL_TOKEN_LIST } from '../config/solanaTokens'
 
 const CI = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/svg/color/'
 
+// Build a mint -> token metadata lookup from SPL_TOKEN_LIST
+const MINT_MAP = new Map()
+for (const token of SPL_TOKEN_LIST) {
+  MINT_MAP.set(token.mint.toBase58(), token)
+}
+
+async function withRetry(fn, retries = 3, delay = 1200) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn()
+    } catch (err) {
+      if (i === retries - 1) throw err
+      await new Promise(r => setTimeout(r, delay * (i + 1)))
+    }
+  }
+}
+
 /**
  * Reads Solana native + SPL token balances for the connected wallet.
- * Returns the same shape as usePortfolio for easy merging.
+ * Uses a single getParsedTokenAccountsByOwner RPC call with retry logic.
  * @param {Object|null} priceMap - symbol -> { price } from CMC
  */
 export function useSolanaPortfolio(priceMap) {
@@ -19,61 +35,74 @@ export function useSolanaPortfolio(priceMap) {
   const [tokenBalances, setTokenBalances] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
+  // Stable key so the effect only re-fires when the actual address changes
+  const walletKey = publicKey?.toBase58() || null
+
+  const fetchBalances = useCallback(async (conn, pk, signal) => {
+    // Native SOL balance
+    const lamports = await withRetry(() =>
+      conn.getBalance(pk, 'confirmed')
+    )
+    if (signal.cancelled) return
+    setSolBalance(lamports / 1e9)
+
+    // All SPL token accounts in a single RPC call
+    const response = await withRetry(() =>
+      conn.getParsedTokenAccountsByOwner(
+        pk,
+        { programId: TOKEN_PROGRAM_ID },
+        'confirmed',
+      )
+    )
+    if (signal.cancelled) return
+
+    const results = []
+    for (const { account } of response.value) {
+      const parsed = account.data.parsed?.info
+      if (!parsed) continue
+
+      const mintAddr = parsed.mint
+      const token = MINT_MAP.get(mintAddr)
+      if (!token) continue // not a token we track
+
+      const uiAmount = parsed.tokenAmount?.uiAmount ?? 0
+      results.push({ ...token, balance: uiAmount })
+    }
+
+    if (!signal.cancelled) setTokenBalances(results)
+  }, [])
+
   useEffect(() => {
-    if (!connected || !publicKey) {
+    if (!connected || !walletKey) {
       setSolBalance(null)
       setTokenBalances([])
       return
     }
 
-    let cancelled = false
+    const signal = { cancelled: false }
     setIsLoading(true)
 
-    async function fetchBalances() {
-      try {
-        // Native SOL balance
-        const lamports = await connection.getBalance(publicKey)
-        if (!cancelled) setSolBalance(lamports / 1e9)
+    fetchBalances(connection, publicKey, signal)
+      .catch(err => console.error('[useSolanaPortfolio] fetch error:', err))
+      .finally(() => { if (!signal.cancelled) setIsLoading(false) })
 
-        // SPL token balances
-        const results = []
-        for (const token of SPL_TOKEN_LIST) {
-          try {
-            const ata = await getAssociatedTokenAddress(token.mint, publicKey)
-            const account = await getAccount(connection, ata)
-            const balance = Number(account.amount) / Math.pow(10, token.decimals)
-            if (balance > 0) {
-              results.push({ ...token, balance })
-            }
-          } catch {
-            // Token account doesn't exist — user holds 0
-          }
-        }
-        if (!cancelled) setTokenBalances(results)
-      } catch (err) {
-        console.error('[useSolanaPortfolio] fetch error:', err)
-      } finally {
-        if (!cancelled) setIsLoading(false)
-      }
-    }
-
-    fetchBalances()
-    return () => { cancelled = true }
-  }, [connected, publicKey, connection])
+    return () => { signal.cancelled = true }
+  }, [connected, walletKey, connection, fetchBalances, publicKey])
 
   const { holdings, totalValue } = useMemo(() => {
     const result = []
     let total = 0
 
     // Native SOL
-    if (solBalance != null && solBalance > 0) {
+    {
+      const bal = solBalance != null ? solBalance : 0
       const price = priceMap?.SOL?.price ?? 0
-      const value = solBalance * price
+      const value = bal * price
       total += value
       result.push({
         asset: 'Solana',
         symbol: 'SOL',
-        balance: solBalance.toFixed(6),
+        balance: bal.toFixed(6),
         price,
         value,
         chain: 'Solana',

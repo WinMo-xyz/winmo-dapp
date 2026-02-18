@@ -10,7 +10,11 @@ export default function DappNavbar() {
   const navigate = useNavigate()
 
   const handleSearchSelect = (asset) => {
-    navigate(`/assets/${asset.id}`)
+    if (asset._forexPair) {
+      navigate(`/forex/${asset._forexPair}`)
+    } else {
+      navigate(`/assets/${asset.id}`)
+    }
   }
 
   return (
@@ -26,11 +30,23 @@ export default function DappNavbar() {
             <NavLink to="/portfolio" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
               Portfolio
             </NavLink>
-            <NavLink to="/assets" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Assets
+            <NavLink to="/stocks" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              Stocks
+            </NavLink>
+            <NavLink to="/crypto" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              Crypto
+            </NavLink>
+            <NavLink to="/commodities" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              Commodities
+            </NavLink>
+            <NavLink to="/bonds" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              Bonds
             </NavLink>
             <NavLink to="/yield" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
               Yield
+            </NavLink>
+            <NavLink to="/forex" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              Forex
             </NavLink>
           </div>
         </div>
@@ -63,11 +79,32 @@ export default function DappNavbar() {
           Portfolio
         </NavLink>
         <NavLink
-          to="/assets"
+          to="/stocks"
           className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
           onClick={() => setMenuOpen(false)}
         >
-          Assets
+          Stocks
+        </NavLink>
+        <NavLink
+          to="/crypto"
+          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          Crypto
+        </NavLink>
+        <NavLink
+          to="/commodities"
+          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          Commodities
+        </NavLink>
+        <NavLink
+          to="/bonds"
+          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          Bonds
         </NavLink>
         <NavLink
           to="/yield"
@@ -75,6 +112,13 @@ export default function DappNavbar() {
           onClick={() => setMenuOpen(false)}
         >
           Yield
+        </NavLink>
+        <NavLink
+          to="/forex"
+          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          Forex
         </NavLink>
         <div className="dapp-mobile-search">
           <SearchBar onSelect={(asset) => { handleSearchSelect(asset); setMenuOpen(false) }} />
