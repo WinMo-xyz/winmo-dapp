@@ -4,7 +4,7 @@
 
 ## API Endpoints
 
-All endpoints return JSON. Base URL: `https://winmo.app` (or your deployment URL).
+All endpoints return JSON. Base URL: `https://app.winmo.xyz` (or your deployment URL).
 
 - `GET /api/agent/assets?category=&subcategory=` — List assets by category (stocks, crypto, commodities, bonds). Optional subcategory filter.
 - `GET /api/agent/asset/:id` — Get full asset detail including description, news, providers, and supported chains.
@@ -42,4 +42,5 @@ When running in-browser, `window.winmo` exposes a JavaScript API:
 ## Discovery
 
 - Machine-readable agent schema: `/.well-known/agents.json`
+- OpenAPI spec: `/openapi.json`
 - This file: `/llms.txt`

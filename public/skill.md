@@ -2,14 +2,14 @@
 name: winmo
 version: 1.0.0
 description: Multi-chain DeFi portfolio. Trade stocks, crypto, commodities, bonds, and forex onchain. Ethereum + Solana.
-homepage: https://winmo.xyz
+homepage: https://app.winmo.xyz
 ---
 
 # WinMo: Trade Everything Onchain
 
 100+ tradeable assets across stocks, crypto, commodities, bonds, and forex. Multi-chain (Ethereum + Solana). AI-agent native.
 
-> **Base URL:** `https://winmo.xyz`
+> **Base URL:** `https://app.winmo.xyz`
 
 ---
 
@@ -17,13 +17,13 @@ homepage: https://winmo.xyz
 
 ```bash
 # Search for any asset
-curl https://winmo.xyz/api/agent/search?q=bitcoin
+curl https://app.winmo.xyz/api/agent/search?q=bitcoin
 
 # Get live crypto prices
-curl https://winmo.xyz/api/agent/prices
+curl https://app.winmo.xyz/api/agent/prices
 
 # Get a swap quote (buy ETH with 100 USDC on Ethereum)
-curl "https://winmo.xyz/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum"
+curl "https://app.winmo.xyz/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum"
 ```
 
 No API key needed. No registration. No authentication. Just call the endpoints.
@@ -63,16 +63,16 @@ Stocks, commodities, and bonds are tokenized onchain via **Ondo Finance**, **Bac
 
 ```bash
 # All assets (100+)
-curl https://winmo.xyz/api/agent/assets
+curl https://app.winmo.xyz/api/agent/assets
 
 # Only crypto
-curl https://winmo.xyz/api/agent/assets?category=crypto
+curl https://app.winmo.xyz/api/agent/assets?category=crypto
 
 # Only large-cap stocks
-curl "https://winmo.xyz/api/agent/assets?category=stocks&subcategory=large-cap"
+curl "https://app.winmo.xyz/api/agent/assets?category=stocks&subcategory=large-cap"
 
 # Only ETFs
-curl "https://winmo.xyz/api/agent/assets?category=stocks&subcategory=etf"
+curl "https://app.winmo.xyz/api/agent/assets?category=stocks&subcategory=etf"
 ```
 
 **Subcategories:**
@@ -106,7 +106,7 @@ curl "https://winmo.xyz/api/agent/assets?category=stocks&subcategory=etf"
 ## Get Asset Detail
 
 ```bash
-curl https://winmo.xyz/api/agent/asset/btc
+curl https://app.winmo.xyz/api/agent/asset/btc
 ```
 
 **Response:**
@@ -132,7 +132,7 @@ curl https://winmo.xyz/api/agent/asset/btc
 ## Live Prices
 
 ```bash
-curl https://winmo.xyz/api/agent/prices
+curl https://app.winmo.xyz/api/agent/prices
 ```
 
 Returns live CoinGecko prices for 50+ crypto tokens merged with static prices for stocks, commodities, and bonds.
@@ -153,10 +153,10 @@ Returns live CoinGecko prices for 50+ crypto tokens merged with static prices fo
 
 ```bash
 # All protocols (11 total)
-curl https://winmo.xyz/api/agent/yield
+curl https://app.winmo.xyz/api/agent/yield
 
 # Safe protocols only
-curl https://winmo.xyz/api/agent/yield?riskLevel=safe
+curl https://app.winmo.xyz/api/agent/yield?riskLevel=safe
 ```
 
 Risk levels: `safe`, `low`, `high-yield`, `speculative`
@@ -190,16 +190,16 @@ Get real-time swap quotes from **Jupiter** (Solana) or **KyberSwap** (Ethereum).
 
 ```bash
 # Buy ETH with 100 USDC on Ethereum
-curl "https://winmo.xyz/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum"
+curl "https://app.winmo.xyz/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum"
 
 # Buy SOL with 50 USDC on Solana
-curl "https://winmo.xyz/api/agent/quote?from=USDC&to=SOL&amount=50&chain=solana"
+curl "https://app.winmo.xyz/api/agent/quote?from=USDC&to=SOL&amount=50&chain=solana"
 
 # Buy tokenized NVIDIA with USDC on Solana
-curl "https://winmo.xyz/api/agent/quote?from=USDC&to=NVDA&amount=200&chain=solana"
+curl "https://app.winmo.xyz/api/agent/quote?from=USDC&to=NVDA&amount=200&chain=solana"
 
 # Buy gold (PAXG) with ETH on Ethereum
-curl "https://winmo.xyz/api/agent/quote?from=ETH&to=XAU&amount=0.5&chain=ethereum"
+curl "https://app.winmo.xyz/api/agent/quote?from=ETH&to=XAU&amount=0.5&chain=ethereum"
 ```
 
 **Parameters:**
@@ -238,10 +238,10 @@ curl "https://winmo.xyz/api/agent/quote?from=ETH&to=XAU&amount=0.5&chain=ethereu
 ## Search
 
 ```bash
-curl "https://winmo.xyz/api/agent/search?q=nvidia"
-curl "https://winmo.xyz/api/agent/search?q=bitcoin"
-curl "https://winmo.xyz/api/agent/search?q=gold"
-curl "https://winmo.xyz/api/agent/search?q=eur"
+curl "https://app.winmo.xyz/api/agent/search?q=nvidia"
+curl "https://app.winmo.xyz/api/agent/search?q=bitcoin"
+curl "https://app.winmo.xyz/api/agent/search?q=gold"
+curl "https://app.winmo.xyz/api/agent/search?q=eur"
 ```
 
 Fuzzy matches on name and symbol across all assets and forex pairs.
@@ -251,7 +251,7 @@ Fuzzy matches on name and symbol across all assets and forex pairs.
 ## Forex Rates
 
 ```bash
-curl https://winmo.xyz/api/agent/forex
+curl https://app.winmo.xyz/api/agent/forex
 ```
 
 Live rates from **Pyth Network** oracles for 25+ FX pairs.
@@ -275,10 +275,10 @@ Get on-chain token addresses for building swap transactions.
 
 ```bash
 # All stock tokens on Ethereum
-curl "https://winmo.xyz/api/agent/tokens?category=stocks&chain=ethereum"
+curl "https://app.winmo.xyz/api/agent/tokens?category=stocks&chain=ethereum"
 
 # All crypto tokens on Solana
-curl "https://winmo.xyz/api/agent/tokens?category=crypto&chain=solana"
+curl "https://app.winmo.xyz/api/agent/tokens?category=crypto&chain=solana"
 ```
 
 **Response:**
@@ -380,6 +380,7 @@ No rate limits on WinMo endpoints. Upstream caches:
 | This skill file | `/skill.md` | Markdown with frontmatter |
 | LLM discovery | `/llms.txt` | Markdown (llmstxt.org spec) |
 | Agent schema | `/.well-known/agents.json` | JSON capability schema |
+| OpenAPI spec | `/openapi.json` | OpenAPI 3.1 |
 | Endpoint directory | `/api/agent/` | JSON |
 
 ---

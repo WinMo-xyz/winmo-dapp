@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import DappNavbar from '../components/DappNavbar'
 import './AIAgent.css'
 
-const SKILL_URL = 'https://winmo.xyz/skill.md'
+const SKILL_URL = 'https://app.winmo.xyz/skill.md'
 const PROMPT_TEXT = `Open ${SKILL_URL} and follow the instructions to integrate with WinMo`
 
 function CopyButton({ text, label }) {

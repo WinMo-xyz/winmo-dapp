@@ -1,0 +1,404 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "WinMo Agent API",
+    "version": "1.0.0",
+    "description": "Multi-chain DeFi portfolio API. 100+ tradeable assets across stocks, crypto, commodities, bonds, and forex. Ethereum + Solana. No API key required.",
+    "contact": { "url": "https://app.winmo.xyz" }
+  },
+  "servers": [
+    { "url": "https://app.winmo.xyz", "description": "Production" }
+  ],
+  "paths": {
+    "/api/agent/assets": {
+      "get": {
+        "operationId": "listAssets",
+        "summary": "List tradeable assets",
+        "description": "Returns 100+ assets across stocks, crypto, commodities, and bonds. Filter by category and subcategory.",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["stocks", "crypto", "commodities", "bonds"] },
+            "description": "Asset category"
+          },
+          {
+            "name": "subcategory",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["pre-ipo", "large-cap", "mid-cap", "small-cap", "etf", "precious-metals", "energy", "industrial", "broad", "treasury", "corporate", "clo"] },
+            "description": "Subcategory filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of assets",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Asset" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/asset/{id}": {
+      "get": {
+        "operationId": "getAsset",
+        "summary": "Get asset detail",
+        "description": "Returns full detail for a single asset including description, news, on-chain providers, and supported chains.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Asset ID (e.g. btc, nvda, gold, tlt)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asset detail",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AssetDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Asset not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/prices": {
+      "get": {
+        "operationId": "getPrices",
+        "summary": "Get live prices",
+        "description": "Live CoinGecko prices for 50+ crypto tokens merged with static prices for stocks, commodities, and bonds.",
+        "responses": {
+          "200": {
+            "description": "Map of symbol to price data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "$ref": "#/components/schemas/PriceEntry" }
+                },
+                "example": {
+                  "BTC": { "price": 104250.00, "change24h": 1.45 },
+                  "ETH": { "price": 3890.50, "change24h": 2.78 },
+                  "SOL": { "price": 248.30, "change24h": 5.12 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/yield": {
+      "get": {
+        "operationId": "getYield",
+        "summary": "Get yield protocols",
+        "description": "Returns 11 yield farming protocols with APY, TVL, risk level, and strategy. Enriched with live DeFi Llama data when available.",
+        "parameters": [
+          {
+            "name": "riskLevel",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["safe", "low", "high-yield", "speculative"] },
+            "description": "Filter by risk level"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of yield protocols",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/YieldProtocol" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/quote": {
+      "get": {
+        "operationId": "getQuote",
+        "summary": "Get swap quote",
+        "description": "Real-time swap quotes from Jupiter (Solana) or KyberSwap (Ethereum). Supports any tradeable asset pair.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Source token symbol (e.g. USDC, ETH, SOL, USDT)"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Destination token symbol (any tradeable asset)"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Amount of source token"
+          },
+          {
+            "name": "chain",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["solana", "ethereum"] },
+            "description": "Chain to execute on"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Swap quote with route details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Quote" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream API error (Jupiter or KyberSwap)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/search": {
+      "get": {
+        "operationId": "searchAssets",
+        "summary": "Search assets",
+        "description": "Fuzzy search all assets and forex pairs by name or symbol.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Search query (e.g. bitcoin, nvidia, gold, eur)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching assets",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Asset" } }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing query parameter",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/forex": {
+      "get": {
+        "operationId": "getForex",
+        "summary": "Get forex rates",
+        "description": "Live rates from Pyth Network oracles for 25+ FX pairs including majors, crosses, and exotics.",
+        "responses": {
+          "200": {
+            "description": "Map of currency pair to rate data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "$ref": "#/components/schemas/ForexRate" }
+                },
+                "example": {
+                  "EUR/USD": { "price": 1.0842, "confidence": 0.0001, "publishTime": 1708300800 },
+                  "USD/JPY": { "price": 149.85, "confidence": 0.02, "publishTime": 1708300800 }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Pyth Network error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/tokens": {
+      "get": {
+        "operationId": "getTokens",
+        "summary": "Get swappable token addresses",
+        "description": "Returns on-chain token addresses for building swap transactions. Filter by category and chain.",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["stocks", "crypto", "commodities", "bonds"] },
+            "description": "Asset category"
+          },
+          {
+            "name": "chain",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["solana", "ethereum"] },
+            "description": "Chain filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of tokens with addresses",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Token" } }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Asset": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "symbol": { "type": "string" },
+          "price": { "type": "number" },
+          "change24h": { "type": "number" },
+          "category": { "type": "string", "enum": ["stocks", "crypto", "commodities", "bonds"] },
+          "subcategory": { "type": "string" },
+          "logo": { "type": "string", "format": "uri" },
+          "providers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Provider" }
+          }
+        }
+      },
+      "AssetDetail": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Asset" },
+          {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "news": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": { "type": "string" },
+                    "date": { "type": "string" },
+                    "source": { "type": "string" }
+                  }
+                }
+              },
+              "chains": { "type": "array", "items": { "type": "string", "enum": ["ethereum", "solana"] } }
+            }
+          }
+        ]
+      },
+      "Provider": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string" },
+          "symbol": { "type": "string" },
+          "address": { "type": "string" },
+          "chain": { "type": "string", "enum": ["ethereum", "solana"] },
+          "decimals": { "type": "integer" }
+        }
+      },
+      "PriceEntry": {
+        "type": "object",
+        "properties": {
+          "price": { "type": "number" },
+          "change24h": { "type": "number" }
+        }
+      },
+      "YieldProtocol": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "protocol": { "type": "string" },
+          "network": { "type": "string" },
+          "asset": { "type": "string" },
+          "apy": { "type": "number" },
+          "totalDeposits": { "type": "string" },
+          "riskLevel": { "type": "string", "enum": ["safe", "low", "high-yield", "speculative"] },
+          "strategy": { "type": "string" },
+          "liveApy": { "type": "number" },
+          "liveTvl": { "type": "number" }
+        }
+      },
+      "Quote": {
+        "type": "object",
+        "properties": {
+          "chain": { "type": "string", "enum": ["solana", "ethereum"] },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "amount": { "type": "string" },
+          "fromAddress": { "type": "string" },
+          "toAddress": { "type": "string" },
+          "quote": { "type": "object" }
+        }
+      },
+      "ForexRate": {
+        "type": "object",
+        "properties": {
+          "price": { "type": "number" },
+          "confidence": { "type": "number" },
+          "publishTime": { "type": "integer" }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "symbol": { "type": "string" },
+          "address": { "type": "string" },
+          "decimals": { "type": "integer" },
+          "chain": { "type": "string", "enum": ["ethereum", "solana"] },
+          "logo": { "type": "string", "format": "uri" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" }
+        }
+      }
+    }
+  }
+}

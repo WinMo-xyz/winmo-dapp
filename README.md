@@ -271,7 +271,10 @@ WinMo is fully AI-agent compatible. See [AGENT_INTEGRATION.md](./AGENT_INTEGRATI
 
 **Quick overview:**
 
-- **Discovery:** `/llms.txt` and `/.well-known/agents.json`
+- **Skill file:** [`/skill.md`](https://app.winmo.xyz/skill.md) — full API reference for agents
+- **OpenAPI spec:** [`/openapi.json`](https://app.winmo.xyz/openapi.json) — OpenAPI 3.1 (GPT Actions, LangChain, etc.)
+- **Agent schema:** [`/.well-known/agents.json`](https://app.winmo.xyz/.well-known/agents.json) — machine-readable capability schema
+- **LLM discovery:** [`/llms.txt`](https://app.winmo.xyz/llms.txt) — llmstxt.org spec
 - **Browser API:** `window.winmo` with 11 methods
 - **REST API:** 8 endpoints at `/api/agent/*`
 
@@ -284,9 +287,9 @@ const quote = await window.winmo.getQuote({ from: 'USDC', to: 'ETH', amount: '10
 
 ```bash
 # REST example
-curl https://your-app.netlify.app/api/agent/assets?category=stocks
-curl https://your-app.netlify.app/api/agent/prices
-curl https://your-app.netlify.app/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum
+curl https://app.winmo.xyz/api/agent/assets?category=stocks
+curl https://app.winmo.xyz/api/agent/prices
+curl https://app.winmo.xyz/api/agent/quote?from=USDC&to=ETH&amount=100&chain=ethereum
 ```
 
 ---
