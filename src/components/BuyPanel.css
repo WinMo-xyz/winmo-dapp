@@ -377,3 +377,46 @@
   text-transform: capitalize;
   opacity: 0.7;
 }
+
+@media (max-width: 768px) {
+  .buy-panel {
+    position: static;
+    padding: 20px 16px;
+  }
+
+  .buy-panel-input {
+    font-size: 16px;
+  }
+
+  .buy-panel-output-input {
+    font-size: 16px;
+  }
+
+  .buy-panel-buy-btn {
+    min-height: 48px;
+  }
+
+  .buy-panel-token-btn {
+    padding: 10px 14px;
+    min-height: 40px;
+  }
+
+  .buy-panel-pct-btn {
+    padding: 8px 0;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .buy-panel {
+    padding: 16px 12px;
+  }
+
+  .buy-panel-field {
+    margin-bottom: 14px;
+  }
+
+  .buy-panel-title {
+    margin-bottom: 18px;
+  }
+}

@@ -607,7 +607,7 @@ textarea:focus-visible {
 /* ---- Mobile responsive ---- */
 @media (max-width: 768px) {
   .container {
-    padding: 0 20px;
+    padding: 0 max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
   }
 
   .section {
@@ -632,10 +632,14 @@ textarea:focus-visible {
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 16px;
+    padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right));
   }
 
   .section {
     padding: 56px 0;
+  }
+
+  .glass-card {
+    border-radius: var(--radius-2);
   }
 }

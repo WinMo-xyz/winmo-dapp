@@ -220,3 +220,38 @@
 }
 
 .asset-swap-history-link:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .asset-swap-wrap {
+    max-width: none;
+  }
+
+  .asset-swap-input-row {
+    flex-direction: column;
+  }
+
+  .asset-swap-select {
+    font-size: 16px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .asset-swap-flip-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .asset-swap-chain-btn {
+    min-height: 44px;
+  }
+
+  .asset-swap-btn {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .asset-swap-card {
+    padding: 20px 16px;
+  }
+}

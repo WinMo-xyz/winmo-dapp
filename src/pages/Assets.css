@@ -168,8 +168,25 @@
 }
 
 @media (max-width: 768px) {
+  .assets-page {
+    padding-top: 80px;
+  }
+
   .assets-tabs {
-    flex-wrap: wrap;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .assets-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .assets-table th:nth-child(2),
+  .assets-table td:nth-child(2) {
+    display: none;
   }
 
   .assets-table th,
@@ -181,5 +198,35 @@
   .asset-actions {
     flex-direction: column;
     gap: 4px;
+  }
+
+  .asset-buy-btn,
+  .asset-sell-btn,
+  .asset-detail-btn {
+    padding: 8px 16px;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .assets-table th:nth-child(4),
+  .assets-table td:nth-child(4) {
+    display: none;
+  }
+
+  .asset-name-cell .asset-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .asset-actions {
+    width: 100%;
+  }
+
+  .asset-buy-btn,
+  .asset-sell-btn,
+  .asset-detail-btn {
+    width: 100%;
+    text-align: center;
   }
 }

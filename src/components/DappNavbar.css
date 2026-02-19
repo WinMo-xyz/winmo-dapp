@@ -185,6 +185,11 @@
 
   .dapp-toggle {
     display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
   }
 
   .dapp-nav-actions {
@@ -212,8 +217,19 @@
     top: 10px;
   }
 
+  .dapp-navbar-inner {
+    height: 52px;
+  }
+
   .dapp-mobile-menu {
     left: 12px;
     right: 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .dapp-mobile-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 }

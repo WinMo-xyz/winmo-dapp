@@ -118,3 +118,33 @@
   color: var(--color-light-secondary);
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+  .price-chart-svg-wrap,
+  .price-chart-skeleton,
+  .price-chart-unavailable {
+    aspect-ratio: 3 / 1;
+  }
+
+  .price-chart-ranges {
+    flex-wrap: wrap;
+  }
+
+  .range-btn {
+    padding: 8px 14px;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .price-chart-svg-wrap,
+  .price-chart-skeleton,
+  .price-chart-unavailable {
+    aspect-ratio: 2.5 / 1;
+  }
+
+  .range-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}

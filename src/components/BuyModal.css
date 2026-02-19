@@ -391,3 +391,25 @@
   border-color: rgba(var(--light), 0.1);
   box-shadow: 0 16px 48px rgba(var(--shadow-color), 0.15);
 }
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: calc(100% - 24px);
+    max-width: none;
+    padding: 24px 20px;
+  }
+
+  .modal-close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 8px;
+    right: 8px;
+  }
+
+  .modal-buy-btn {
+    min-height: 48px;
+  }
+}
