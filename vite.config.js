@@ -16,6 +16,25 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       include: ['buffer'],
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-evm': ['wagmi', 'viem', '@rainbow-me/rainbowkit'],
+            'vendor-solana': [
+              '@solana/web3.js',
+              '@solana/wallet-adapter-react',
+              '@solana/wallet-adapter-react-ui',
+              '@solana/spl-token',
+            ],
+            'vendor-query': ['@tanstack/react-query'],
+          },
+        },
+      },
+      target: 'es2020',
+      sourcemap: false,
+    },
     server: {
       proxy: {
         '/api/cmc': {

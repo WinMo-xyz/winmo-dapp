@@ -1,4 +1,4 @@
-@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,900&f[]=clash-display@400,500,600,700&display=swap');
+/* Fonts loaded via <link> in index.html for faster parsing */
 
 :root {
   /* Core palette */
@@ -188,6 +188,31 @@ body::after {
   background-size: 256px 256px;
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--light-10);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--light-20);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--light-10) transparent;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -243,14 +268,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  transition: all 0.5s var(--ease-out);
+  transition: all 0.4s var(--ease-out);
   white-space: nowrap;
   position: relative;
   overflow: hidden;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
 }
 
 .btn-primary {
@@ -307,7 +337,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-accent:hover {
-  box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.3);
+  box-shadow: 0 4px 24px rgba(var(--accent-rgb), 0.35), 0 0 0 1px rgba(var(--accent-rgb), 0.15);
 }
 
 .btn-buy {
@@ -316,7 +346,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-buy:hover {
-  box-shadow: 0 0 32px rgba(101, 217, 120, 0.3);
+  box-shadow: 0 4px 20px rgba(101, 217, 120, 0.35);
 }
 
 .btn-sell {
@@ -325,7 +355,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-sell:hover {
-  box-shadow: 0 0 32px rgba(243, 53, 56, 0.3);
+  box-shadow: 0 4px 20px rgba(243, 53, 56, 0.35);
 }
 
 /* Gradient text helper */
@@ -343,7 +373,9 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(var(--light), 0.02);
   border: 1px solid var(--light-5);
   border-radius: var(--radius-1);
-  box-shadow: 0 1px 0 0 var(--light-5) inset;
+  box-shadow:
+    0 1px 0 0 var(--light-5) inset,
+    0 4px 24px rgba(var(--shadow-color), 0.06);
   backdrop-filter: blur(20px);
   transition: background 0.5s var(--ease-out), border-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out), transform 0.5s var(--ease-out);
 }
@@ -353,9 +385,10 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(var(--light), 0.04);
   border-color: var(--light-10);
   box-shadow:
-    0 1px 0 0 var(--light-5) inset,
-    0 8px 32px rgba(var(--shadow-color), 0.12);
-  transform: translateY(-2px);
+    0 1px 0 0 var(--light-7) inset,
+    0 12px 40px rgba(var(--shadow-color), 0.15),
+    0 0 0 1px rgba(var(--accent-rgb), 0.05);
+  transform: translateY(-3px);
 }
 
 /* Gradient border card */
@@ -389,9 +422,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 [data-theme="light"] .glass-card {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.6);
   border-color: rgba(var(--light), 0.08);
-  box-shadow: 0 1px 3px rgba(var(--shadow-color), 0.06);
+  box-shadow:
+    0 1px 3px rgba(var(--shadow-color), 0.06),
+    0 4px 16px rgba(var(--shadow-color), 0.04);
+}
+
+[data-theme="light"] .glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 2px 8px rgba(var(--shadow-color), 0.08),
+    0 12px 40px rgba(var(--shadow-color), 0.08);
 }
 
 [data-theme="light"] .glow {
@@ -507,9 +549,33 @@ h1, h2, h3, h4, h5, h6 {
 .reveal-delay-3 { transition-delay: 0.3s; }
 
 /* ---- Focus glow for inputs ---- */
-.glow-focus:focus {
+.glow-focus:focus,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   border-color: rgba(var(--accent-rgb), 0.4);
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08), 0 0 16px rgba(var(--accent-rgb), 0.06);
+  outline: none;
+}
+
+/* ---- Text shimmer effect ---- */
+.text-shimmer {
+  background: linear-gradient(
+    110deg,
+    var(--color-light) 35%,
+    rgba(var(--accent-rgb), 0.8) 50%,
+    var(--color-light) 65%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes text-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
 }
 
 /* ---- Subtle number ticker feel ---- */
@@ -522,6 +588,20 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes nav-slide-down {
   from { opacity: 0; transform: translateY(-12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Page loading spinner (used by React.lazy Suspense) ---- */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--light-10, rgba(255,255,255,0.1));
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ---- Mobile responsive ---- */

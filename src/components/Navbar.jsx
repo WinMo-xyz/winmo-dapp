@@ -8,7 +8,7 @@ export default function Navbar() {
     <nav className="landing-navbar">
       <div className="landing-navbar-inner">
         <Link to="/" className="navbar-logo">
-          <span className="logo-mark">W</span>
+          <img src="/winmo-logo.png" alt="WinMo" className="logo-img" />
           <span className="logo-text">WinMo</span>
         </Link>
 

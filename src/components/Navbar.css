@@ -36,20 +36,11 @@
   flex-shrink: 0;
 }
 
-.logo-mark {
+.logo-img {
   width: 30px;
   height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gradient-1);
-  background-size: 200% 100%;
-  animation: gradient 4s linear infinite;
   border-radius: 7px;
-  font-weight: 900;
-  font-size: 14px;
-  color: var(--color-dark);
-  font-family: var(--font-display);
+  object-fit: contain;
 }
 
 .logo-text {
@@ -69,6 +60,11 @@
 .nav-btn {
   font-size: 13px;
   padding: 8px 20px;
+  transition: all 0.3s var(--ease-out);
+}
+
+.nav-btn:hover {
+  box-shadow: 0 4px 16px rgba(var(--shadow-color), 0.2);
 }
 
 @media (max-width: 480px) {

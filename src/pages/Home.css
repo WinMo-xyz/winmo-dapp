@@ -63,6 +63,11 @@
 .home-cta {
   padding: 16px 36px;
   font-size: 16px;
+  box-shadow: 0 4px 20px rgba(var(--shadow-color), 0.2);
+}
+
+.home-cta:hover {
+  box-shadow: 0 8px 32px rgba(var(--shadow-color), 0.3), 0 0 0 1px rgba(var(--accent-rgb), 0.1);
 }
 
 .home-chain-picker {
@@ -182,12 +187,18 @@
   white-space: nowrap;
   background: linear-gradient(
     180deg,
-    rgba(var(--light), 0.06) 0%,
-    rgba(var(--light), 0.015) 100%
+    rgba(var(--accent-rgb), 0.08) 0%,
+    rgba(var(--light), 0.02) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: home-text-breathe 6s ease-in-out infinite;
+}
+
+@keyframes home-text-breathe {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 

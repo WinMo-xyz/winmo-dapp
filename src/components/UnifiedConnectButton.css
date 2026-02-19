@@ -25,6 +25,12 @@
 .unified-connect-btn:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
+}
+
+.unified-connect-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
 }
 
 /* Chain picker dropdown */

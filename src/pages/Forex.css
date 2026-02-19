@@ -47,8 +47,12 @@
   border: none;
 }
 
-.forex-tab:hover { color: var(--color-light); }
-.forex-tab.active { background: var(--accent); color: var(--bg-dark); }
+.forex-tab:hover { color: var(--color-light); background: var(--light-5); }
+.forex-tab.active {
+  background: var(--accent);
+  color: rgb(var(--dark));
+  box-shadow: 0 2px 12px rgba(var(--accent-rgb), 0.25);
+}
 
 .forex-content {
   animation: slide-up 0.5s var(--ease-out) 0.18s both;
@@ -79,8 +83,13 @@
   letter-spacing: 0.05em;
 }
 
-.forex-filter-btn:hover { border-color: var(--light-20); }
-.forex-filter-btn.active { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+.forex-filter-btn:hover { border-color: var(--light-20); color: var(--color-light); }
+.forex-filter-btn.active {
+  background: var(--accent);
+  color: rgb(var(--dark));
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.2);
+}
 
 .forex-search {
   padding: 8px 16px;

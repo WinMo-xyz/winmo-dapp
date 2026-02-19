@@ -6,6 +6,8 @@
   border-radius: var(--radius-3);
   overflow: hidden;
   background: var(--light-5);
+  border: 1px solid var(--light-5);
+  transition: border-color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
 
 .asset-logo img {

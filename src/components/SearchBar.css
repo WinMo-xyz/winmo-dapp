@@ -68,6 +68,8 @@
 
 .search-result:hover {
   background: var(--light-5);
+  border-left: 2px solid var(--accent);
+  padding-left: 10px;
 }
 
 .search-result-icon {

@@ -21,7 +21,7 @@ export default function DappNavbar() {
     <nav className="dapp-navbar">
       <div className="dapp-navbar-inner">
         <NavLink to="/portfolio" className="navbar-logo">
-          <span className="logo-mark">W</span>
+          <img src="/winmo-logo.png" alt="WinMo" className="logo-img" />
           <span className="logo-text">WinMo</span>
         </NavLink>
 

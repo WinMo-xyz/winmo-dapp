@@ -64,7 +64,20 @@
       "WebFetch(domain:assets.backed.fi)",
       "WebFetch(domain:docs.dinari.com)",
       "WebFetch(domain:arbiscan.io)",
-      "WebFetch(domain:rainbow.me)"
+      "WebFetch(domain:rainbow.me)",
+      "WebFetch(domain:yields.llama.fi)",
+      "WebFetch(domain:api.llama.fi)",
+      "WebFetch(domain:www.stakingrewards.com)",
+      "WebFetch(domain:defillama.com)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "WebFetch(domain:assets.coingecko.com)",
+      "Bash(# Try MORPHO on CMC - search for its ID # Morpho was listed around 2024, likely ID in 28000-35000 range # Let me try the CoinGecko API to find the actual image URL curl -s \"\"https://api.coingecko.com/api/v3/coins/morpho?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false\"\")",
+      "Bash(# Try CoinGecko API for pump.fun token curl -s \"\"https://api.coingecko.com/api/v3/coins/pump-fun?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false\"\")",
+      "Bash(# Search CoinGecko for OKB curl -s \"\"https://api.coingecko.com/api/v3/search?query=okb\"\")",
+      "Bash(# Search CoinGecko for ethena curl -s \"\"https://api.coingecko.com/api/v3/search?query=ethena\"\")",
+      "Bash(# Search CoinGecko for nexo curl -s \"\"https://api.coingecko.com/api/v3/search?query=nexo\"\")",
+      "Bash(wc:*)",
+      "Bash(du:*)"
     ]
   }
 }

@@ -98,8 +98,8 @@ export default function Yield() {
                       <span className={`yield-stat-value gradient-text ${apyLoading && selected.llamaPoolId ? 'apy-loading' : ''}`}>{selected.apy}%</span>
                     </div>
                     <div className="yield-stat">
-                      <span className="yield-stat-label">Total Deposits</span>
-                      <span className="yield-stat-value">{selected.totalDeposits}</span>
+                      <span className="yield-stat-label">Total Deposits {selected.llamaPoolId && <span className="yield-live-dot" />}</span>
+                      <span className={`yield-stat-value ${apyLoading && selected.llamaPoolId ? 'apy-loading' : ''}`}>{selected.totalDeposits}</span>
                     </div>
                   </div>
 

@@ -81,7 +81,7 @@ export default function AssetDetail() {
 
           {/* News & Funding */}
           <section className="asset-detail-news">
-            <h2 className="asset-detail-section-title">News & Funding Rounds</h2>
+            <h2 className="asset-detail-section-title">News & AI Insights</h2>
             <div className="news-wrapper">
               <div className="news-blur">
                 <div className="news-grid">
