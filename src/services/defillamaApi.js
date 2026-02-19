@@ -14,7 +14,7 @@ export async function fetchYieldPools(poolIds) {
   }
 
   try {
-    const response = await fetch('https://yields.llama.fi/pools')
+    const response = await fetch('/api/defillama/pools')
     if (!response.ok) throw new Error(`DeFi Llama API error: ${response.status}`)
 
     const json = await response.json()

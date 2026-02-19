@@ -40,7 +40,7 @@ async function fetchGeckoHistory(geckoId, days) {
 
   try {
     const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}`
+      `/api/gecko/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}`
     )
     if (!res.ok) return null
     const json = await res.json()

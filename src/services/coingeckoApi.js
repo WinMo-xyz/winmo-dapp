@@ -31,7 +31,7 @@ export async function fetchPriceHistory(assetId, days = 7) {
 
   try {
     const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}`
+      `/api/gecko/api/v3/coins/${geckoId}/market_chart?vs_currency=usd&days=${days}`
     )
     if (!res.ok) throw new Error(`CoinGecko ${res.status}`)
 

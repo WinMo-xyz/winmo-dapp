@@ -77,6 +77,16 @@ export default defineConfig(({ mode }) => {
             })
           },
         },
+        '/api/defillama': {
+          target: 'https://yields.llama.fi',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/defillama/, ''),
+        },
+        '/api/pyth': {
+          target: 'https://hermes.pyth.network',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/pyth/, ''),
+        },
       },
     },
   }

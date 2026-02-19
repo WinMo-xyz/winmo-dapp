@@ -74,6 +74,16 @@
   to = "/.netlify/functions/solana-rpc-proxy"
   status = 200
 
+[[redirects]]
+  from = "/api/defillama/*"
+  to = "/.netlify/functions/defillama-proxy/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/pyth/*"
+  to = "/.netlify/functions/pyth-proxy/:splat"
+  status = 200
+
 # SPA fallback (must be last)
 [[redirects]]
   from = "/*"

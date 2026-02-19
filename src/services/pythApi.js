@@ -1,4 +1,4 @@
-const HERMES_URL = 'https://hermes.pyth.network/v2/updates/price/latest'
+const HERMES_URL = '/api/pyth/v2/updates/price/latest'
 const CACHE_TTL = 10_000 // 10 seconds
 let cache = { data: null, timestamp: 0 }
 

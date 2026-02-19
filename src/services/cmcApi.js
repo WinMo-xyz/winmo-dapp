@@ -69,7 +69,7 @@ export async function fetchCryptoPrices() {
   try {
     const ids = Object.values(SYMBOL_TO_GECKO_ID).join(',')
     const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`
+      `/api/gecko/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`
     )
 
     if (!response.ok) {
