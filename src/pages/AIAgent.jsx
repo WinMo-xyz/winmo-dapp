@@ -50,7 +50,7 @@ export default function AIAgent() {
           {/* Hero */}
           <div className="agent-hero">
             <h1 className="agent-hero-title">
-              Connect any AI to <span className="gradient-text">WinMo</span>
+              Connect AI Agent to <span className="gradient-text">WinMo</span>
             </h1>
             <p className="agent-hero-subtitle">
               Give your agent access to 100+ tradeable assets across stocks, crypto, commodities, bonds, and forex. No API key. No registration.
