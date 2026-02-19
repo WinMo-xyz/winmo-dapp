@@ -87,6 +87,10 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/pyth/, ''),
         },
+        '/api/agent': {
+          target: 'http://localhost:8888',
+          changeOrigin: true,
+        },
       },
     },
   }

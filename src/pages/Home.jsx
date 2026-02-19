@@ -47,40 +47,52 @@ export default function Home() {
             <p className="home-subtitle">
               Stocks, crypto, commodities, bonds. One portfolio, fully onchain. Buy anything from anywhere.
             </p>
-            <ConnectButton.Custom>
-              {({ openConnectModal }) => (
-                <div className="home-cta-wrap" ref={pickerRef}>
-                  <button
-                    className="btn btn-primary home-cta"
-                    onClick={() => setPickerOpen(!pickerOpen)}
-                  >
-                    Connect Wallet
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </button>
-                  {pickerOpen && (
-                    <div className="home-chain-picker">
-                      <button
-                        className="home-chain-option"
-                        onClick={() => { setPickerOpen(false); openSolanaModal(true) }}
-                      >
-                        <span className="home-chain-icon">◎</span>
-                        <span>Solana</span>
-                      </button>
-                      <button
-                        className="home-chain-option"
-                        onClick={() => { setPickerOpen(false); openConnectModal() }}
-                      >
-                        <span className="home-chain-icon">Ξ</span>
-                        <span>Ethereum</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </ConnectButton.Custom>
+            <div className="home-cta-group">
+              <ConnectButton.Custom>
+                {({ openConnectModal }) => (
+                  <div className="home-cta-wrap" ref={pickerRef}>
+                    <button
+                      className="btn btn-primary home-cta"
+                      onClick={() => setPickerOpen(!pickerOpen)}
+                    >
+                      Connect Wallet
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                      </svg>
+                    </button>
+                    {pickerOpen && (
+                      <div className="home-chain-picker">
+                        <button
+                          className="home-chain-option"
+                          onClick={() => { setPickerOpen(false); openSolanaModal(true) }}
+                        >
+                          <span className="home-chain-icon">◎</span>
+                          <span>Solana</span>
+                        </button>
+                        <button
+                          className="home-chain-option"
+                          onClick={() => { setPickerOpen(false); openConnectModal() }}
+                        >
+                          <span className="home-chain-icon">Ξ</span>
+                          <span>Ethereum</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </ConnectButton.Custom>
+
+              <button
+                className="btn home-cta home-cta-agent"
+                onClick={() => navigate('/ai-agent')}
+              >
+                Connect AI Agent
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="home-visual">

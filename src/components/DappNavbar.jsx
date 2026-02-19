@@ -48,6 +48,9 @@ export default function DappNavbar() {
             <NavLink to="/forex" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
               Forex
             </NavLink>
+            <NavLink to="/ai-agent" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              AI Agent
+            </NavLink>
           </div>
         </div>
 
@@ -119,6 +122,13 @@ export default function DappNavbar() {
           onClick={() => setMenuOpen(false)}
         >
           Forex
+        </NavLink>
+        <NavLink
+          to="/ai-agent"
+          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
+          onClick={() => setMenuOpen(false)}
+        >
+          AI Agent
         </NavLink>
         <div className="dapp-mobile-search">
           <SearchBar onSelect={(asset) => { handleSearchSelect(asset); setMenuOpen(false) }} />

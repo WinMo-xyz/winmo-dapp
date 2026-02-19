@@ -10,6 +10,7 @@ const AssetDetail = lazy(() => import('./pages/AssetDetail'))
 const Yield = lazy(() => import('./pages/Yield'))
 const Forex = lazy(() => import('./pages/Forex'))
 const ForexPair = lazy(() => import('./pages/ForexPair'))
+const AIAgent = lazy(() => import('./pages/AIAgent'))
 
 function PageLoader() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/yield" element={<ProtectedRoute><Yield /></ProtectedRoute>} />
           <Route path="/forex" element={<ProtectedRoute><Forex /></ProtectedRoute>} />
           <Route path="/forex/:pair" element={<ProtectedRoute><ForexPair /></ProtectedRoute>} />
+          <Route path="/ai-agent" element={<AIAgent />} />
         </Routes>
       </Suspense>
     </>

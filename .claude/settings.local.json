@@ -77,7 +77,13 @@
       "Bash(# Search CoinGecko for ethena curl -s \"\"https://api.coingecko.com/api/v3/search?query=ethena\"\")",
       "Bash(# Search CoinGecko for nexo curl -s \"\"https://api.coingecko.com/api/v3/search?query=nexo\"\")",
       "Bash(wc:*)",
-      "Bash(du:*)"
+      "Bash(du:*)",
+      "WebFetch(domain:llmstxt.org)",
+      "WebFetch(domain:a2a-protocol.org)",
+      "Bash(node /tmp/extract-assets.mjs:*)",
+      "WebFetch(domain:winmo.xyz)",
+      "WebFetch(domain:app.winmo.xyz)",
+      "WebFetch(domain:moltemail.com)"
     ]
   }
 }

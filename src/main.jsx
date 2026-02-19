@@ -8,6 +8,7 @@ import { RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowki
 import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { WalletProvider } from './context/WalletContext'
+import { WinmoAgentProvider } from './agent'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 import { config } from './config/wagmi'
 import { SOLANA_RPC_ENDPOINT, SOLANA_WALLETS } from './config/solana'
@@ -53,7 +54,9 @@ createRoot(document.getElementById('root')).render(
                 <WalletModalProvider>
                   <BrowserRouter>
                     <WalletProvider>
-                      <App />
+                      <WinmoAgentProvider>
+                        <App />
+                      </WinmoAgentProvider>
                     </WalletProvider>
                   </BrowserRouter>
                 </WalletModalProvider>

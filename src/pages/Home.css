@@ -54,10 +54,16 @@
   animation: fade-up 0.8s var(--ease-out) 0.1s both;
 }
 
+.home-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: fade-up 0.8s var(--ease-out) 0.2s both;
+}
+
 .home-cta-wrap {
   position: relative;
   display: inline-block;
-  animation: fade-up 0.8s var(--ease-out) 0.2s both;
 }
 
 .home-cta {
@@ -68,6 +74,27 @@
 
 .home-cta:hover {
   box-shadow: 0 8px 32px rgba(var(--shadow-color), 0.3), 0 0 0 1px rgba(var(--accent-rgb), 0.1);
+}
+
+.home-cta-agent {
+  background: transparent;
+  color: var(--color-light);
+  border: 1px solid var(--light-15);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.home-cta-agent:hover {
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: rgba(var(--accent-rgb), 0.06);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.1);
+}
+
+.home-cta-agent svg {
+  color: var(--accent);
 }
 
 .home-chain-picker {
@@ -212,6 +239,11 @@
 
   .home-subtitle {
     margin: 0 auto 32px;
+  }
+
+  .home-cta-group {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .home-visual {

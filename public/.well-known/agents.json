@@ -1,0 +1,114 @@
+{
+  "name": "WinMo",
+  "description": "Multi-chain DeFi portfolio DApp supporting Ethereum and Solana. Browse 100+ tradeable assets (stocks, crypto, commodities, bonds, forex), get swap quotes, view yield farming opportunities, and manage portfolio holdings.",
+  "url": "https://winmo.app",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "list-assets",
+      "name": "List Assets",
+      "description": "List tradeable assets by category. Returns array of assets with id, name, symbol, price, change24h, category, subcategory, logo, and provider information.",
+      "endpoint": "/api/agent/assets",
+      "method": "GET",
+      "parameters": [
+        { "name": "category", "type": "string", "required": false, "description": "Asset category: stocks, crypto, commodities, or bonds" },
+        { "name": "subcategory", "type": "string", "required": false, "description": "Subcategory filter. Stocks: pre-ipo, large-cap, mid-cap, small-cap, etf. Crypto: large-cap, mid-cap, small-cap. Commodities: precious-metals, energy, industrial, broad. Bonds: treasury, corporate, clo." }
+      ],
+      "returns": { "type": "array", "items": "Asset objects with id, name, symbol, price, change24h, category, subcategory, logo, providers" }
+    },
+    {
+      "id": "get-asset",
+      "name": "Get Asset Detail",
+      "description": "Get full detail for a single asset including description, news, on-chain providers, and supported chains.",
+      "endpoint": "/api/agent/asset/:id",
+      "method": "GET",
+      "parameters": [
+        { "name": "id", "type": "string", "required": true, "description": "Asset ID (e.g. btc, nvda, gold, tlt)" }
+      ],
+      "returns": { "type": "object", "description": "Asset with description, news array, providers array, and chains array" }
+    },
+    {
+      "id": "get-prices",
+      "name": "Get Live Prices",
+      "description": "Get live crypto prices for 50+ tokens from CoinGecko. Returns a map of symbol to price and 24h change.",
+      "endpoint": "/api/agent/prices",
+      "method": "GET",
+      "parameters": [],
+      "returns": { "type": "object", "description": "Map of symbol -> { price, change24h }" }
+    },
+    {
+      "id": "get-yield",
+      "name": "Get Yield Protocols",
+      "description": "Get yield farming protocols with APY, TVL, risk level, strategy description, and DeFi Llama pool ID.",
+      "endpoint": "/api/agent/yield",
+      "method": "GET",
+      "parameters": [
+        { "name": "riskLevel", "type": "string", "required": false, "description": "Filter by risk: safe, low, high-yield, or speculative" }
+      ],
+      "returns": { "type": "array", "items": "Protocol objects with id, name, protocol, network, apy, totalDeposits, riskLevel, strategy" }
+    },
+    {
+      "id": "get-quote",
+      "name": "Get Swap Quote",
+      "description": "Get a swap quote from Jupiter (Solana) or KyberSwap (Ethereum). Returns route details and expected output amount.",
+      "endpoint": "/api/agent/quote",
+      "method": "GET",
+      "parameters": [
+        { "name": "from", "type": "string", "required": true, "description": "Source token symbol (e.g. USDC, ETH, SOL)" },
+        { "name": "to", "type": "string", "required": true, "description": "Destination token symbol (e.g. ETH, BTC, NVDA)" },
+        { "name": "amount", "type": "string", "required": true, "description": "Amount of source token to swap" },
+        { "name": "chain", "type": "string", "required": true, "description": "Chain to execute on: solana or ethereum" }
+      ],
+      "returns": { "type": "object", "description": "Quote with inputAmount, outputAmount, route details, and price impact" }
+    },
+    {
+      "id": "search-assets",
+      "name": "Search Assets",
+      "description": "Fuzzy search all assets and forex pairs by name or symbol.",
+      "endpoint": "/api/agent/search",
+      "method": "GET",
+      "parameters": [
+        { "name": "q", "type": "string", "required": true, "description": "Search query (e.g. bitcoin, nvidia, gold, eur)" }
+      ],
+      "returns": { "type": "array", "items": "Matching asset objects" }
+    },
+    {
+      "id": "get-forex",
+      "name": "Get Forex Rates",
+      "description": "Get live forex rates from Pyth Network oracles for 25+ currency pairs including majors, crosses, and exotics.",
+      "endpoint": "/api/agent/forex",
+      "method": "GET",
+      "parameters": [],
+      "returns": { "type": "object", "description": "Map of pair (e.g. EUR/USD) -> { price, confidence, publishTime }" }
+    },
+    {
+      "id": "get-tokens",
+      "name": "Get Swappable Tokens",
+      "description": "Get swappable token addresses for a category and chain. Useful for building swap transactions.",
+      "endpoint": "/api/agent/tokens",
+      "method": "GET",
+      "parameters": [
+        { "name": "category", "type": "string", "required": false, "description": "Asset category: stocks, crypto, commodities, or bonds" },
+        { "name": "chain", "type": "string", "required": false, "description": "Chain: solana or ethereum" }
+      ],
+      "returns": { "type": "array", "items": "Token objects with id, name, symbol, address, decimals, logo" }
+    }
+  ],
+  "browserApi": {
+    "global": "window.winmo",
+    "readyEvent": "winmo:ready",
+    "methods": [
+      { "name": "getAssets", "args": "(category, subcategory?)", "returns": "Promise<Asset[]>", "description": "Get asset list by category" },
+      { "name": "getAsset", "args": "(id)", "returns": "Promise<Asset>", "description": "Get full asset detail" },
+      { "name": "searchAssets", "args": "(query)", "returns": "Promise<Asset[]>", "description": "Search all assets" },
+      { "name": "getPrices", "args": "()", "returns": "Promise<Record<string, {price, change24h}>>", "description": "Get live crypto prices" },
+      { "name": "getForexRates", "args": "()", "returns": "Promise<Record<string, {price, confidence, publishTime}>>", "description": "Get live forex rates" },
+      { "name": "getYieldProtocols", "args": "(riskLevel?)", "returns": "Promise<Protocol[]>", "description": "Get yield protocols" },
+      { "name": "getQuote", "args": "({ from, to, amount, chain })", "returns": "Promise<Quote>", "description": "Get swap quote" },
+      { "name": "getWalletState", "args": "()", "returns": "WalletState", "description": "Get connected wallet state (sync)" },
+      { "name": "getPortfolio", "args": "()", "returns": "Promise<Holdings[]>", "description": "Get wallet portfolio (requires connected wallet)" },
+      { "name": "getBalance", "args": "(symbol, chain)", "returns": "Promise<string>", "description": "Get single token balance (requires connected wallet)" },
+      { "name": "executeSwap", "args": "({ from, to, amount, chain, slippage? })", "returns": "Promise<TxResult>", "description": "Execute swap (requires wallet signature)" }
+    ]
+  }
+}

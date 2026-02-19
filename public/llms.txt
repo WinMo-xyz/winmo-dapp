@@ -1,0 +1,45 @@
+# WinMo
+
+> WinMo is a multi-chain DeFi portfolio DApp. It lets users connect Ethereum and Solana wallets, view combined portfolio holdings, browse 100+ tradeable assets (stocks, crypto, commodities, bonds, forex), get swap quotes, and explore yield farming opportunities.
+
+## API Endpoints
+
+All endpoints return JSON. Base URL: `https://winmo.app` (or your deployment URL).
+
+- `GET /api/agent/assets?category=&subcategory=` — List assets by category (stocks, crypto, commodities, bonds). Optional subcategory filter.
+- `GET /api/agent/asset/:id` — Get full asset detail including description, news, providers, and supported chains.
+- `GET /api/agent/prices` — Live crypto prices for 50+ tokens (CoinGecko). Returns symbol -> { price, change24h }.
+- `GET /api/agent/yield?riskLevel=` — Yield farming protocols with APY, TVL, risk level, and strategy descriptions. Optional riskLevel filter (safe, low, high-yield, speculative).
+- `GET /api/agent/quote?from=&to=&amount=&chain=` — Get a swap quote. Supports Solana (Jupiter) and Ethereum (KyberSwap).
+- `GET /api/agent/search?q=` — Fuzzy search all assets and forex pairs by name or symbol.
+- `GET /api/agent/forex` — Live forex rates from Pyth Network oracles for 25+ currency pairs.
+- `GET /api/agent/tokens?category=&chain=` — Get swappable token addresses for a category and chain.
+
+## Browser API
+
+When running in-browser, `window.winmo` exposes a JavaScript API:
+
+- `window.winmo.getAssets(category, subcategory?)` — Get asset list
+- `window.winmo.getAsset(id)` — Get asset detail
+- `window.winmo.searchAssets(query)` — Search all assets
+- `window.winmo.getPrices()` — Get live crypto prices
+- `window.winmo.getForexRates()` — Get live forex rates
+- `window.winmo.getYieldProtocols(riskLevel?)` — Get yield protocols
+- `window.winmo.getQuote({ from, to, amount, chain })` — Get swap quote
+- `window.winmo.getWalletState()` — Get connected wallet state
+- `window.winmo.getPortfolio()` — Get wallet portfolio holdings
+- `window.winmo.getBalance(symbol, chain)` — Get single token balance
+- `window.winmo.executeSwap({ from, to, amount, chain, slippage? })` — Execute a swap (requires wallet)
+
+## Supported Asset Categories
+
+- **Stocks**: Pre-IPO (OpenAI, Anthropic, SpaceX), Large Cap (NVDA, AAPL, MSFT), Mid Cap, Small Cap, ETFs (SPY, QQQ). Tokenized via Ondo and Backed.
+- **Crypto**: Large Cap (BTC, ETH, SOL), Mid Cap (JUP, UNI, AAVE), Small Cap (BONK, PYTH, TRUMP). Native on Ethereum and Solana.
+- **Commodities**: Precious Metals (Gold/PAXG, Silver), Energy (Oil), Industrial (Copper, Nickel), Broad Commodity ETFs.
+- **Bonds**: Treasury (TLT, SGOV), Corporate (HYG), CLO (CLOA, JAAA), TIPS. Tokenized via Ondo.
+- **Forex**: 25+ pairs including majors (EUR/USD, USD/JPY), crosses, and exotics. Powered by Pyth oracles.
+
+## Discovery
+
+- Machine-readable agent schema: `/.well-known/agents.json`
+- This file: `/llms.txt`
