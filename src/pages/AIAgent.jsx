@@ -87,7 +87,7 @@ export default function AIAgent() {
                     <code>{PROMPT_TEXT}</code>
                     <CopyButton text={PROMPT_TEXT} />
                   </div>
-                  <p className="agent-step-hint">Paste this into any AI agent — ChatGPT, Claude, custom bots — to connect with WinMo.</p>
+                  <p className="agent-step-hint">Paste this into any AI agent like ChatGPT, Claude, or custom bots to connect with WinMo.</p>
                 </div>
 
                 {/* Step 2: skill.md */}
@@ -136,7 +136,7 @@ export default function AIAgent() {
                     </svg>
                   </div>
                   <h3 className="agent-launch-title">Launch Winmo AiFi Agent</h3>
-                  <p className="agent-launch-desc">Autonomous portfolio management powered by AI. Rebalances, yield farming, and cross-chain execution — on autopilot.</p>
+                  <p className="agent-launch-desc">Autonomous portfolio management powered by AI. Rebalances, yield farming, and cross-chain execution on autopilot.</p>
 
                   <div className="agent-launch-features">
                     <div className="agent-launch-feature">
@@ -153,7 +153,7 @@ export default function AIAgent() {
                     </div>
                     <div className="agent-launch-feature">
                       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      Non-custodial — your wallet, your keys
+                      Non-custodial. Your wallet, your keys
                     </div>
                   </div>
 

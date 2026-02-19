@@ -191,7 +191,8 @@
   font-size: 12px;
   line-height: 1.65;
   color: var(--accent);
-  word-break: break-all;
+  overflow-wrap: break-word;
+  word-break: keep-all;
   display: block;
 }
 
