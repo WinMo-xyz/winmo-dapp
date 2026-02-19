@@ -9,9 +9,11 @@ const CG = 'https://assets.coingecko.com/coins/images/'
 
 // RWA token provider metadata
 export const PROVIDERS = {
-  ondo:   { name: 'Ondo', chain: 'ethereum', logo: CB + 'ondo.finance' },
-  backed: { name: 'Backed', chain: 'solana', logo: CB + 'backed.fi' },
-  dinari: { name: 'Dinari', chain: 'arbitrum', logo: CB + 'dinari.com' },
+  ondo:   { name: 'Ondo', logo: CB + 'ondo.finance' },
+  backed: { name: 'Backed', logo: CB + 'backed.fi' },
+  dinari: { name: 'Dinari', logo: CB + 'dinari.com' },
+  paxos:  { name: 'Paxos', logo: CB + 'paxos.com' },
+  tether: { name: 'Tether', logo: CB + 'tether.to' },
 }
 
 const stocks = [
@@ -24,134 +26,147 @@ const stocks = [
   // Large Cap
   { id: 'aapl', name: 'Apple', symbol: 'AAPL', price: 198.45, change24h: 0.67, category: 'stocks', subcategory: 'large-cap', logo: CB + 'apple.com', providers: [
     { provider: 'ondo', symbol: 'AAPLon', address: '0x14c3abf95cb9c93a8b82c1cdcb76d72cb87b2d4c', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'AAPLon', address: '123mYEnRLM2LLYsJW3K6oyYh8uP1fngj732iG638ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'AAPLx', address: 'XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'AAPL.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'googl', name: 'Alphabet', symbol: 'GOOGL', price: 175.80, change24h: -0.45, category: 'stocks', subcategory: 'large-cap', logo: CB + 'abc.xyz', providers: [
     { provider: 'ondo', symbol: 'GOOGLon', address: '0xbA47214eDd2bb43099611b208f75E4b42FDcfEDc', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'GOOGLon', address: 'bbahNA5vT9WJeYft8tALrH1LXWffjwqVoUbqYa1ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'GOOGLx', address: 'XsCPL9dNWBMvFtTmwcCA5v3xWPSMEBCszbQdiLLq6aN', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'GOOGL.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'msft', name: 'Microsoft', symbol: 'MSFT', price: 445.20, change24h: 1.12, category: 'stocks', subcategory: 'large-cap', logo: CB + 'microsoft.com', providers: [
     { provider: 'ondo', symbol: 'MSFTon', address: '0xB812837b81a3a6b81d7CD74CfB19A7f2784555E5', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'MSFTon', address: 'FRmH6iRkMr33DLG6zVLR7EM4LojBFAuq6NtFzG6ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'MSFTx', address: 'XspzcW1PRtgf6Wj92HCiZdjzKCyFekVD8P5Ueh3dRMX', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'MSFT.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'meta', name: 'Meta', symbol: 'META', price: 585.30, change24h: 1.89, category: 'stocks', subcategory: 'large-cap', logo: CM + 'META.png', providers: [
     { provider: 'ondo', symbol: 'METAon', address: '0x59644165402b611b350645555b50afb581c71eb2', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'METAon', address: 'fDxs5y12E7x7jBwCKBXGqt71uJmCWsAQ3Srkte6ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'METAx', address: 'Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'META.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'tsla', name: 'Tesla', symbol: 'TSLA', price: 248.50, change24h: -2.34, category: 'stocks', subcategory: 'large-cap', logo: CM + 'TSLA.png', providers: [
     { provider: 'ondo', symbol: 'TSLAon', address: '0xf6b1117ec07684D3958caD8BEb1b302bfD21103f', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'TSLAon', address: 'KeGv7bsfR4MheC1CkmnAVceoApjrkvBhHYjWb67ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'TSLAx', address: 'XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'TSLA.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'jpm', name: 'JPMorgan Chase & Co', symbol: 'JPM', price: 242.80, change24h: 0.78, category: 'stocks', subcategory: 'large-cap', logo: CM + 'JPM.png', providers: [
     { provider: 'ondo', symbol: 'JPMon', address: '0x03c1ec4ca9dbb168e6db0def827c085999cbffaf', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'JPMon', address: 'E5Gczsavxcomqf6Cw1sGCKLabL1xYD2FzKxVoB4ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'JPMx', address: 'XsMAqkcKsUewDrzVkait4e5u4y8REgtyS7jWgCpLV2C', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'JPM.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'nvda', name: 'NVIDIA', symbol: 'NVDA', price: 140.11, change24h: 2.15, category: 'stocks', subcategory: 'large-cap', logo: CM + 'NVDA.png', providers: [
     { provider: 'ondo', symbol: 'NVDAon', address: '0x2d1f7226bd1f780af6b9a49dcc0ae00e8df4bdee', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'NVDAon', address: 'gEGtLTPNQ7jcg25zTetkbmF7teoDLcrfTnQfmn2ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'NVDAx', address: 'Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'NVDA.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'amzn', name: 'Amazon', symbol: 'AMZN', price: 228.68, change24h: 1.34, category: 'stocks', subcategory: 'large-cap', logo: CB + 'amazon.com', providers: [
     { provider: 'ondo', symbol: 'AMZNon', address: '0xbb8774FB97436d23d74C1b882E8E9A69322cFD31', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'AMZNon', address: '14Tqdo8V1FhzKsE3W2pFsZCzYPQxxupXRcqw9jv6ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'AMZNx', address: 'Xs3eBt7uRfJX8QUs4suhyU8p2M6DoUDrJyWBa8LLZsg', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'AMZN.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'orcl', name: 'Oracle', symbol: 'ORCL', price: 188.45, change24h: 0.92, category: 'stocks', subcategory: 'large-cap', logo: CB + 'oracle.com', providers: [
     { provider: 'ondo', symbol: 'ORCLon', address: '0x8a23c6baadb88512b30475c83df6a63881e33e1e', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'ORCLx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'ORCLon', address: 'GmDADFpfwjfzZq9MfCafMDTS69MgVjtzD7Fd9a4ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'ORCL.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'pg', name: 'Procter & Gamble', symbol: 'PG', price: 170.30, change24h: -0.23, category: 'stocks', subcategory: 'large-cap', logo: CM + 'PG.png', providers: [
     { provider: 'ondo', symbol: 'PGon', address: '0x339ce23a355ed6d513dd3e1462975c4ecd86823a', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'PGx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'PGon', address: 'GZ8v4NdSG7CTRZqHMgNsTPRULeVi8CpdWd9wZY8ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'PG.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'qcom', name: 'Qualcomm', symbol: 'QCOM', price: 172.55, change24h: 1.56, category: 'stocks', subcategory: 'large-cap', logo: CM + 'QCOM.png', providers: [
     { provider: 'ondo', symbol: 'QCOMon', address: '0xE3419710c1f77D44B4DaB02316d3f048818C4E59', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'QCOMx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'QCOMon', address: 'hrmX7MV5hifoaBVjnrdpz698yABxrbBNAcWtWo9ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'QCOM.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   // Mid Cap
   { id: 'mcd', name: "McDonald's Corp", symbol: 'MCD', price: 295.60, change24h: 0.34, category: 'stocks', subcategory: 'mid-cap', logo: CM + 'MCD.png', providers: [
     { provider: 'ondo', symbol: 'MCDon', address: '0x4c82c8cd9a218612dce60b156b73a36705645e3b', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'MCDon', address: 'EUbJjmDt8JA222M91bVLZs211siZ2jzbFArH9N3ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'MCDx', address: 'XsqE9cRRpzxcGKDXj1BJ7Xmg4GRhZoyY1KpmGSxAWT2', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'MCD.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'pep', name: 'PepsiCo', symbol: 'PEP', price: 168.90, change24h: -0.56, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pepsico.com', providers: [
     { provider: 'ondo', symbol: 'PEPon', address: '0x3ce219d498d807317f840f4cb0f03fa27dd65046', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'PEPx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'PEPon', address: 'gud6b3fYekjhMG5F818BALwbg2vt4JKoow59Md9ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'PEP.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'c', name: 'Citigroup', symbol: 'C', price: 65.40, change24h: 1.23, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'citigroup.com', providers: [
-    { provider: 'ondo', symbol: 'Con', address: null, chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'Cx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'Con', address: '0xc46e7ef70d7cf8c17863a6b0b9be2af6a4c41abe', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'Con', address: 'PjtfUiw6Hwd8PZ94EcUw8mBSYxp7SjjzSLeNTDKondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'C.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'ba', name: 'Boeing', symbol: 'BA', price: 178.20, change24h: -1.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'boeing.com', providers: [
-    { provider: 'ondo', symbol: 'BAon', address: null, chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'BAx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'BAon', address: '0x57270d35a840bc5c094da6fbeca033fb71ea6ab0', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'BAon', address: '1YVZ4LGpq8CAhpdpm3mgy7GgPb83gJczCpxLUQ3ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'BA.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'coin', name: 'Coinbase', symbol: 'COIN', price: 288.70, change24h: 3.45, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'coinbase.com', providers: [
     { provider: 'ondo', symbol: 'COINon', address: '0xf042cfa86cf1d598a75bdb55c3507a1f39f9493b', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'COINon', address: '5u6KDiNJXxX4rGMfYT4BApZQC5CuDNrG6MHkwp1ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'COINx', address: 'Xs7ZdzSHLU9ftNJsii5fCeJhoRWSC32SQGzGQtePxNu', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'COIN.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'mstr', name: 'MicroStrategy', symbol: 'MSTR', price: 377.20, change24h: 4.12, category: 'stocks', subcategory: 'mid-cap', logo: CM + 'MSTR.png', providers: [
     { provider: 'ondo', symbol: 'MSTRon', address: '0xcabd955322dfbf94c084929ac5e9eca3feb5556f', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'MSTRon', address: 'FSz4ouiqXpHuGPcpacZfTzbMjScoj5FfzHkiyu2ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'MSTRx', address: 'XsP7xzNPvEHS1m6qfanPUGjNmdnmsLKEoNAnHjdxxyZ', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'MSTR.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'pfe', name: 'Pfizer', symbol: 'PFE', price: 26.85, change24h: -0.67, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'pfizer.com', providers: [
     { provider: 'ondo', symbol: 'PFEon', address: '0x06954faa913fa14c28eb1b2e459594f22f33f3de', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'PFEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'PFEon', address: 'Gwh9fPsX1qWATXy63vNaJnAFfwebWQtZaVmPko6ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'PFE.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'crcl', name: 'Circle', symbol: 'CRCL', price: 54.30, change24h: 2.34, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'circle.com', providers: [
     { provider: 'ondo', symbol: 'CRCLon', address: '0x3632dea96a953c11dac2f00b4a05a32cd1063fae', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'CRCLx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'CRCLon', address: '6xHEyem9hmkGtVq6XGCiQUGpPsHBaoYuYdFNZa5ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'CRCL.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'jd', name: 'JD.com', symbol: 'JD', price: 39.75, change24h: 1.89, category: 'stocks', subcategory: 'mid-cap', logo: CB + 'jd.com', providers: [
     { provider: 'ondo', symbol: 'JDon', address: '0xdeB6B89088cA9B7d7756087c8a0F7C6DF46f319C', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'JDx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'JDon', address: 'E1aUS5nyv7kaBzdQzPVJW5zfaMgoUJpKYzdnFS2ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'JD.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   // Small Cap
   { id: 'sbux', name: 'Starbucks', symbol: 'SBUX', price: 98.75, change24h: 0.89, category: 'stocks', subcategory: 'small-cap', logo: CM + 'SBUX.png', providers: [
     { provider: 'ondo', symbol: 'SBUXon', address: '0xf15fbc1349ab99abad63db3f9a510bf413be3bef', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'SBUXx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'SBUXon', address: 'iPFqjcZQTNMNXA4kbShbMhfAVD8yr8Uq9UtXMV6ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'SBUX.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'adbe', name: 'Adobe', symbol: 'ADBE', price: 485.30, change24h: 2.12, category: 'stocks', subcategory: 'small-cap', logo: CB + 'adobe.com', providers: [
-    { provider: 'ondo', symbol: 'ADBEon', address: null, chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'ADBEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'ADBEon', address: '0x7042a8ffc7c7049684bfbc2fcb41b72380755a43', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'ADBEon', address: '12Rh6JhfW4X5fKP16bbUdb4pcVCKDHFB48x8GG33ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'ADBE.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'intu', name: 'Intuit', symbol: 'INTU', price: 625.40, change24h: 1.56, category: 'stocks', subcategory: 'small-cap', logo: CB + 'intuit.com', providers: [
-    { provider: 'ondo', symbol: 'INTUon', address: null, chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'INTUx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'INTUon', address: '0x6cc0afd51ce4cb6920b775f3d6376ab82b9a93bb', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'INTUon', address: 'CozoH5HBTyyeYSQxHcWpGzd4Sq5XBaKzBzvTtN3ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'INTU.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'gme', name: 'GameStop', symbol: 'GME', price: 29.85, change24h: 5.67, category: 'stocks', subcategory: 'small-cap', logo: CB + 'gamestop.com', providers: [
     { provider: 'ondo', symbol: 'GMEon', address: '0x71d24baeb0a033ec5f90ff65c4210545af378d97', chain: 'ethereum', decimals: 18 },
-    { provider: 'backed', symbol: 'GMEx', address: null, chain: 'solana', decimals: 6 },
+    { provider: 'ondo', symbol: 'GMEon', address: 'aznKt8v32CwYMEcTcB4bGTv8DXWStCpHrcCtyy7ondo', chain: 'solana', decimals: 9 },
     { provider: 'dinari', symbol: 'GME.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   // ETF
   { id: 'spy', name: 'SPDR S&P 500 ETF', symbol: 'SPY', price: 605.20, change24h: 0.45, category: 'stocks', subcategory: 'etf', logo: CB + 'ssga.com', providers: [
     { provider: 'ondo', symbol: 'SPYon', address: '0xFeDC5f4a6c38211c1338aa411018DFAf26612c08', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'SPYon', address: 'k18WJUULWheRkSpSquYGdNNmtuE2Vbw1hpuUi92ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'SPYx', address: 'XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'SPY.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
   { id: 'qqq', name: 'Invesco QQQ ETF', symbol: 'QQQ', price: 525.80, change24h: 0.78, category: 'stocks', subcategory: 'etf', logo: CB + 'invesco.com', providers: [
     { provider: 'ondo', symbol: 'QQQon', address: '0x0e397938c1aa0680954093495b70a9f5e2249aba', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'QQQon', address: 'HrYNm6jTQ71LoFphjVKBTdAE4uja7WsmLG8VxB8ondo', chain: 'solana', decimals: 9 },
     { provider: 'backed', symbol: 'QQQx', address: 'Xs8S1uUs1zvS2p7iwtsG3b6fkhpvmwz4GYU3gWAmWHZ', chain: 'solana', decimals: 6 },
     { provider: 'dinari', symbol: 'QQQ.d', address: null, chain: 'arbitrum', decimals: 18 },
   ] },
@@ -245,31 +260,120 @@ const crypto = [
 ]
 
 const commodities = [
-  { id: 'gold', name: 'Gold', symbol: 'XAU', price: 2685.40, change24h: 0.34, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'gold.org' },
-  { id: 'gld', name: 'SPDR Gold Shares', symbol: 'GLD', price: 245.80, change24h: 0.42, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ssga.com', ethereumAddress: '0x423d42e505e64f99b6e277eb7ed324cc5606f139' },
-  { id: 'slv', name: 'iShares Silver Trust', symbol: 'SLV', price: 28.95, change24h: 1.12, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', ethereumAddress: '0xf3e4872e6a4cf365888d93b6146a2baa7348f1a4' },
-  { id: 'iau', name: 'iShares Gold Trust', symbol: 'IAU', price: 49.20, change24h: 0.38, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', ethereumAddress: '0x4f0ca3df1c2e6b943cf82e649d576ffe7b2fabcf' },
-  { id: 'pall', name: 'abrdn Physical Palladium Shares ETF', symbol: 'PALL', price: 95.30, change24h: 0.56, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'abrdn.com', ethereumAddress: '0x0ce36d199bd6851788e03392568849394cbde722' },
-  { id: 'uso', name: 'United States Oil Fund', symbol: 'USO', price: 72.40, change24h: -0.68, category: 'commodities', subcategory: 'energy', logo: CB + 'uscfinvestments.com', ethereumAddress: '0x1f5fc5c3c8b0f15c7e21af623936ff2b210b6415' },
-  { id: 'copx', name: 'Global X Copper Miners ETF', symbol: 'COPX', price: 42.15, change24h: 0.89, category: 'commodities', subcategory: 'industrial', logo: CB + 'globalxetfs.com', ethereumAddress: '0x423a63dfe8d82cd9c6568c92210aa537d8ef6885' },
-  { id: 'nikl', name: 'Sprott Nickel Miners ETF', symbol: 'NIKL', price: 18.75, change24h: -1.23, category: 'commodities', subcategory: 'industrial', logo: CB + 'sprott.com', ethereumAddress: '0xbf54eb503bb350583d11f4348086dc3608fa245c' },
-  { id: 'remx', name: 'VanEck Rare Earth/Strategic Metals ETF', symbol: 'REMX', price: 38.40, change24h: 1.45, category: 'commodities', subcategory: 'industrial', logo: CB + 'vaneck.com', ethereumAddress: '0x1140043f02d8ee34b10eae2e32ae921cda1459ee' },
-  { id: 'dbc', name: 'Invesco DB Commodity Index', symbol: 'DBC', price: 23.60, change24h: -0.34, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', ethereumAddress: '0x20224080ad516769723c9a4a18325fc4e8c9ab5d' },
-  { id: 'ftgc', name: 'First Trust Global Tactical Commodity', symbol: 'FTGC', price: 22.85, change24h: 0.15, category: 'commodities', subcategory: 'broad', logo: CB + 'ftportfolios.com', ethereumAddress: '0xacf3fecaa787f268351a86409c3bd3b96ef924fb' },
-  { id: 'pdbc', name: 'Invesco Optimum Yield Diversified Commodity', symbol: 'PDBC', price: 14.85, change24h: -0.22, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', ethereumAddress: '0x46c0a02a877c1412cb32b57028b2f771c0364a7e' },
+  { id: 'gold', name: 'Gold', symbol: 'XAU', price: 2685.40, change24h: 0.34, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'gold.org', providers: [
+    { provider: 'paxos', symbol: 'PAXG', address: '0x45804880De22913dAFE09f4980848ECE6EcbAf78', chain: 'ethereum', decimals: 18 },
+    { provider: 'paxos', symbol: 'PAXG', address: '9TPL8droGJ7jThsq4momaoz6uhTcvX2SeMqipoPmNa8R', chain: 'solana', decimals: 9 },
+    { provider: 'tether', symbol: 'XAUT', address: '0x68749665FF8D2d112Fa859AA293F07A622782F38', chain: 'ethereum', decimals: 6 },
+  ] },
+  { id: 'gld', name: 'SPDR Gold Shares', symbol: 'GLD', price: 245.80, change24h: 0.42, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ssga.com', providers: [
+    { provider: 'ondo', symbol: 'GLDon', address: '0x423d42e505e64f99b6e277eb7ed324cc5606f139', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'GLDon', address: 'hWfiw4mcxT8rnNFkk6fsCQSxoxgZ9yVhB6tyeVcondo', chain: 'solana', decimals: 9 },
+    { provider: 'backed', symbol: 'GLDx', address: 'Xsv9hRk1z5ystj9MhnA7Lq4vjSsLwzL2nxrwmwtD3re', chain: 'solana', decimals: 8 },
+    { provider: 'dinari', symbol: 'GLD.d', address: '0xBE8e3f4d5BD6eE0175359982Cc91DAfa3cf72502', chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'slv', name: 'iShares Silver Trust', symbol: 'SLV', price: 28.95, change24h: 1.12, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'SLVon', address: '0xf3e4872e6a4cf365888d93b6146a2baa7348f1a4', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'SLVon', address: 'iy11ytbSGcUnrjE6Lfv78TFqxKyUESfku1FugS9ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'SLV.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'iau', name: 'iShares Gold Trust', symbol: 'IAU', price: 49.20, change24h: 0.38, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'IAUon', address: '0x4f0ca3df1c2e6b943cf82e649d576ffe7b2fabcf', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'IAUon', address: 'M77ZvkZ8zW5udRbuJCbuwSwavRa7bGAZYMTwru8ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'IAU.d', address: '0x39Bce681d72720F80424914800A78c63FdfaF645', chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'pall', name: 'abrdn Physical Palladium Shares ETF', symbol: 'PALL', price: 95.30, change24h: 0.56, category: 'commodities', subcategory: 'precious-metals', logo: CB + 'abrdn.com', providers: [
+    { provider: 'ondo', symbol: 'PALLon', address: '0x0ce36d199bd6851788e03392568849394cbde722', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'PALLon', address: 'P7hTXnKk2d2DyqWnefp5BSroE1qjjKpKxg9SxQqondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'PALL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'uso', name: 'United States Oil Fund', symbol: 'USO', price: 72.40, change24h: -0.68, category: 'commodities', subcategory: 'energy', logo: CB + 'uscfinvestments.com', providers: [
+    { provider: 'ondo', symbol: 'USOon', address: '0x1f5fc5c3c8b0f15c7e21af623936ff2b210b6415', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'USOon', address: 'rpydAzWdCy85HEmoQkH5PVxYtDYQWjmLxgHHadxondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'USO.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'copx', name: 'Global X Copper Miners ETF', symbol: 'COPX', price: 42.15, change24h: 0.89, category: 'commodities', subcategory: 'industrial', logo: CB + 'globalxetfs.com', providers: [
+    { provider: 'ondo', symbol: 'COPXon', address: '0x423a63dfe8d82cd9c6568c92210aa537d8ef6885', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'COPXon', address: 'X7j77hTmjZJbepkXXBcsEapM8qNgdfihkFj6CZ5ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'COPX.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'nikl', name: 'Sprott Nickel Miners ETF', symbol: 'NIKL', price: 18.75, change24h: -1.23, category: 'commodities', subcategory: 'industrial', logo: CB + 'sprott.com', providers: [
+    { provider: 'ondo', symbol: 'NIKLon', address: '0xbf54eb503bb350583d11f4348086dc3608fa245c', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'NIKLon', address: 'V8LRV7kWjrx6Prke9oHEHNUiR122BVtyuPciTCTondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'NIKL.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'remx', name: 'VanEck Rare Earth/Strategic Metals ETF', symbol: 'REMX', price: 38.40, change24h: 1.45, category: 'commodities', subcategory: 'industrial', logo: CB + 'vaneck.com', providers: [
+    { provider: 'ondo', symbol: 'REMXon', address: '0x1140043f02d8ee34b10eae2e32ae921cda1459ee', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'REMXon', address: 'tiitb2Z1HtpB2DpVr6V7tdCFS3jmTinLeuGj9EVondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'REMX.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'dbc', name: 'Invesco DB Commodity Index', symbol: 'DBC', price: 23.60, change24h: -0.34, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', providers: [
+    { provider: 'ondo', symbol: 'DBCon', address: '0x20224080ad516769723c9a4a18325fc4e8c9ab5d', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'DBCon', address: 'td1aY5AvYQuwGD75qNq9aPipMexraN9mQXJwqifondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'DBC.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'ftgc', name: 'First Trust Global Tactical Commodity', symbol: 'FTGC', price: 22.85, change24h: 0.15, category: 'commodities', subcategory: 'broad', logo: CB + 'ftportfolios.com', providers: [
+    { provider: 'ondo', symbol: 'FTGCon', address: '0xacf3fecaa787f268351a86409c3bd3b96ef924fb', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'FTGCon', address: 'ivBnfPTyuHDNWmMSnbavckhJK6SHZW8h77nZKsEondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'FTGC.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'pdbc', name: 'Invesco Optimum Yield Diversified Commodity', symbol: 'PDBC', price: 14.85, change24h: -0.22, category: 'commodities', subcategory: 'broad', logo: CB + 'invesco.com', providers: [
+    { provider: 'ondo', symbol: 'PDBCon', address: '0x46c0a02a877c1412cb32b57028b2f771c0364a7e', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'PDBCon', address: 'M6agiXbNgy8Xon9ngiW4ZDPbMFcNCTMkMMkshZyondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'PDBC.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
 ]
 
 const bonds = [
-  { id: 'tlt', name: 'iShares 20+ Year Treasury Bond ETF', symbol: 'TLT', price: 91.50, change24h: -0.22, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x992651BFeB9A0DCC4457610E284ba66D86489d4d' },
-  { id: 'sgov', name: 'iShares 0-3 Month Treasury Bond ETF', symbol: 'SGOV', price: 100.12, change24h: 0.01, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x8de5d49725550f7b318b2fa0f1b1f118e98e8d0f' },
-  { id: 'agg', name: 'iShares Core US Aggregate Bond ETF', symbol: 'AGG', price: 97.85, change24h: -0.08, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0xfF7CF16aA2fFc463b996DB2f7B7cf0130336899D' },
-  { id: 'tip', name: 'iShares TIPS Bond ETF', symbol: 'TIP', price: 107.30, change24h: -0.15, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', ethereumAddress: '0x2df38ca485d01fc15e4fd85847ed26b7ef871c1c' },
-  { id: 'usfr', name: 'WisdomTree Floating Rate Treasury Fund', symbol: 'USFR', price: 50.35, change24h: 0.02, category: 'bonds', subcategory: 'treasury', logo: CB + 'wisdomtree.com', ethereumAddress: '0xfb82561a955bf59b9263301126af490d3799e231' },
-  { id: 'hyg', name: 'iShares iBoxx $ High Yield Corporate Bond ETF', symbol: 'HYG', price: 78.60, change24h: 0.15, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', ethereumAddress: '0xeD3618Bb8778F8eBBe2f241Da532227591771D04' },
-  { id: 'binc', name: 'iShares Flexible Income Active ETF', symbol: 'BINC', price: 51.20, change24h: 0.12, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', ethereumAddress: '0x88703c1e71f44a2d329c99e8e112f7a4e7dd6312' },
-  { id: 'cloa', name: 'iShares AAA CLO Active ETF', symbol: 'CLOA', price: 50.85, change24h: 0.05, category: 'bonds', subcategory: 'clo', logo: CB + 'ishares.com', ethereumAddress: '0x8cefd49b703de9c0486d9bf6cb559f0895268ee8' },
-  { id: 'cloi', name: 'VanEck CLO ETF', symbol: 'CLOI', price: 25.40, change24h: 0.08, category: 'bonds', subcategory: 'clo', logo: CB + 'vaneck.com', ethereumAddress: '0xe8b09e8175aecb35a171fa059647434fe47f114c' },
-  { id: 'jaaa', name: 'Janus Henderson AAA CLO ETF', symbol: 'JAAA', price: 50.95, change24h: 0.03, category: 'bonds', subcategory: 'clo', logo: CB + 'janushenderson.com', ethereumAddress: '0x219a1b27baa08d72fac836665a3b752f3c9acbbc' },
+  { id: 'tlt', name: 'iShares 20+ Year Treasury Bond ETF', symbol: 'TLT', price: 91.50, change24h: -0.22, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'TLTon', address: '0x992651BFeB9A0DCC4457610E284ba66D86489d4d', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'TLTon', address: 'KaSLSWByKy6b9FrCYXPEJoHmLpuFZtTCJk1F1Z9ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'TLT.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'sgov', name: 'iShares 0-3 Month Treasury Bond ETF', symbol: 'SGOV', price: 100.12, change24h: 0.01, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'SGOVon', address: '0x8de5d49725550f7b318b2fa0f1b1f118e98e8d0f', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'SGOVon', address: 'HjrN6ChZK2QRL6hMXayjGPLFvxhgjwKEy135VRjondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'SGOV.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'agg', name: 'iShares Core US Aggregate Bond ETF', symbol: 'AGG', price: 97.85, change24h: -0.08, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'AGGon', address: '0xfF7CF16aA2fFc463b996DB2f7B7cf0130336899D', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'AGGon', address: '13qTjKx53y6LKGGStiKeieGbnVx3fx1bbwopKFb3ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'AGG.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'tip', name: 'iShares TIPS Bond ETF', symbol: 'TIP', price: 107.30, change24h: -0.15, category: 'bonds', subcategory: 'treasury', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'TIPon', address: '0x2df38ca485d01fc15e4fd85847ed26b7ef871c1c', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'TIPon', address: 'k6BPp2Xmf2TYgrZiUyWfUoZBKeqaDbvPoAVgSx2ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'TIP.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'usfr', name: 'WisdomTree Floating Rate Treasury Fund', symbol: 'USFR', price: 50.35, change24h: 0.02, category: 'bonds', subcategory: 'treasury', logo: CB + 'wisdomtree.com', providers: [
+    { provider: 'ondo', symbol: 'USFRon', address: '0xfb82561a955bf59b9263301126af490d3799e231', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'USFRon', address: 'o6U1Sm6Vd7EofMyCrL28mrp2QLzgYGgjveHiEQ5ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'USFR.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'hyg', name: 'iShares iBoxx $ High Yield Corporate Bond ETF', symbol: 'HYG', price: 78.60, change24h: 0.15, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'HYGon', address: '0xeD3618Bb8778F8eBBe2f241Da532227591771D04', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'HYGon', address: 'c5ug15fwZRfQhhVa6LHscFY33ebVDHcVCezYpj7ondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'HYG.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'binc', name: 'iShares Flexible Income Active ETF', symbol: 'BINC', price: 51.20, change24h: 0.12, category: 'bonds', subcategory: 'corporate', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'BINCon', address: '0x88703c1e71f44a2d329c99e8e112f7a4e7dd6312', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'BINCon', address: 'mhZ69E1vDnAsQJXAwarLYSX5tmgeMajXBJ2rXAcondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'BINC.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'cloa', name: 'iShares AAA CLO Active ETF', symbol: 'CLOA', price: 50.85, change24h: 0.05, category: 'bonds', subcategory: 'clo', logo: CB + 'ishares.com', providers: [
+    { provider: 'ondo', symbol: 'CLOAon', address: '0x8cefd49b703de9c0486d9bf6cb559f0895268ee8', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'CLOAon', address: 't71FyTYHVkPAb5g48adDHmkVxXYbUuP2eq6jDZLondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'CLOA.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'cloi', name: 'VanEck CLO ETF', symbol: 'CLOI', price: 25.40, change24h: 0.08, category: 'bonds', subcategory: 'clo', logo: CB + 'vaneck.com', providers: [
+    { provider: 'ondo', symbol: 'CLOIon', address: '0xe8b09e8175aecb35a171fa059647434fe47f114c', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'CLOIon', address: 'ucQ3VfWAx9pkCN4Kg84zE56FtB4FJN2kQH4ArYYondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'CLOI.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
+  { id: 'jaaa', name: 'Janus Henderson AAA CLO ETF', symbol: 'JAAA', price: 50.95, change24h: 0.03, category: 'bonds', subcategory: 'clo', logo: CB + 'janushenderson.com', providers: [
+    { provider: 'ondo', symbol: 'JAAAon', address: '0x219a1b27baa08d72fac836665a3b752f3c9acbbc', chain: 'ethereum', decimals: 18 },
+    { provider: 'ondo', symbol: 'JAAAon', address: 'KZtqx9BJbpcGY7vdzhqPXM3ECKChxE5YhXaDiwRondo', chain: 'solana', decimals: 9 },
+    { provider: 'dinari', symbol: 'JAAA.d', address: null, chain: 'arbitrum', decimals: 18 },
+  ] },
 ]
 
 const assetDetails = {

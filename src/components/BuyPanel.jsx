@@ -236,8 +236,8 @@ export default function BuyPanel({ asset }) {
             <div className="buy-panel-provider-select">
               {availableProviders.map(p => (
                 <button
-                  key={p.provider}
-                  className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider ? 'active' : ''}`}
+                  key={`${p.provider}-${p.chain}`}
+                  className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider && selectedProvider?.chain === p.chain ? 'active' : ''}`}
                   onClick={() => handleProviderSelect(p)}
                 >
                   <img src={PROVIDERS[p.provider].logo} alt={PROVIDERS[p.provider].name} width={20} height={20} />

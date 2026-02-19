@@ -58,7 +58,13 @@
       "Bash(npx -y tsx -e:*)",
       "WebFetch(domain:dinari.com)",
       "WebFetch(domain:www.k.co.cr)",
-      "WebFetch(domain:www.kraken.com)"
+      "WebFetch(domain:www.kraken.com)",
+      "WebFetch(domain:app.ondo.finance)",
+      "WebFetch(domain:forum.arbitrum.foundation)",
+      "WebFetch(domain:assets.backed.fi)",
+      "WebFetch(domain:docs.dinari.com)",
+      "WebFetch(domain:arbiscan.io)",
+      "WebFetch(domain:rainbow.me)"
     ]
   }
 }

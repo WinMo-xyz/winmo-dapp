@@ -205,8 +205,8 @@ export default function BuyModal({ asset, mode = 'buy', onClose }) {
               <div className="modal-provider-select">
                 {availableProviders.map(p => (
                   <button
-                    key={p.provider}
-                    className={`modal-provider-btn ${selectedProvider?.provider === p.provider ? 'active' : ''}`}
+                    key={`${p.provider}-${p.chain}`}
+                    className={`modal-provider-btn ${selectedProvider?.provider === p.provider && selectedProvider?.chain === p.chain ? 'active' : ''}`}
                     onClick={() => handleProviderSelect(p)}
                   >
                     <img src={PROVIDERS[p.provider].logo} alt={PROVIDERS[p.provider].name} width={20} height={20} />

@@ -319,6 +319,7 @@
 /* Provider selector */
 .modal-provider-select {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
