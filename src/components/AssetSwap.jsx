@@ -378,6 +378,9 @@ export default function AssetSwap({ category }) {
               )}
             </div>
           )}
+          {isConnected && balance != null && fromAmount && parseFloat(fromAmount) > balance && (
+            <p className="asset-swap-error">Insufficient balance. Value must be less than {formatBal(balance)} {fromToken?.symbol}.</p>
+          )}
         </div>
 
         {/* Flip */}

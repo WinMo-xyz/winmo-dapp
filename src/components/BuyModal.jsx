@@ -165,28 +165,20 @@ export default function BuyModal({ asset, mode = 'buy', onClose }) {
     reset()
   }
 
-  // Clamp amount to balance
   const handleAmountChange = (val) => {
-    let finalVal = val
-    if (activeBalance != null && parseFloat(val) > activeBalance) {
-      finalVal = String(activeBalance)
-    }
-    setAmount(finalVal)
-    setReceive(estimateReceive(finalVal, asset.price, isSell))
+    setAmount(val)
+    setReceive(estimateReceive(val, asset.price, isSell))
     if (swapStatus !== 'idle') reset()
   }
 
   const handleReceiveChange = (val) => {
     setReceive(val)
-    let reverseAmt = reverseEstimate(val, asset.price, isSell)
-    // Clamp to balance
-    if (reverseAmt && activeBalance != null && parseFloat(reverseAmt) > activeBalance) {
-      reverseAmt = String(activeBalance)
-      setReceive(estimateReceive(reverseAmt, asset.price, isSell))
-    }
+    const reverseAmt = reverseEstimate(val, asset.price, isSell)
     setAmount(reverseAmt)
     if (swapStatus !== 'idle') reset()
   }
+
+  const exceedsBalance = activeBalance != null && amount && parseFloat(amount) > activeBalance
 
   const handlePercent = (pct) => {
     if (activeBalance != null && activeBalance > 0) {
@@ -386,6 +378,9 @@ export default function BuyModal({ asset, mode = 'buy', onClose }) {
               </button>
             ))}
           </div>
+          {exceedsBalance && (
+            <p className="modal-error">Insufficient balance. Value must be less than {formatBalance(activeBalance)} {balanceTokenLabel}.</p>
+          )}
         </div>
 
         <div className="modal-output">
