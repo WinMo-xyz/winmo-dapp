@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import AssetLogo from './AssetLogo'
 import { useSwap } from '../hooks/useSwap'
 import { useSolanaSwap } from '../hooks/useSolanaSwap'
@@ -48,7 +48,19 @@ export default function BuyPanel({ asset }) {
   const { openConnectModal } = useConnectModal()
 
   // Provider selection for stocks with multiple RWA providers
-  const availableProviders = asset ? getAssetProviders(asset) : []
+  // Memoize to prevent recomputation on every render — uses a stable snapshot
+  const availableProviders = useMemo(() => {
+    if (!asset) return []
+    const providers = getAssetProviders(asset)
+    // Deduplicate by provider+chain to guard against any external array mutation
+    const seen = new Set()
+    return providers.filter(p => {
+      const key = `${p.provider}-${p.chain}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+  }, [asset?.id])
   const hasProviders = availableProviders.length > 0
   const [selectedProvider, setSelectedProvider] = useState(availableProviders[0] || null)
 
@@ -341,8 +353,8 @@ export default function BuyPanel({ asset }) {
           <div className="buy-panel-provider-select">
             {availableProviders.map(p => (
               <button
-                key={p.provider}
-                className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider ? 'active' : ''}`}
+                key={`${p.provider}-${p.chain}`}
+                className={`buy-panel-provider-btn ${selectedProvider?.provider === p.provider && selectedProvider?.chain === p.chain ? 'active' : ''}`}
                 onClick={() => handleProviderSelect(p)}
                 disabled={isSwapping}
               >
