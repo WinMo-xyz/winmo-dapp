@@ -45,7 +45,7 @@ export default function Home() {
               Money
             </h1>
             <p className="home-subtitle">
-              Stocks, crypto, commodities, bonds. One portfolio, fully onchain. Buy anything from anywhere.
+              Stocks. Crypto. Gold. Bonds. Forex. All onchain, all yours. Fund from your bank, trade the world.
             </p>
             <div className="home-cta-group">
               <ConnectButton.Custom>
