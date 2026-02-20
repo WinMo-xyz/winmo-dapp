@@ -610,3 +610,37 @@
     display: block;
   }
 }
+
+@media (max-width: 480px) {
+  .ai-agent-page { padding-top: 100px; padding-bottom: 60px; }
+  .agent-hero { padding: 20px 12px 16px; border-radius: 12px; }
+  .agent-hero-title { font-size: 22px; }
+  .agent-hero-subtitle { font-size: 12px; max-width: 100%; }
+  .agent-hero-badge { font-size: 9px; padding: 4px 10px; }
+  .agent-onboard { padding: 16px 12px; border-radius: 12px; }
+  .agent-onboard-title { font-size: 15px; }
+  .agent-onboard-desc { font-size: 12px; }
+  .agent-onboard-header { gap: 10px; }
+  .agent-onboard-icon { width: 36px; height: 36px; border-radius: 8px; }
+  .agent-step { margin-bottom: 20px; }
+  .agent-step-label { font-size: 11px; }
+  .agent-step-hint { font-size: 11px; }
+  .agent-code-block { font-size: 10px; padding: 10px; padding-right: 10px; border-radius: 10px; overflow-x: auto; }
+  .agent-code-block code { font-size: 10px; word-break: break-all; }
+  .agent-copy-btn { padding: 4px 8px; font-size: 9px; top: 6px; right: 6px; }
+  .agent-launch-content { padding: 20px 14px; }
+  .agent-launch-title { font-size: 16px; }
+  .agent-launch-desc { font-size: 12px; }
+  .agent-launch-feature { font-size: 11px; gap: 8px; }
+  .agent-launch-btn { padding: 12px 16px; font-size: 13px; }
+  .agent-custom-card { padding: 20px 14px; }
+  .agent-custom-title { font-size: 15px; }
+  .agent-custom-desc { font-size: 12px; }
+  .agent-template { padding: 12px 10px; }
+  .agent-template-name { font-size: 12px; }
+  .agent-template small { font-size: 10px; }
+  .heartbeat-row { padding: 8px 10px; gap: 6px; }
+  .heartbeat-endpoint { font-size: 9px; word-break: break-all; }
+  .heartbeat-status { font-size: 9px; }
+  .ai-agent-page .coming-soon-badge { font-size: 11px; padding: 8px 18px; }
+}

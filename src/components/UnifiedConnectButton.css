@@ -1,5 +1,6 @@
 .unified-connect {
   position: relative;
+  min-width: 0;
 }
 
 /* Main connect button (disconnected state) */
@@ -92,17 +93,18 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
 }
 
 .unified-wallet-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 12px;
+  gap: 5px;
+  height: 34px;
+  padding: 0 10px;
   border-radius: 10px;
-  border: 1px solid rgba(var(--light), 0.08);
-  background: rgba(var(--light), 0.04);
+  border: 1px solid var(--light-7);
+  background: var(--light-5);
   color: rgb(var(--light));
   font-family: var(--font-body);
   font-size: 13px;
@@ -110,6 +112,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(var(--shadow-color), 0.08) inset;
 }
 
 .unified-wallet-pill:hover {
@@ -117,19 +120,20 @@
   border-color: rgba(var(--light), 0.15);
 }
 
-.unified-wallet-pill.solana:hover {
-  border-color: rgba(var(--red-rgb, 255, 75, 75), 0.4);
-  background: rgba(var(--red-rgb, 255, 75, 75), 0.08);
-}
-
 .unified-chain-icon {
   width: 18px;
   height: 18px;
-  border-radius: 4px;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 .unified-wallet-addr {
   font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
+  display: inline-block;
 }
 
 .unified-add-btn {
@@ -153,17 +157,44 @@
   background: rgba(var(--accent-rgb), 0.06);
 }
 
+@media (max-width: 1280px) {
+  .unified-wallet-addr {
+    max-width: 90px;
+  }
+
+  .unified-wallet-pill {
+    font-size: 12px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .unified-wallet-addr {
+    max-width: 70px;
+  }
+
+  .unified-connected-group {
+    gap: 4px;
+  }
+
+  .unified-wallet-pill {
+    height: 32px;
+  }
+
+  .unified-add-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 480px) {
   .unified-wallet-pill {
     max-width: 140px;
   }
 
   .unified-wallet-addr {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     max-width: 80px;
-    display: inline-block;
   }
 
   .unified-connect-btn {
@@ -177,4 +208,141 @@
     height: 28px;
     font-size: 16px;
   }
+}
+
+/* ---- Solana Account Modal ---- */
+.sol-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: sol-overlay-in 0.2s ease-out;
+}
+
+@keyframes sol-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sol-modal {
+  position: relative;
+  width: 340px;
+  max-width: 90vw;
+  padding: 36px 32px 28px;
+  border-radius: var(--radius-1);
+  background: rgb(var(--dark));
+  border: 1px solid var(--light-10);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: sol-modal-in 0.25s var(--ease-out);
+}
+
+@keyframes sol-modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.sol-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--light-5);
+  color: var(--color-light-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sol-modal-close:hover {
+  background: var(--light-10);
+  color: var(--color-light);
+}
+
+.sol-modal-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.sol-modal-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.sol-modal-avatar span {
+  font-size: 32px;
+}
+
+.sol-modal-address {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sol-modal-balance {
+  font-size: 15px;
+  color: var(--color-light-secondary);
+  margin-bottom: 20px;
+}
+
+.sol-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.sol-modal-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px;
+  border-radius: var(--radius-2);
+  background: var(--light-3);
+  border: 1px solid var(--light-7);
+  color: var(--color-light);
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sol-modal-action:hover {
+  background: var(--light-7);
+  border-color: var(--light-15);
+}
+
+.sol-modal-action.disconnect:hover {
+  background: rgba(243, 53, 56, 0.08);
+  border-color: rgba(243, 53, 56, 0.25);
+  color: var(--red);
+}
+
+.sol-modal-action.disconnect:hover svg {
+  stroke: var(--red);
+}
+
+[data-theme="light"] .sol-modal {
+  background: rgb(var(--dark));
+  box-shadow: 0 24px 64px rgba(var(--shadow-color), 0.15);
 }

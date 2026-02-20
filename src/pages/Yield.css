@@ -349,3 +349,27 @@
     flex: 1;
   }
 }
+
+@media (max-width: 480px) {
+  .yield-page { padding-top: 100px; padding-bottom: 60px; }
+  .yield-title { margin-bottom: 4px; font-size: 24px; }
+  .yield-subtitle { font-size: 12px; margin-bottom: 20px; }
+  .yield-sidebar { gap: 8px; }
+  .yield-risk-group { min-width: 180px; }
+  .yield-risk-header { padding: 10px 12px; }
+  .yield-risk-label { font-size: 10px; }
+  .yield-item { padding: 10px 12px; gap: 8px; }
+  .yield-item-name { font-size: 11px; }
+  .yield-item-apy { font-size: 11px; }
+  .yield-item-icon { font-size: 14px; width: 20px; }
+  .yield-detail { padding: 14px; border-radius: 12px; }
+  .yield-detail-header { gap: 10px; margin-bottom: 16px; }
+  .yield-detail-icon { width: 40px; height: 40px; font-size: 24px; }
+  .yield-detail-name { font-size: 16px; margin-bottom: 6px; }
+  .yield-badge { font-size: 10px; padding: 3px 8px; }
+  .yield-detail-strategy { font-size: 12px; margin-bottom: 20px; }
+  .yield-stat-value { font-size: 16px; }
+  .yield-stat-label { font-size: 10px; }
+  .yield-select-display { padding: 10px 12px; font-size: 12px; }
+  .yield-deposit-btn, .yield-withdraw-btn { padding: 10px 16px; font-size: 12px; }
+}

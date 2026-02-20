@@ -14,9 +14,11 @@ Today, if you want to build a diversified portfolio across stocks, crypto, commo
 - A crypto exchange account (Coinbase, Binance)
 - A DeFi wallet (MetaMask, Phantom)
 - A forex broker (OANDA, IG)
+- A fiat on/off-ramp (Moonpay, Ramp, bank wires)
+- A crypto card provider (Coinbase Card, Crypto.com)
 - Multiple KYC processes, funding rails, and interfaces
 
-Five accounts. Five dashboards. Five login credentials. Five different views of what should be one portfolio. Every boundary between these systems is a tax on the user's time, capital, and attention.
+Seven accounts. Seven dashboards. Seven login credentials. Seven different views of what should be one portfolio. Every boundary between these systems is a tax on the user's time, capital, and attention.
 
 **The fragmentation isn't just inconvenient. It's extractive.** Every intermediary takes a cut. Every boundary creates friction. Every siloed platform locks users into a walled garden where switching costs keep them captive.
 
@@ -134,6 +136,7 @@ This isn't an afterthought bolted onto a human interface. It's a foundational de
 | **Trade Executor** | Get real-time quotes from Jupiter and KyberSwap, execute at optimal prices |
 | **Forex Analyst** | Monitor 25+ currency pairs via Pyth oracles, identify arbitrage opportunities |
 | **Alert System** | Poll prices, detect threshold crosses, trigger notifications or trades |
+| **Treasury Agent** | Monitor fiat on/off-ramp status, automate stablecoin conversions, manage card funding |
 
 ---
 
@@ -145,12 +148,13 @@ Tokenization creates a virtuous cycle that accelerates adoption:
 More assets tokenized
     → More liquidity onchain
         → Better prices and tighter spreads
-            → More users and agents enter
-                → More demand for tokenized assets
-                    → More assets tokenized
+            → Fiat rails lower the entry barrier
+                → More users and agents enter
+                    → More demand for tokenized assets
+                        → More assets tokenized
 ```
 
-WinMo sits at the center of this flywheel. Every asset class the platform supports — stocks via Ondo, gold via Paxos, bonds via Ondo, forex via Pyth stablecoins — increases the utility of the platform, which attracts more users and agents, which drives demand for more tokenized assets.
+WinMo sits at the center of this flywheel. Every asset class the platform supports — stocks via Ondo, gold via Paxos, bonds via Ondo, forex via Pyth stablecoins — increases the utility of the platform. WinMo Money's fiat rails via Bridge.xyz remove the biggest remaining friction: getting money in and out. When you can deposit USD from your bank, trade any asset class on-chain, spend via a Visa card, and cash out to your bank — all without leaving one interface — the flywheel accelerates.
 
 ### Where we are in 2026
 
@@ -181,11 +185,21 @@ Not Ethereum-only. Not Solana-only. Both. With a unified wallet context that pre
 
 Four-layer agent compatibility (discovery, schema, browser API, REST API) means any AI agent — from a simple script to a sophisticated autonomous system — can discover, understand, and interact with every WinMo feature without documentation beyond what the platform itself provides.
 
-### 4. No Custody, No Accounts
+### 4. Fiat Rails Built In — WinMo Money
 
-WinMo never holds your funds. Every trade is a direct swap on-chain, signed by your wallet, settled by the blockchain. No account creation. No KYC. No deposit/withdrawal. You connect, you trade, you disconnect.
+Most DeFi apps stop at the on-chain boundary. You need a separate exchange to convert fiat to crypto, a separate bank integration to cash out, and a separate card provider to spend. WinMo Money, powered by Bridge.xyz, collapses all three into one interface:
 
-### 5. Institutional-Grade Data
+- **On-Ramp**: Deposit fiat (USD, EUR, GBP, and more) from your bank and receive stablecoins on Solana, Ethereum, Base, or Polygon — directly to your connected wallet.
+- **Off-Ramp**: Send crypto to a liquidation address and receive fiat in your bank account. No exchange accounts, no manual withdrawals.
+- **Winmo Card**: A virtual and physical Visa card backed by USDC. Spend crypto anywhere Visa is accepted — groceries, flights, subscriptions — without manually selling first.
+
+KYC is required once for fiat services (via Bridge.xyz hosted verification) and unlocks all three rails. On-chain trading remains permissionless — connect, swap, disconnect. Fiat rails add the last mile that makes WinMo a complete financial system, not just a trading interface.
+
+### 5. Non-Custodial by Default
+
+WinMo never holds your funds. Every trade is a direct swap on-chain, signed by your wallet, settled by the blockchain. Fiat services via Bridge.xyz are custodied by Bridge during the conversion window only — once stablecoins hit your wallet or fiat hits your bank, they're fully yours.
+
+### 6. Institutional-Grade Data
 
 Prices from CoinGecko (crypto), Pyth Network (forex), and DeFi Llama (yields) — the same data sources used by institutional trading desks and DeFi protocols managing billions.
 
@@ -193,13 +207,13 @@ Prices from CoinGecko (crypto), Pyth Network (forex), and DeFi Llama (yields) �
 
 ## The Future
 
-### Near Term: More Assets, More Chains
+### Near Term: More Assets, More Chains, Full Fiat Rails
 
-As tokenization providers like Ondo, Backed, and Securitize expand their offerings, WinMo will support them. As new chains mature (Base, Arbitrum, Sui), WinMo's architecture is designed to add chain support without rewriting the core.
+As tokenization providers like Ondo, Backed, and Securitize expand their offerings, WinMo will support them. As new chains mature (Base, Arbitrum, Sui), WinMo's architecture is designed to add chain support without rewriting the core. WinMo Money will go live with full Bridge.xyz integration — KYC, fiat deposits, bank withdrawals, and the Winmo Card — closing the loop between traditional banking and on-chain finance.
 
 ### Medium Term: Agent-Executed Strategies
 
-The `window.winmo.executeSwap()` API is the first step. The next is composable strategies: "Rebalance my portfolio to 60% stocks, 30% crypto, 10% bonds" executed by an agent as a series of atomic swaps across chains.
+The `window.winmo.executeSwap()` API is the first step. The next is composable strategies: "Rebalance my portfolio to 60% stocks, 30% crypto, 10% bonds" executed by an agent as a series of atomic swaps across chains. Agents will also manage fiat flows — automatically funding a Winmo Card when the balance drops, or sweeping idle stablecoins to yield protocols.
 
 ### Long Term: The Financial Operating System
 
@@ -216,9 +230,12 @@ When every stock, bond, commodity, currency, and crypto token is a token on a bl
 | Metric | Value |
 |--------|-------|
 | Total assets listed | 100+ |
-| Asset categories | 5 (stocks, crypto, commodities, bonds, forex) |
+| Asset categories | 6 (stocks, crypto, commodities, bonds, forex, fiat) |
 | Supported chains | 2 (Ethereum, Solana) |
+| Fiat rails | 3 (on-ramp, off-ramp, Winmo Card) |
+| Fiat currencies supported | 6 (USD, EUR, GBP, SGD, BRL, MXN) |
 | Tokenization providers | 4 (Ondo, Backed, Paxos, Tether) |
+| Fiat infrastructure | Bridge.xyz |
 | Yield protocols | 11 across 4 risk tiers |
 | Forex pairs | 25+ |
 | Forex stablecoins | 20+ |
@@ -229,4 +246,4 @@ When every stock, bond, commodity, currency, and crypto token is a token on a bl
 
 ---
 
-*Built with conviction that the future of finance is open, programmable, and accessible to everyone — human or machine.*
+*Built with conviction that the future of finance is open, programmable, and accessible to everyone — human or machine. From bank account to blockchain and back, in one interface.*

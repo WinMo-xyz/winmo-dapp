@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════════════════════════
+   DappNavbar — Top bar + scrollable mobile nav strip
+   ═══════════════════════════════════════════════════════════════════ */
+
 .dapp-navbar {
   position: fixed;
   top: 12px;
@@ -5,7 +9,8 @@
   right: 0;
   z-index: 9000;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 0 24px;
 }
 
@@ -14,19 +19,24 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: var(--max-width);
+  max-width: 1440px;
   height: 56px;
-  padding: 0 12px 0 20px;
-  background: rgba(var(--dark), 0.5);
-  backdrop-filter: blur(32px) saturate(1.6);
-  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  gap: 14px;
+  padding: 0 14px 0 20px;
+  background: rgba(var(--dark), 0.72);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
   border-radius: var(--radius-rounded);
-  border: 1px solid var(--light-5);
+  border: 1px solid var(--light-7);
   box-shadow:
     0 0 0 1px var(--light-3) inset,
-    0 16px 40px rgba(var(--shadow-color), 0.25);
+    0 1px 0 0 rgba(255, 255, 255, 0.03) inset,
+    0 8px 24px rgba(var(--shadow-color), 0.18),
+    0 24px 48px rgba(var(--shadow-color), 0.12);
   animation: nav-slide-down 0.6s var(--ease-out) both;
 }
+
+/* ── Desktop Nav Center ──────────────────────────────────────────── */
 
 .dapp-nav-center {
   flex: 1;
@@ -37,23 +47,23 @@
 .dapp-nav-pill {
   display: flex;
   align-items: center;
-  background: var(--light-3);
+  background: var(--light-5);
   border-radius: var(--radius-rounded);
-  padding: 4px;
-  border: 1px solid var(--light-5);
-  box-shadow: 0 0 0 1px var(--light-3) inset;
+  padding: 3px;
+  border: 1px solid var(--light-7);
+  box-shadow: 0 1px 4px rgba(var(--shadow-color), 0.08) inset;
 }
 
 .dapp-nav-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 14px;
+  padding: 7px 13px;
   font-size: 12.5px;
   font-weight: 500;
   color: var(--color-light-secondary);
   border-radius: var(--radius-rounded);
-  transition: color 0.3s var(--ease-out), background 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+  transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
   text-decoration: none;
   white-space: nowrap;
   position: relative;
@@ -61,24 +71,28 @@
 
 .dapp-nav-link:hover {
   color: var(--color-light);
-  background: var(--light-5);
+  background: var(--light-7);
 }
 
 .dapp-nav-link.active {
   color: var(--color-light);
-  background: var(--light-7);
-  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.08);
+  font-weight: 600;
+  background: var(--light-10);
+  box-shadow:
+    0 1px 3px rgba(var(--shadow-color), 0.1),
+    0 0 16px rgba(var(--accent-rgb), 0.06);
 }
 
 .dapp-nav-link.active::after {
   content: '';
   position: absolute;
-  bottom: 2px;
-  left: 25%;
-  right: 25%;
+  bottom: 1px;
+  left: 30%;
+  right: 30%;
   height: 2px;
   background: var(--accent);
   border-radius: 1px;
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.4);
   animation: nav-indicator-in 0.3s var(--ease-out);
 }
 
@@ -87,109 +101,168 @@
   to { transform: scaleX(1); opacity: 1; }
 }
 
-.dapp-nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* ── Logo ────────────────────────────────────────────────────────── */
+
+.dapp-navbar .navbar-logo {
+  margin-right: 4px;
   flex-shrink: 0;
 }
 
-/* Mobile */
+.dapp-navbar .logo-img {
+  transition: transform 0.3s var(--ease-out);
+}
+
+.dapp-navbar .navbar-logo:hover .logo-img {
+  transform: rotate(-6deg) scale(1.05);
+}
+
+.dapp-navbar .logo-text {
+  background: var(--gradient-1);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient 6s linear infinite;
+}
+
+/* ── Desktop Actions ─────────────────────────────────────────────── */
+
+.dapp-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+/* ── Mobile Top Bar Right ────────────────────────────────────────── */
+
 .dapp-mobile-right {
   display: none;
   align-items: center;
   gap: 8px;
 }
 
-.dapp-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  width: 28px;
-  padding: 4px 8px;
-}
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE NAV STRIP — Scrollable horizontal chips below header
+   ═══════════════════════════════════════════════════════════════════ */
 
-.dapp-toggle span {
-  display: block;
+.dapp-mobile-nav {
+  display: none;
   width: 100%;
-  height: 1.5px;
-  background: var(--color-light);
-  border-radius: 2px;
-  transition: all 0.4s var(--ease-out);
-}
-
-.dapp-toggle.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.dapp-toggle.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.dapp-toggle.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-.dapp-mobile-menu {
-  position: fixed;
-  top: calc(12px + 56px + 12px);
-  left: 20px;
-  right: 20px;
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  background: rgba(var(--dark), 0.85);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  max-width: 1440px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background: rgba(var(--dark), 0.65);
+  backdrop-filter: blur(32px) saturate(1.6);
+  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  border-radius: var(--radius-rounded);
   border: 1px solid var(--light-5);
-  border-radius: var(--radius-2);
-  padding: 12px;
-  z-index: 8999;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-8px);
-  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+  position: relative;
 }
 
-.dapp-mobile-link {
-  padding: 12px 16px;
-  font-size: 14px;
-  font-weight: 500;
+.dapp-mobile-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll hint — only when content overflows */
+.dapp-mobile-nav.has-overflow::after {
+  content: '›';
+  position: sticky;
+  right: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  margin-left: -36px;
+  font-size: 22px;
+  font-weight: 300;
   color: var(--color-light-secondary);
-  text-align: left;
-  border-radius: var(--radius-3);
-  transition: all 0.3s var(--ease-out);
+  background: linear-gradient(to right, transparent, rgba(var(--dark), 0.75) 45%);
+  border-radius: 0 var(--radius-rounded) var(--radius-rounded) 0;
+  pointer-events: none;
+  animation: scroll-hint 1.5s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(4px); opacity: 1; }
+}
+
+.dapp-mobile-chip {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-main);
+  color: var(--color-light-secondary);
   text-decoration: none;
+  border-radius: var(--radius-rounded);
+  white-space: nowrap;
+  transition: all 0.2s var(--ease-out);
 }
 
-.dapp-mobile-link:hover {
+.dapp-mobile-chip:hover {
   color: var(--color-light);
-  background: var(--light-5);
+  background: var(--light-7);
 }
 
-.dapp-mobile-link.active {
+.dapp-mobile-chip.active {
   color: var(--color-light);
-  background: var(--light-5);
-  border-left: 2px solid var(--accent);
-  padding-left: 14px;
+  font-weight: 600;
+  background: var(--light-10);
+  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.06);
 }
 
-.dapp-mobile-search {
-  padding: 8px 4px;
-}
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════════ */
 
-@media (max-width: 900px) {
-  .dapp-mobile-right {
-    display: flex;
+/* ── 1280px — Compress nav links ─────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .dapp-nav-link {
+    padding: 7px 10px;
+    font-size: 12px;
   }
 
-  .dapp-toggle {
+  .dapp-navbar-inner {
+    gap: 10px;
+  }
+}
+
+/* ── 1100px — Further compress ───────────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .dapp-nav-link {
+    padding: 6px 8px;
+    font-size: 11.5px;
+  }
+
+  .dapp-navbar-inner {
+    gap: 8px;
+    padding: 0 10px 0 16px;
+  }
+
+  .dapp-navbar .navbar-logo {
+    margin-right: 0;
+  }
+}
+
+/* ── 1024px — Switch to mobile layout ────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .dapp-navbar {
+    padding: 0 16px;
+  }
+
+  .dapp-mobile-right {
     display: flex;
-    width: 44px;
-    height: 44px;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
   }
 
   .dapp-nav-actions {
@@ -200,36 +273,40 @@
     display: none;
   }
 
-  .dapp-mobile-menu {
+  /* Show the scrollable nav strip */
+  .dapp-mobile-nav {
     display: flex;
   }
 
-  .dapp-mobile-menu.open {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
+  /* Push page content below two-row header */
+  main {
+    padding-top: 130px !important;
   }
 }
 
+/* ── 480px — Small phones ────────────────────────────────────────── */
+
 @media (max-width: 480px) {
   .dapp-navbar {
-    padding: 0 12px;
-    top: 10px;
+    padding: 0 10px;
+    top: 8px;
   }
 
   .dapp-navbar-inner {
-    height: 52px;
+    height: 46px;
+    padding: 0 8px 0 12px;
   }
 
-  .dapp-mobile-menu {
-    left: 12px;
-    right: 12px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  .dapp-logo-text { font-size: 16px; }
+
+  .dapp-mobile-nav {
+    margin-top: 6px;
+    padding: 4px 6px;
+    gap: 3px;
   }
 
-  .dapp-mobile-link {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
+  .dapp-mobile-chip {
+    padding: 5px 10px;
+    font-size: 11px;
   }
 }

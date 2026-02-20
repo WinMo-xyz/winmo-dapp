@@ -440,3 +440,36 @@
   .rwa-arb-table thead th:nth-child(2),
   .rwa-arb-table tbody td:nth-child(2) { display: none; }
 }
+
+@media (max-width: 480px) {
+  .rwa-arb-empty { padding: 24px 12px; }
+  .rwa-arb-empty p { font-size: 13px; }
+  .rwa-arb-empty span { font-size: 11px; }
+
+  .rwa-arb-subtitle { font-size: 12px; }
+  .rwa-arb-count { font-size: 11px; }
+  .rwa-arb-timer { min-width: auto; }
+  .rwa-arb-scanning { font-size: 11px; }
+  .rwa-arb-next { font-size: 11px; }
+
+  .rwa-arb-filters { flex-wrap: wrap; }
+  .rwa-arb-filter-btn { padding: 4px 8px; font-size: 10px; }
+
+  .rwa-arb-table thead th { padding: 6px 4px; font-size: 9px; }
+  .rwa-arb-table tbody td { padding: 6px 4px; font-size: 11px; }
+  .rwa-arb-table thead th:nth-child(3),
+  .rwa-arb-table tbody td:nth-child(3) { display: none; }
+  .rwa-arb-asset-name { font-size: 11px; }
+  .rwa-arb-spread { font-size: 11px; }
+  .rwa-arb-rate-cell { font-size: 11px; }
+  .rwa-arb-chain-badge { font-size: 8px; padding: 2px 5px; }
+  .rwa-arb-trade-btn { padding: 3px 6px; font-size: 9px; }
+
+  .rwa-arb-inline-swap { padding: 10px 8px; }
+  .rwa-arb-inline-swap-title { font-size: 12px; }
+  .rwa-arb-inline-field { min-width: 0; }
+  .rwa-arb-inline-input { padding: 8px 10px; font-size: 13px; }
+  .rwa-arb-inline-token { padding: 8px 10px; font-size: 11px; }
+  .rwa-arb-inline-swap-btn { padding: 10px 14px; font-size: 12px; min-width: 0; }
+  .rwa-arb-preset-btn { padding: 3px 6px; font-size: 9px; }
+}

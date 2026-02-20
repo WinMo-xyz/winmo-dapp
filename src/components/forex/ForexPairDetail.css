@@ -608,3 +608,51 @@
 
   .fpd-dtable td, .fpd-dtable th { padding: 10px 12px; font-size: 12px; }
 }
+
+@media (max-width: 480px) {
+  .fpd-hdr { gap: 6px; margin-bottom: 12px; }
+  .fpd-hdr-pair { font-size: 13px; }
+  .fpd-hdr-flags { font-size: 14px; }
+  .fpd-hdr-cat { font-size: 9px; padding: 2px 6px; }
+  .fpd-hdr-rate { font-size: 13px; }
+  .fpd-hdr-change { font-size: 11px; }
+  .fpd-hdr-vol { font-size: 11px; }
+  .fpd-hdr-tokens { font-size: 9px; padding: 3px 8px; }
+  .fpd-hdr-swap, .fpd-hdr-close { padding: 4px 10px; font-size: 9px; }
+  .fpd-hdr-mid { gap: 8px; }
+
+  .fpd-pair-title { font-size: 18px; }
+  .fpd-cat-badge { font-size: 9px; padding: 2px 6px; }
+  .fpd-oracle-badge { font-size: 9px; padding: 4px 10px; }
+  .fpd-big-rate { font-size: 26px; }
+  .fpd-big-change { font-size: 12px; }
+  .fpd-rate-row { gap: 6px; margin-bottom: 12px; }
+
+  .fpd-chart-card { padding: 10px; }
+  .fpd-chart-svg { height: 160px; }
+  .fpd-tf-btn { padding: 3px 6px; font-size: 9px; }
+  .fpd-candle-count { font-size: 9px; }
+
+  .fpd-stats { gap: 6px; margin-bottom: 16px; }
+  .fpd-stat { padding: 10px; }
+  .fpd-stat-label { font-size: 9px; margin-bottom: 4px; }
+  .fpd-stat-val { font-size: 13px; }
+
+  .fpd-swap-card { padding: 12px; }
+  .fpd-swap-input { padding: 10px; font-size: 14px; }
+  .fpd-swap-select { padding: 10px 8px; min-width: 72px; font-size: 11px; }
+  .fpd-swap-lbl { font-size: 9px; }
+  .fpd-swap-btn { padding: 12px; font-size: 11px; }
+  .fpd-swap-result { padding: 10px 12px; }
+  .fpd-swap-result-val { font-size: 14px; }
+
+  .fpd-depth { margin-top: 20px; }
+  .fpd-depth-svg { height: 140px; }
+  .fpd-depth-chart { padding: 8px; }
+  .fpd-dtable td, .fpd-dtable th { padding: 6px 4px; font-size: 10px; }
+  .fpd-dt-mono { font-size: 10px; }
+
+  .fpd-vo-card { padding: 20px 12px; }
+  .fpd-vo-text { font-size: 12px; }
+  .fpd-vo-sub { font-size: 11px; }
+}

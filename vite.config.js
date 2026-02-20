@@ -87,6 +87,15 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api\/pyth/, ''),
         },
+        '/api/bridge': {
+          target: 'https://api.bridge.xyz',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/bridge/, ''),
+          headers: {
+            'Api-Key': env.VITE_BRIDGE_API_KEY || '',
+            'Content-Type': 'application/json',
+          },
+        },
         '/api/agent': {
           target: 'http://localhost:8888',
           changeOrigin: true,

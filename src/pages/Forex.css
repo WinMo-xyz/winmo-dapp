@@ -966,3 +966,37 @@
   .arb-inline-swap-btn { width: 100%; margin-top: 8px; }
   .arb-inline-swap { padding: 16px; }
 }
+
+@media (max-width: 480px) {
+  .forex-page { padding-top: 100px; padding-bottom: 60px; }
+  .forex-title { margin-bottom: 4px; font-size: 24px; }
+  .forex-subtitle { font-size: 12px; margin-bottom: 12px; }
+  .forex-tabs { padding: 3px; margin-bottom: 16px; }
+  .forex-tab { padding: 5px 8px; font-size: 10px; }
+  .forex-filter-btn { padding: 5px 10px; font-size: 10px; }
+  .forex-search { padding: 6px 12px; font-size: 12px; min-width: 100%; }
+  .forex-table td, .forex-table th { padding: 6px 4px; font-size: 10px; }
+  .forex-table th:nth-child(4),
+  .forex-table td:nth-child(4) { display: none; }
+  .forex-table th:nth-child(5),
+  .forex-table td:nth-child(5) { display: none; }
+  .forex-pair-flags { font-size: 14px; }
+  .forex-pair-name { font-size: 11px; }
+  .forex-rate-cell { font-size: 10px; }
+  .forex-view-btn, .forex-trade-btn { padding: 4px 8px; font-size: 9px; }
+  .forex-swap-card { padding: 14px; }
+  .forex-swap-select { min-width: 80px; padding: 10px 8px; font-size: 12px; }
+  .forex-swap-input { font-size: 14px; padding: 10px 10px; }
+  .forex-swap-btn { padding: 12px; font-size: 13px; }
+  .forex-swap-rates { padding: 10px 12px; font-size: 11px; }
+  .forex-tool-card { padding: 14px; }
+  .forex-tool-card h3 { font-size: 14px; }
+  .forex-tool-label { font-size: 10px; }
+  .forex-tool-input, .forex-tool-select { padding: 8px 10px; font-size: 13px; }
+  .forex-tool-result-value { font-size: 20px; }
+  .arb-inline-swap { padding: 12px 10px; }
+  .arb-inline-field { min-width: 0; }
+  .arb-inline-input { padding: 10px; font-size: 14px; }
+  .arb-inline-swap-btn { padding: 10px 16px; font-size: 13px; min-width: 0; }
+  .arb-preset-btn { padding: 3px 8px; font-size: 10px; }
+}

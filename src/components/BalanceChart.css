@@ -151,8 +151,7 @@
 }
 
 @media (max-width: 480px) {
-  .balance-range-btn {
-    padding: 5px 6px;
-    font-size: 10px;
-  }
+  .balance-chart { padding: 16px 10px; }
+  .balance-range-btn { padding: 4px 5px; font-size: 9px; }
+  .balance-chart-header { margin-bottom: 12px; }
 }

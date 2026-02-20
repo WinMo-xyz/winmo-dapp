@@ -269,3 +269,30 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .asset-detail-page { padding-top: 100px; padding-bottom: 60px; }
+  .asset-detail-breadcrumb { font-size: 11px; margin-bottom: 16px; gap: 4px; }
+  .asset-detail-header { gap: 8px; }
+  .asset-detail-info { gap: 10px; }
+  .asset-detail-logo { width: 32px; height: 32px; font-size: 16px; }
+  .asset-detail-name { font-size: 18px; }
+  .asset-detail-symbol { font-size: 11px; }
+  .asset-detail-price { font-size: 24px; }
+  .asset-detail-change { font-size: 12px; }
+  .asset-detail-desc { font-size: 13px; margin-bottom: 20px; }
+  .asset-detail-section-title { font-size: 16px; margin-bottom: 12px; }
+  .asset-detail-chart { padding: 12px; border-radius: 12px; }
+  .buy-panel { padding: 14px; border-radius: 12px; }
+  .buy-panel-title { font-size: 14px; }
+  .buy-input { padding: 10px 10px; font-size: 13px; }
+  .buy-btn { padding: 10px; font-size: 13px; }
+  .about-section { padding: 14px; }
+  .about-title { font-size: 14px; }
+  .about-text { font-size: 12px; }
+  .news-card { padding: 12px; }
+  .news-source { font-size: 10px; }
+  .news-title { font-size: 13px; }
+  .news-date { font-size: 11px; }
+  .news-coming-soon .coming-soon-badge { font-size: 11px; padding: 8px 18px; }
+}

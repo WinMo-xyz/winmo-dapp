@@ -209,24 +209,28 @@
 }
 
 @media (max-width: 480px) {
+  .assets-page { padding-top: 100px; padding-bottom: 60px; }
+  .assets-title { margin-bottom: 4px; }
+  .assets-subtitle { font-size: 13px; margin-bottom: 16px; }
+
+  .assets-tabs { padding: 3px; margin-bottom: 16px; }
+  .assets-tab { padding: 6px 10px; font-size: 11px; }
+
+  .assets-table th:nth-child(3),
+  .assets-table td:nth-child(3) { display: none; }
   .assets-table th:nth-child(4),
-  .assets-table td:nth-child(4) {
-    display: none;
-  }
+  .assets-table td:nth-child(4) { display: none; }
 
-  .asset-name-cell .asset-logo {
-    width: 28px;
-    height: 28px;
-  }
+  .assets-table th,
+  .assets-table td { padding: 8px 6px; font-size: 11px; }
 
-  .asset-actions {
-    width: 100%;
-  }
+  .asset-name-cell { gap: 8px; }
+  .asset-name-cell .asset-logo { width: 24px; height: 24px; }
+  .asset-name { font-size: 12px; }
+  .asset-symbol { font-size: 10px; }
 
-  .asset-buy-btn,
-  .asset-sell-btn,
-  .asset-detail-btn {
-    width: 100%;
-    text-align: center;
+  .asset-actions { width: 100%; }
+  .asset-buy-btn, .asset-sell-btn, .asset-detail-btn {
+    width: 100%; text-align: center; padding: 6px 10px; font-size: 11px;
   }
 }

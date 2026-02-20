@@ -83,7 +83,22 @@
       "Bash(node /tmp/extract-assets.mjs:*)",
       "WebFetch(domain:winmo.xyz)",
       "WebFetch(domain:app.winmo.xyz)",
-      "WebFetch(domain:moltemail.com)"
+      "WebFetch(domain:moltemail.com)",
+      "WebFetch(domain:apidocs.bridge.xyz)",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:mobbin.com)",
+      "WebFetch(domain:www.designyourway.net)",
+      "WebFetch(domain:keylaydesign.com)",
+      "WebFetch(domain:designsystems.surf)",
+      "WebFetch(domain:buck.co)",
+      "WebFetch(domain:corporateinsight.com)",
+      "WebFetch(domain:motiff.com)",
+      "WebFetch(domain:www.brandcolorcode.com)",
+      "WebFetch(domain:pageflows.com)",
+      "WebFetch(domain:www.creativebloq.com)",
+      "WebFetch(domain:www.designrush.com)",
+      "WebFetch(domain:www.wendyeduarte.com)",
+      "WebFetch(domain:medium.com)"
     ]
   }
 }

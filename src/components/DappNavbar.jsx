@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import UnifiedConnectButton from './UnifiedConnectButton'
 import SearchBar from './SearchBar'
@@ -6,8 +6,22 @@ import ThemeToggle from './ThemeToggle'
 import './DappNavbar.css'
 
 export default function DappNavbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const navStripRef = useRef(null)
+  const [canScroll, setCanScroll] = useState(false)
+
+  const checkOverflow = useCallback(() => {
+    const el = navStripRef.current
+    if (!el) return
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8
+    setCanScroll(el.scrollWidth > el.clientWidth + 8 && !atEnd)
+  }, [])
+
+  useEffect(() => {
+    checkOverflow()
+    window.addEventListener('resize', checkOverflow)
+    return () => window.removeEventListener('resize', checkOverflow)
+  }, [checkOverflow])
 
   const handleSearchSelect = (asset) => {
     if (asset._forexPair) {
@@ -18,122 +32,93 @@ export default function DappNavbar() {
   }
 
   return (
-    <nav className="dapp-navbar">
-      <div className="dapp-navbar-inner">
-        <NavLink to="/portfolio" className="navbar-logo">
-          <img src="/winmo-logo.png" alt="WinMo" className="logo-img" />
-          <span className="logo-text">WinMo</span>
-        </NavLink>
+    <>
+      <nav className="dapp-navbar">
+        <div className="dapp-navbar-inner">
+          <NavLink to="/portfolio" className="navbar-logo">
+            <img src="/winmo-logo.png" alt="WinMo" className="logo-img" />
+            <span className="logo-text">WinMo</span>
+          </NavLink>
 
-        <div className="dapp-nav-center">
-          <div className="dapp-nav-pill">
-            <NavLink to="/portfolio" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Portfolio
-            </NavLink>
-            <NavLink to="/stocks" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Stocks
-            </NavLink>
-            <NavLink to="/crypto" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Crypto
-            </NavLink>
-            <NavLink to="/commodities" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Commodities
-            </NavLink>
-            <NavLink to="/bonds" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Bonds
-            </NavLink>
-            <NavLink to="/yield" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Yield
-            </NavLink>
-            <NavLink to="/forex" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              Forex
-            </NavLink>
-            <NavLink to="/ai-agent" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
-              AI Agent
-            </NavLink>
+          {/* Desktop nav */}
+          <div className="dapp-nav-center">
+            <div className="dapp-nav-pill">
+              <NavLink to="/portfolio" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Portfolio
+              </NavLink>
+              <NavLink to="/money" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Money
+              </NavLink>
+              <NavLink to="/stocks" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Stocks
+              </NavLink>
+              <NavLink to="/crypto" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Crypto
+              </NavLink>
+              <NavLink to="/commodities" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Commodities
+              </NavLink>
+              <NavLink to="/bonds" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Bonds
+              </NavLink>
+              <NavLink to="/yield" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Yield
+              </NavLink>
+              <NavLink to="/forex" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                Forex
+              </NavLink>
+              <NavLink to="/ai-agent" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+                AI Agent
+              </NavLink>
+            </div>
+          </div>
+
+          {/* Desktop actions */}
+          <div className="dapp-nav-actions">
+            <SearchBar onSelect={handleSearchSelect} />
+            <ThemeToggle />
+            <UnifiedConnectButton />
+          </div>
+
+          {/* Mobile top bar right */}
+          <div className="dapp-mobile-right">
+            <SearchBar onSelect={handleSearchSelect} />
+            <ThemeToggle />
+            <UnifiedConnectButton compact />
           </div>
         </div>
 
-        <div className="dapp-nav-actions">
-          <SearchBar onSelect={handleSearchSelect} />
-          <ThemeToggle />
-          <UnifiedConnectButton />
+        {/* Mobile scrollable nav strip — sits right below header */}
+        <div className={`dapp-mobile-nav ${canScroll ? 'has-overflow' : ''}`} ref={navStripRef} onScroll={checkOverflow}>
+          <NavLink to="/portfolio" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Portfolio
+          </NavLink>
+          <NavLink to="/money" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Money
+          </NavLink>
+          <NavLink to="/stocks" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Stocks
+          </NavLink>
+          <NavLink to="/crypto" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Crypto
+          </NavLink>
+          <NavLink to="/commodities" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Commodities
+          </NavLink>
+          <NavLink to="/bonds" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Bonds
+          </NavLink>
+          <NavLink to="/yield" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Yield
+          </NavLink>
+          <NavLink to="/forex" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            Forex
+          </NavLink>
+          <NavLink to="/ai-agent" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+            AI Agent
+          </NavLink>
         </div>
-
-        <div className="dapp-mobile-right">
-          <ThemeToggle />
-          <UnifiedConnectButton compact />
-          <button
-            className={`dapp-toggle ${menuOpen ? 'open' : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span /><span /><span />
-          </button>
-        </div>
-      </div>
-
-      <div className={`dapp-mobile-menu ${menuOpen ? 'open' : ''}`}>
-        <NavLink
-          to="/portfolio"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Portfolio
-        </NavLink>
-        <NavLink
-          to="/stocks"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Stocks
-        </NavLink>
-        <NavLink
-          to="/crypto"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Crypto
-        </NavLink>
-        <NavLink
-          to="/commodities"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Commodities
-        </NavLink>
-        <NavLink
-          to="/bonds"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Bonds
-        </NavLink>
-        <NavLink
-          to="/yield"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Yield
-        </NavLink>
-        <NavLink
-          to="/forex"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          Forex
-        </NavLink>
-        <NavLink
-          to="/ai-agent"
-          className={({ isActive }) => `dapp-mobile-link ${isActive ? 'active' : ''}`}
-          onClick={() => setMenuOpen(false)}
-        >
-          AI Agent
-        </NavLink>
-        <div className="dapp-mobile-search">
-          <SearchBar onSelect={(asset) => { handleSearchSelect(asset); setMenuOpen(false) }} />
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   )
 }
