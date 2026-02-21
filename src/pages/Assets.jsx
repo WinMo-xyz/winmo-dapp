@@ -127,7 +127,7 @@ export default function Assets({ defaultTab = 'Crypto' }) {
                 </thead>
                 <tbody>
                   {assets.map((asset) => (
-                    <tr key={asset.id}>
+                    <tr key={asset.id} className="asset-row-clickable" onClick={() => navigate(`/assets/${asset.id}`)}>
                       <td className="asset-name-cell">
                         <AssetLogo logo={asset.logo} name={asset.name} size={32} />
                         <span className="asset-name">{asset.name}</span>
@@ -138,15 +138,15 @@ export default function Assets({ defaultTab = 'Crypto' }) {
                         {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
                       </td>
                       <td className="asset-actions">
-                        <button className="btn btn-buy asset-buy-btn" onClick={() => setBuyAsset(asset)}>
+                        <button className="btn btn-buy asset-buy-btn" onClick={(e) => { e.stopPropagation(); setBuyAsset(asset) }}>
                           Buy
                         </button>
                         {getAssetChains(asset).length > 0 && (
-                          <button className="btn btn-sell asset-sell-btn" onClick={() => setSellAsset(asset)}>
+                          <button className="btn btn-sell asset-sell-btn" onClick={(e) => { e.stopPropagation(); setSellAsset(asset) }}>
                             Sell
                           </button>
                         )}
-                        <button className="btn btn-outline asset-detail-btn" onClick={() => navigate(`/assets/${asset.id}`)}>
+                        <button className="btn btn-outline asset-detail-btn" onClick={(e) => { e.stopPropagation(); navigate(`/assets/${asset.id}`) }}>
                           Details
                         </button>
                       </td>
