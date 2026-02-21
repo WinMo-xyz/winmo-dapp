@@ -276,12 +276,18 @@
   opacity: 1;
 }
 
+.buy-panel-chain-selector-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
 .buy-panel-chain-info {
   font-size: 13px;
   color: var(--color-light-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 20px;
   padding: 12px 14px;
   background: var(--light-3);

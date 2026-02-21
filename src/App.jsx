@@ -1,10 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import ProtectedRoute from './components/ProtectedRoute'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
-import Home from './pages/Home'
+import Portfolio from './pages/Portfolio'
 
-const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Assets = lazy(() => import('./pages/Assets'))
 const AssetDetail = lazy(() => import('./pages/AssetDetail'))
 const Yield = lazy(() => import('./pages/Yield'))
@@ -27,17 +25,17 @@ export default function App() {
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
-          <Route path="/stocks" element={<ProtectedRoute><Assets key="stocks" defaultTab="Stocks" /></ProtectedRoute>} />
-          <Route path="/crypto" element={<ProtectedRoute><Assets key="crypto" defaultTab="Crypto" /></ProtectedRoute>} />
-          <Route path="/commodities" element={<ProtectedRoute><Assets key="commodities" defaultTab="Commodities" /></ProtectedRoute>} />
-          <Route path="/bonds" element={<ProtectedRoute><Assets key="bonds" defaultTab="Bonds" /></ProtectedRoute>} />
-          <Route path="/assets/:id" element={<ProtectedRoute><AssetDetail /></ProtectedRoute>} />
-          <Route path="/yield" element={<ProtectedRoute><Yield /></ProtectedRoute>} />
-          <Route path="/forex" element={<ProtectedRoute><Forex /></ProtectedRoute>} />
-          <Route path="/forex/:pair" element={<ProtectedRoute><ForexPair /></ProtectedRoute>} />
-          <Route path="/money" element={<ProtectedRoute><Money /></ProtectedRoute>} />
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/portfolio" element={<Navigate to="/" replace />} />
+          <Route path="/stocks" element={<Assets key="stocks" defaultTab="Stocks" />} />
+          <Route path="/crypto" element={<Assets key="crypto" defaultTab="Crypto" />} />
+          <Route path="/commodities" element={<Assets key="commodities" defaultTab="Commodities" />} />
+          <Route path="/bonds" element={<Assets key="bonds" defaultTab="Bonds" />} />
+          <Route path="/assets/:id" element={<AssetDetail />} />
+          <Route path="/yield" element={<Yield />} />
+          <Route path="/forex" element={<Forex />} />
+          <Route path="/forex/:pair" element={<ForexPair />} />
+          <Route path="/money" element={<Money />} />
           <Route path="/ai-agent" element={<AIAgent />} />
         </Routes>
       </Suspense>

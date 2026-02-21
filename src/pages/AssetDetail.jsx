@@ -7,6 +7,13 @@ import { getAssetById } from '../services/assets'
 import { useLivePrices } from '../hooks/useLivePrices'
 import './AssetDetail.css'
 
+const CATEGORY_ROUTES = {
+  stocks: { path: '/stocks', label: 'Stocks' },
+  crypto: { path: '/crypto', label: 'Crypto' },
+  commodities: { path: '/commodities', label: 'Commodities' },
+  bonds: { path: '/bonds', label: 'Bonds' },
+}
+
 function formatPrice(price) {
   if (price >= 1) return price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   if (price >= 0.01) return price.toFixed(4)
@@ -28,13 +35,15 @@ export default function AssetDetail() {
             <div className="asset-not-found glass-card">
               <h2>Asset not found</h2>
               <p>Nothing here. This asset doesn't exist.</p>
-              <Link to="/assets" className="btn btn-secondary">Back to Assets</Link>
+              <Link to="/crypto" className="btn btn-secondary">Back to Assets</Link>
             </div>
           </div>
         </main>
       </>
     )
   }
+
+  const parent = CATEGORY_ROUTES[asset.category] || { path: '/crypto', label: 'Assets' }
 
   return (
     <>
@@ -43,7 +52,7 @@ export default function AssetDetail() {
         <div className="container">
           {/* Breadcrumb */}
           <div className="asset-detail-breadcrumb">
-            <Link to="/assets" className="breadcrumb-link">Assets</Link>
+            <Link to={parent.path} className="breadcrumb-back">&larr; {parent.label}</Link>
             <span className="breadcrumb-sep">/</span>
             <span className="breadcrumb-current">{asset.name}</span>
           </div>

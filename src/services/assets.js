@@ -186,16 +186,17 @@ const stocks = [
 
 const crypto = [
   // Large Cap
-  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png' },
   { id: 'btc', name: 'Bitcoin', symbol: 'BTC', price: 104250.00, change24h: 1.45, category: 'crypto', subcategory: 'large-cap', logo: CI + 'btc.svg', ethereumAddress: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599' },
   { id: 'eth', name: 'Ethereum', symbol: 'ETH', price: 3890.50, change24h: 2.78, category: 'crypto', subcategory: 'large-cap', logo: CI + 'eth.svg', ethereumAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
   { id: 'bnb', name: 'BNB', symbol: 'BNB', price: 715.40, change24h: 0.89, category: 'crypto', subcategory: 'large-cap', logo: CI + 'bnb.svg', ethereumAddress: '0x418D75f65a02b3D53B2418FB8E1fe493759c7605' },
+  { id: 'sol', name: 'Solana', symbol: 'SOL', price: 248.30, change24h: 5.12, category: 'crypto', subcategory: 'large-cap', logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png' },
   { id: 'link', name: 'Chainlink', symbol: 'LINK', price: 14.20, change24h: 1.85, category: 'crypto', subcategory: 'large-cap', logo: CI + 'link.svg', ethereumAddress: '0x514910771AF9Ca656af840dff83E8264EcF986CA' },
   { id: 'trx', name: 'TRON', symbol: 'TRX', price: 0.276, change24h: 0.45, category: 'crypto', subcategory: 'large-cap', logo: CG + '1094/standard/tron-logo.png', ethereumAddress: '0x50327c6c5a14DCade707ABad2E27eB517dF87AB5' },
   { id: 'ton', name: 'Toncoin', symbol: 'TON', price: 1.35, change24h: -1.20, category: 'crypto', subcategory: 'large-cap', logo: CG + '17980/large/ton_symbol.png', ethereumAddress: '0x582d872A1B094FC48F5DE31D3B73F2D9bE47deF1' },
   { id: 'shib', name: 'Shiba Inu', symbol: 'SHIB', price: 0.000006, change24h: 3.45, category: 'crypto', subcategory: 'large-cap', logo: CG + '11939/large/shiba.png', ethereumAddress: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE' },
   { id: 'pepe', name: 'Pepe', symbol: 'PEPE', price: 0.0000037, change24h: 5.67, category: 'crypto', subcategory: 'large-cap', logo: CG + '29850/large/pepe-token.jpeg', ethereumAddress: '0x6982508145454Ce325dDbE47a25d4ec3d2311933' },
   // Mid Cap
+  { id: 'ondo', name: 'Ondo Finance', symbol: 'ONDO', price: 0.26, change24h: 4.12, category: 'crypto', subcategory: 'mid-cap', logo: CG + '26580/large/ONDO.png', ethereumAddress: '0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3' },
   { id: 'jup', name: 'Jupiter', symbol: 'JUP', price: 1.24, change24h: 4.56, category: 'crypto', subcategory: 'mid-cap', logo: 'https://static.jup.ag/jup/icon.png' },
   { id: 'uni', name: 'Uniswap', symbol: 'UNI', price: 14.20, change24h: 4.56, category: 'crypto', subcategory: 'mid-cap', logo: CI + 'uni.svg', ethereumAddress: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984' },
   { id: 'mnt', name: 'Mantle', symbol: 'MNT', price: 1.08, change24h: 2.34, category: 'crypto', subcategory: 'mid-cap', logo: 'https://coin-images.coingecko.com/coins/images/30980/large/MNT_Token_Logo.png', ethereumAddress: '0x3c3a81e81dc49a522a592e7622a7e711c06bf354' },
@@ -207,7 +208,6 @@ const crypto = [
   { id: 'render', name: 'Render', symbol: 'RENDER', price: 1.36, change24h: 3.78, category: 'crypto', subcategory: 'mid-cap', logo: CG + '11636/large/rndr.png', ethereumAddress: '0x6De037ef9aD2725EB40118Bb1702EBb27e4Aeb24' },
   { id: 'arb', name: 'Arbitrum', symbol: 'ARB', price: 0.12, change24h: -1.56, category: 'crypto', subcategory: 'mid-cap', logo: 'https://coin-images.coingecko.com/coins/images/16547/large/arb.jpg', ethereumAddress: '0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1' },
   { id: 'pol', name: 'Polygon', symbol: 'POL', price: 0.10, change24h: 0.78, category: 'crypto', subcategory: 'mid-cap', logo: CG + '4713/large/polygon.png', ethereumAddress: '0x455e53CBB86018Ac2B8092FdCd39d8444aFFC3F6' },
-  { id: 'ondo', name: 'Ondo Finance', symbol: 'ONDO', price: 0.26, change24h: 4.12, category: 'crypto', subcategory: 'mid-cap', logo: CG + '26580/large/ONDO.png', ethereumAddress: '0xfAbA6f8e4a5E8Ab82F62fe7C39859FA577269BE3' },
   { id: 'wld', name: 'Worldcoin', symbol: 'WLD', price: 0.39, change24h: -2.34, category: 'crypto', subcategory: 'mid-cap', logo: CG + '31069/large/worldcoin.jpeg', ethereumAddress: '0x163f8C2467924be0ae7B5347228CABF260318753' },
   { id: 'ena', name: 'Ethena', symbol: 'ENA', price: 0.12, change24h: 1.45, category: 'crypto', subcategory: 'mid-cap', logo: 'https://coin-images.coingecko.com/coins/images/36530/large/ethena.png', ethereumAddress: '0x57e114B691Db790C35207b2e685D4A43181e6061' },
   { id: 'qnt', name: 'Quant', symbol: 'QNT', price: 65.43, change24h: 0.56, category: 'crypto', subcategory: 'mid-cap', logo: CG + '3370/large/5ZOu7brX_400x400.jpg', ethereumAddress: '0x4a220E6096B25EADb88358cb44068A3248254675' },

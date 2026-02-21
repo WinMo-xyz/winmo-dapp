@@ -191,6 +191,8 @@ export default function BuyModal({ asset, mode = 'buy', onClose }) {
 
   // Not connected to the required chain: show connect prompt
   const needsConnect = (useSolana && !isSolanaConnected) || (!useSolana && !isEvmConnected)
+  // Show chain selector when neither wallet is connected and asset is on both chains (crypto only, no providers)
+  const showChainSelector = !hasProviders && hasSolanaRoute && hasEvmRoute && !isSolanaConnected && !isEvmConnected
   if (needsConnect) {
     const chainLabel = useSolana ? 'Solana' : 'Ethereum'
     return (
@@ -220,6 +222,28 @@ export default function BuyModal({ asset, mode = 'buy', onClose }) {
                     </div>
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {showChainSelector && (
+            <div className="modal-field">
+              <label className="modal-label">Chain</label>
+              <div className="modal-provider-select">
+                <button
+                  className={`modal-provider-btn ${useSolana ? 'active' : ''}`}
+                  onClick={() => setChainOverride('solana')}
+                >
+                  <span className="modal-chain-selector-icon">◎</span>
+                  <span className="modal-provider-name">Solana</span>
+                </button>
+                <button
+                  className={`modal-provider-btn ${!useSolana ? 'active' : ''}`}
+                  onClick={() => setChainOverride('ethereum')}
+                >
+                  <span className="modal-chain-selector-icon">&#926;</span>
+                  <span className="modal-provider-name">Ethereum</span>
+                </button>
               </div>
             </div>
           )}

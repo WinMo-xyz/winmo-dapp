@@ -630,6 +630,36 @@ textarea:focus-visible {
   }
 }
 
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .gradient-text,
+  .btn-primary::after,
+  .gradient-border::before,
+  .blurer,
+  .section-line {
+    animation: none;
+  }
+
+  .skeleton {
+    animation: none;
+    background: var(--light-5);
+  }
+}
+
+/* Disable grain overlay on mobile to save GPU compositing */
+@media (max-width: 768px) {
+  body::after {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 0 max(50px, env(safe-area-inset-left)) 0 max(50px, env(safe-area-inset-right));

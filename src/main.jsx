@@ -18,7 +18,16 @@ import '@solana/wallet-adapter-react-ui/styles.css'
 import './styles/solana-overrides.css'
 import './styles/global.css'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
 
 function RainbowKitThemed({ children }) {
   const { theme } = useTheme()

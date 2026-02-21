@@ -19,8 +19,16 @@ export default function DappNavbar() {
 
   useEffect(() => {
     checkOverflow()
-    window.addEventListener('resize', checkOverflow)
-    return () => window.removeEventListener('resize', checkOverflow)
+    let timer
+    const debouncedCheck = () => {
+      clearTimeout(timer)
+      timer = setTimeout(checkOverflow, 200)
+    }
+    window.addEventListener('resize', debouncedCheck)
+    return () => {
+      window.removeEventListener('resize', debouncedCheck)
+      clearTimeout(timer)
+    }
   }, [checkOverflow])
 
   const handleSearchSelect = (asset) => {
@@ -35,7 +43,7 @@ export default function DappNavbar() {
     <>
       <nav className="dapp-navbar">
         <div className="dapp-navbar-inner">
-          <NavLink to="/portfolio" className="navbar-logo">
+          <NavLink to="/" className="navbar-logo">
             <img src="/winmo-logo.png" alt="WinMo" className="logo-img" />
             <span className="logo-text">WinMo</span>
           </NavLink>
@@ -43,7 +51,7 @@ export default function DappNavbar() {
           {/* Desktop nav */}
           <div className="dapp-nav-center">
             <div className="dapp-nav-pill">
-              <NavLink to="/portfolio" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink to="/" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
                 Portfolio
               </NavLink>
               <NavLink to="/money" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
@@ -90,7 +98,7 @@ export default function DappNavbar() {
 
         {/* Mobile scrollable nav strip — sits right below header */}
         <div className={`dapp-mobile-nav ${canScroll ? 'has-overflow' : ''}`} ref={navStripRef} onScroll={checkOverflow}>
-          <NavLink to="/portfolio" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+          <NavLink to="/" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
             Portfolio
           </NavLink>
           <NavLink to="/money" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>

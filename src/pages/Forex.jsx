@@ -87,20 +87,23 @@ function MarketsTab({ markets, isLoading, onTrade }) {
           </thead>
           <tbody>
             {markets.map(m => (
-              <tr key={m.pair}>
+              <tr
+                key={m.pair}
+                onClick={() => onTrade(m.pair)}
+              >
                 <td>
                   <div className="forex-pair-cell">
                     <span className="forex-pair-flags">
                       {CURRENCY_META[m.base]?.flag}{CURRENCY_META[m.quote]?.flag}
                     </span>
-                    <span className="forex-pair-name forex-pair-link" onClick={() => onTrade(m.pair)}>{m.pair}</span>
+                    <span className="forex-pair-name">{m.pair}</span>
                   </div>
                 </td>
                 <td className="forex-rate-cell">{formatRate(m.rate)}</td>
                 <td><span className={`forex-category ${m.category}`}>{m.category}</span></td>
                 <td className="forex-volume-cell">{formatVolume(m.volume)}</td>
                 <td>
-                  <button className="forex-trade-btn" onClick={() => onTrade(m.pair)}>Trade</button>
+                  <button className="forex-trade-btn" onClick={(e) => { e.stopPropagation(); onTrade(m.pair) }}>Trade</button>
                 </td>
               </tr>
             ))}
@@ -387,7 +390,10 @@ function ArbitrageTab() {
 function ArbRow({ pairKey, p, r, spread, dir, arbLoading, isExpanded, onToggle }) {
   return (
     <>
-      <tr className={isExpanded ? 'arb-row-active' : ''}>
+      <tr
+        className={isExpanded ? 'arb-row-active' : ''}
+        onClick={onToggle}
+      >
         <td>
           <div className="forex-pair-cell">
             <span className="forex-pair-name">
@@ -411,7 +417,7 @@ function ArbRow({ pairKey, p, r, spread, dir, arbLoading, isExpanded, onToggle }
         <td>
           <button
             className={`forex-trade-btn ${isExpanded ? 'active' : ''}`}
-            onClick={onToggle}
+            onClick={(e) => { e.stopPropagation(); onToggle() }}
           >
             {isExpanded ? 'Close' : 'Trade'}
           </button>

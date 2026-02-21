@@ -11,12 +11,21 @@
     <link rel="icon" type="image/svg+xml" href="/winmo-logo.svg" />
     <link rel="apple-touch-icon" href="/winmo-logo.png" />
 
+    <!-- PWA-like experience -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
     <!-- Font preconnect (before any font request) -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
 
+    <!-- Preload font stylesheet for faster rendering -->
+    <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&f[]=clash-display@500,600,700&display=swap" as="style" />
+
     <!-- Fonts — loaded as stylesheet link instead of CSS @import for faster parsing -->
-    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&f[]=clash-display@500,600,700&display=swap" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&f[]=clash-display@500,600,700&display=swap" fetchpriority="high" />
+
+    <!-- API domain preconnect -->
+    <link rel="preconnect" href="https://pro-api.coinmarketcap.com" />
 
     <!-- DNS prefetch for API & CDN domains -->
     <link rel="dns-prefetch" href="https://api.coingecko.com" />

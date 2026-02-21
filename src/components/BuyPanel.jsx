@@ -210,6 +210,7 @@ export default function BuyPanel({ asset }) {
 
   // Not connected to the required chain: show connect prompt
   const needsConnect = (useSolana && !isSolanaConnected) || (!useSolana && !isEvmConnected)
+  const showChainSelector = !hasProviders && hasSolanaRoute && hasEvmRoute && !isSolanaConnected && !isEvmConnected
   if (needsConnect) {
     const chainLabel = useSolana ? 'Solana' : 'Ethereum'
     return (
@@ -251,6 +252,28 @@ export default function BuyPanel({ asset }) {
                   </div>
                 </button>
               ))}
+            </div>
+          </div>
+        )}
+
+        {showChainSelector && (
+          <div className="buy-panel-field">
+            <label className="buy-panel-label">Chain</label>
+            <div className="buy-panel-provider-select">
+              <button
+                className={`buy-panel-provider-btn ${useSolana ? 'active' : ''}`}
+                onClick={() => setChainOverride('solana')}
+              >
+                <span className="buy-panel-chain-selector-icon">◎</span>
+                <span className="buy-panel-provider-name">Solana</span>
+              </button>
+              <button
+                className={`buy-panel-provider-btn ${!useSolana ? 'active' : ''}`}
+                onClick={() => setChainOverride('ethereum')}
+              >
+                <span className="buy-panel-chain-selector-icon">&#926;</span>
+                <span className="buy-panel-provider-name">Ethereum</span>
+              </button>
             </div>
           </div>
         )}

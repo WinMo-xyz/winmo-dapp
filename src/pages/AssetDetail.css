@@ -14,13 +14,14 @@
   animation: slide-up 0.5s var(--ease-out) both;
 }
 
-.breadcrumb-link {
+.breadcrumb-back {
   color: var(--color-light-secondary);
-  transition: color 0.3s;
+  font-weight: 600;
+  transition: color 0.2s;
 }
 
-.breadcrumb-link:hover {
-  color: var(--color-light);
+.breadcrumb-back:hover {
+  color: var(--accent);
 }
 
 .breadcrumb-sep {

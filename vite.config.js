@@ -28,12 +28,17 @@ export default defineConfig(({ mode }) => {
               '@solana/wallet-adapter-react-ui',
               '@solana/spl-token',
             ],
+            'vendor-solana-wallets': ['@solana/wallet-adapter-wallets'],
             'vendor-query': ['@tanstack/react-query'],
           },
         },
       },
       target: 'es2020',
       sourcemap: false,
+      cssCodeSplit: true,
+      cssMinify: 'esbuild',
+      chunkSizeWarningLimit: 600,
+      assetsInlineLimit: 4096,
     },
     server: {
       proxy: {

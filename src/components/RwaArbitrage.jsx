@@ -217,7 +217,10 @@ function RwaArbRow({ pairKey, p, r, spread, dir, arbLoading, isExpanded, onToggl
 
   return (
     <>
-      <tr className={isExpanded ? 'rwa-arb-row-active' : ''}>
+      <tr
+        className={isExpanded ? 'rwa-arb-row-active' : ''}
+        onClick={onToggle}
+      >
         <td>
           <div className="rwa-arb-asset-cell">
             <AssetLogo logo={p.asset.logo} name={p.asset.name} size={24} />
@@ -245,7 +248,7 @@ function RwaArbRow({ pairKey, p, r, spread, dir, arbLoading, isExpanded, onToggl
         <td>
           <button
             className={`rwa-arb-trade-btn ${isExpanded ? 'active' : ''}`}
-            onClick={onToggle}
+            onClick={(e) => { e.stopPropagation(); onToggle() }}
           >
             {isExpanded ? 'Close' : 'Trade'}
           </button>

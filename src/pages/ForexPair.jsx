@@ -53,6 +53,11 @@ export default function ForexPair() {
       <DappNavbar />
       <main className="forex-page">
         <div className="container">
+          <div className="forex-detail-breadcrumb">
+            <Link to="/forex" className="breadcrumb-back">&larr; Forex</Link>
+            <span className="breadcrumb-sep">/</span>
+            <span className="breadcrumb-current">{pairName}</span>
+          </div>
           <ForexPairDetail
             market={market}
             rates={rates}

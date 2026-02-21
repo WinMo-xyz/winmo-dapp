@@ -20,7 +20,7 @@ export function useForexRates() {
 
   useEffect(() => {
     fetchRates()
-    const interval = setInterval(fetchRates, 10_000)
+    const interval = setInterval(fetchRates, 30_000)
     return () => clearInterval(interval)
   }, [fetchRates])
 
