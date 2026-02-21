@@ -29,7 +29,7 @@ export function getPortfolio() {
     { asset: 'Bitcoin', symbol: 'BTC', balance: '0.12', price: 104250.00, value: 12510.00, chain: 'Bitcoin', logo: CI + 'btc.svg' },
     { asset: 'Ethereum', symbol: 'ETH', balance: '1.8', price: 3890.50, value: 7002.90, chain: 'Ethereum', logo: CI + 'eth.svg' },
     { asset: 'Solana', symbol: 'SOL', balance: '8.5', price: 248.30, value: 2110.55, chain: 'Solana', logo: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png' },
-    { asset: 'BNB', symbol: 'BNB', balance: '1.5', price: 715.40, value: 1073.10, chain: 'BNB Chain', logo: CI + 'bnb.svg' },
+    { asset: 'BNB', symbol: 'BNB', balance: '1.5', price: 715.40, value: 1073.10, chain: 'BSC', logo: CI + 'bnb.svg' },
     { asset: 'Uniswap', symbol: 'UNI', balance: '40', price: 14.20, value: 568.00, chain: 'Ethereum', logo: CI + 'uni.svg' },
     { asset: 'Mantle', symbol: 'MNT', balance: '400', price: 1.08, value: 432.00, chain: 'Ethereum', logo: CB + 'mantle.xyz' },
     { asset: 'Jupiter', symbol: 'JUP', balance: '300', price: 1.24, value: 372.00, chain: 'Solana', logo: 'https://static.jup.ag/jup/icon.png' },
