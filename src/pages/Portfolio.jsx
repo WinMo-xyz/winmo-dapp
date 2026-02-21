@@ -124,10 +124,13 @@ export default function Portfolio() {
                         </svg>
                       </div>
                       <div className="donut-labels">
-                        <span><span className="dot" style={{ background: 'var(--red)' }} /> Bad {insights.allocation.bad}%</span>
                         <span><span className="dot" style={{ background: 'var(--accent)' }} /> Stocks {insights.allocation.stocks}%</span>
-                        <span><span className="dot" style={{ background: 'var(--accent-cool)' }} /> Commodities {insights.allocation.commodities}%</span>
                         <span><span className="dot" style={{ background: 'var(--purple)' }} /> Crypto {insights.allocation.crypto}%</span>
+                        <span><span className="dot" style={{ background: 'var(--accent-cool)' }} /> Bonds {insights.allocation.bonds}%</span>
+                        <span><span className="dot" style={{ background: '#d4a853' }} /> Commodities {insights.allocation.commodities}%</span>
+                        <span><span className="dot" style={{ background: 'var(--color-light-secondary)' }} /> Cash {insights.allocation.cash}%</span>
+                        <span><span className="dot" style={{ background: 'var(--success)' }} /> Yield {insights.allocation.yield}%</span>
+                        <span><span className="dot" style={{ background: '#e87848' }} /> Forex {insights.allocation.forex}%</span>
                       </div>
                     </div>
                   </div>
@@ -135,7 +138,7 @@ export default function Portfolio() {
                   {/* Recommendations */}
                   <div className="insight-card glass-card">
                     <h4 className="insight-card-title">Action Required</h4>
-                    <p className="insight-action-text">Your portfolio is lopsided</p>
+                    <p className="insight-action-text">3 rebalancing opportunities</p>
                     <div className="insight-recommendations">
                       {insights.recommendations.map((rec, i) => (
                         <div key={i} className="insight-rec">

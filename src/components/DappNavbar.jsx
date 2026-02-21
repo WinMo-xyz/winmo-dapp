@@ -54,7 +54,7 @@ export default function DappNavbar() {
               <NavLink to="/" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
                 Portfolio
               </NavLink>
-              <NavLink to="/money" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink to="/money" className={({ isActive }) => `dapp-nav-link nav-coming-soon ${isActive ? 'active' : ''}`}>
                 Money
               </NavLink>
               <NavLink to="/stocks" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
@@ -101,7 +101,7 @@ export default function DappNavbar() {
           <NavLink to="/" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
             Portfolio
           </NavLink>
-          <NavLink to="/money" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+          <NavLink to="/money" className={({ isActive }) => `dapp-mobile-chip nav-coming-soon ${isActive ? 'active' : ''}`}>
             Money
           </NavLink>
           <NavLink to="/stocks" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
