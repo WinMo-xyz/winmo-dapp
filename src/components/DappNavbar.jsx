@@ -75,7 +75,7 @@ export default function DappNavbar() {
               <NavLink to="/forex" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
                 Forex
               </NavLink>
-              <NavLink to="/ai-agent" className={({ isActive }) => `dapp-nav-link ${isActive ? 'active' : ''}`}>
+              <NavLink to="/ai-agent" className={({ isActive }) => `dapp-nav-link nav-new ${isActive ? 'active' : ''}`}>
                 AI Agent
               </NavLink>
             </div>
@@ -122,7 +122,7 @@ export default function DappNavbar() {
           <NavLink to="/forex" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
             Forex
           </NavLink>
-          <NavLink to="/ai-agent" className={({ isActive }) => `dapp-mobile-chip ${isActive ? 'active' : ''}`}>
+          <NavLink to="/ai-agent" className={({ isActive }) => `dapp-mobile-chip nav-new ${isActive ? 'active' : ''}`}>
             AI Agent
           </NavLink>
         </div>
