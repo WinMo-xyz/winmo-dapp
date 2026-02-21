@@ -41,7 +41,6 @@ export async function fetchPriceHistory(assetId, days = 7) {
     cache.set(cacheKey, { data, ts: Date.now() })
     return data
   } catch (err) {
-    console.error('CoinGecko fetch failed:', err)
     return null
   }
 }

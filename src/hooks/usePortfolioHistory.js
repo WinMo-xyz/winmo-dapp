@@ -32,6 +32,7 @@ const SYMBOL_TO_GECKO = {
 
 const cache = new Map()
 const CACHE_TTL = 5 * 60 * 1000
+const MAX_CACHE_SIZE = 50
 
 async function fetchGeckoHistory(geckoId, days) {
   const key = `${geckoId}:${days}`
@@ -46,6 +47,10 @@ async function fetchGeckoHistory(geckoId, days) {
     const json = await res.json()
     const data = json.prices // [[timestamp, price], ...]
     cache.set(key, { data, ts: Date.now() })
+    if (cache.size > MAX_CACHE_SIZE) {
+      const oldest = cache.keys().next().value
+      cache.delete(oldest)
+    }
     return data
   } catch {
     return null

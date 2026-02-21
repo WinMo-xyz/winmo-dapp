@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import DappNavbar from '../components/DappNavbar'
 import AssetLogo from '../components/AssetLogo'
 import BuyModal from '../components/BuyModal'
+import AISuggestions from '../components/AISuggestions'
+import { generateYieldSuggestions } from '../services/aiSuggestions'
 import { useLiveYield } from '../hooks/useLiveYield'
 import './Yield.css'
 
@@ -92,8 +94,24 @@ export default function Yield() {
     }
   }, [modalProtocol])
 
+  const yieldSuggestions = useMemo(() => generateYieldSuggestions(filteredProtocols), [filteredProtocols])
+
   const openDeposit = (id) => { setModalId(id); setModalMode('buy') }
   const openWithdraw = (id) => { setModalId(id); setModalMode('sell') }
+
+  const handleSuggestionAction = useCallback((s) => {
+    // Find matching protocol by name
+    const match = allProtocols.find(p => p.name === s.asset)
+    if (match) {
+      setSelectedId(match.id)
+      if (s.action === 'Deposit') {
+        openDeposit(match.id)
+      } else if (s.action === 'Sell') {
+        openWithdraw(match.id)
+      }
+      // For Watch/Hold, just select the protocol row
+    }
+  }, [allProtocols])
 
   const riskColor = (level) => {
     switch (level) {
@@ -125,6 +143,8 @@ export default function Yield() {
               </button>
             ))}
           </div>
+
+          <AISuggestions suggestions={yieldSuggestions} onAction={handleSuggestionAction} />
 
           <div className="yield-layout">
             {/* Protocol table */}

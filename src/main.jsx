@@ -1,5 +1,5 @@
 import './polyfills'
-import { StrictMode } from 'react'
+import { StrictMode, useMemo } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
@@ -31,7 +31,7 @@ const queryClient = new QueryClient({
 
 function RainbowKitThemed({ children }) {
   const { theme } = useTheme()
-  const rkTheme = theme === 'dark'
+  const rkTheme = useMemo(() => theme === 'dark'
     ? darkTheme({
         accentColor: '#c9a84c',
         accentColorForeground: '#050917',
@@ -43,7 +43,8 @@ function RainbowKitThemed({ children }) {
         accentColorForeground: '#f8f5f0',
         borderRadius: 'large',
         fontStack: 'system',
-      })
+      }),
+  [theme])
 
   return (
     <RainbowKitProvider theme={rkTheme}>

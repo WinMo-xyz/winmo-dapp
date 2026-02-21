@@ -138,7 +138,7 @@
 .forex-search::placeholder { color: var(--color-light-secondary); }
 .forex-search:focus { border-color: var(--accent); }
 
-.forex-table-wrap { border-radius: var(--radius-2); overflow: hidden; }
+.forex-table-wrap { border-radius: var(--radius-2); overflow-x: auto; overflow-y: hidden; }
 
 .forex-table {
   width: 100%;
@@ -1031,7 +1031,12 @@
   .forex-pair-flags { font-size: 14px; }
   .forex-pair-name { font-size: 11px; }
   .forex-rate-cell { font-size: 10px; }
-  .forex-view-btn, .forex-trade-btn { padding: 4px 8px; font-size: 9px; }
+  .forex-view-btn, .forex-trade-btn { padding: 6px 10px; font-size: 10px; min-height: 44px; }
+  .forex-matrix { min-width: 500px; }
+  .forex-matrix th { padding: 8px 4px; font-size: 10px; }
+  .forex-matrix td { padding: 6px 4px; font-size: 10px; }
+  .forex-swap-input { font-size: 16px; }
+  .forex-swap-select { font-size: 16px; }
   .forex-swap-card { padding: 14px; }
   .forex-swap-select { min-width: 80px; padding: 10px 8px; font-size: 12px; }
   .forex-swap-input { font-size: 14px; padding: 10px 10px; }

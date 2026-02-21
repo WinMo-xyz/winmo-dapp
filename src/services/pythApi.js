@@ -43,7 +43,6 @@ export async function fetchPythPrices(feedIdMap) {
     cache = { data: priceMap, timestamp: now }
     return priceMap
   } catch (err) {
-    console.error('[pyth] Failed to fetch FX prices:', err)
     return cache.data || {}
   }
 }

@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DappNavbar from '../components/DappNavbar'
 import BuyModal from '../components/BuyModal'
 import AssetLogo from '../components/AssetLogo'
+import AISuggestions from '../components/AISuggestions'
 import { getStocks, getCrypto, getCommodities, getBonds, getAssetChains } from '../services/assets'
+import { generateAssetSuggestions } from '../services/aiSuggestions'
 import { useLivePrices } from '../hooks/useLivePrices'
 import RwaArbitrageTab from '../components/RwaArbitrage'
 import AssetSwap from '../components/AssetSwap'
@@ -72,6 +74,7 @@ export default function Assets({ defaultTab = 'Crypto' }) {
   const [subSelections, setSubSelections] = useState(DEFAULT_SUB)
   const [buyAsset, setBuyAsset] = useState(null)
   const [sellAsset, setSellAsset] = useState(null)
+  const [swapFromSymbol, setSwapFromSymbol] = useState(null)
   const navigate = useNavigate()
   const { version } = useLivePrices()
   void version
@@ -81,9 +84,31 @@ export default function Assets({ defaultTab = 'Crypto' }) {
   const fetcher = FETCHERS[defaultTab]
   const assets = fetcher ? fetcher(activeSub) : []
 
+  const assetSuggestions = useMemo(() => generateAssetSuggestions(assets, null, defaultTab), [assets, defaultTab])
+
   const handleSubChange = (key) => {
     setSubSelections(prev => ({ ...prev, [defaultTab]: key }))
   }
+
+  const handleSuggestionAction = useCallback((s) => {
+    // Find matching asset by symbol
+    const match = assets.find(a => a.symbol === s.asset)
+    if (!match) return
+    switch (s.action) {
+      case 'Buy':
+        setBuyAsset(match)
+        break
+      case 'Sell':
+        setSellAsset(match)
+        break
+      case 'Swap':
+        setSwapFromSymbol(match.symbol)
+        handleSubChange('swap')
+        break
+      default:
+        navigate(`/assets/${match.id}`)
+    }
+  }, [assets, navigate])
 
   return (
     <>
@@ -109,8 +134,12 @@ export default function Assets({ defaultTab = 'Crypto' }) {
             </div>
           )}
 
+          {activeSub !== 'swap' && activeSub !== 'arbitrage' && (
+            <AISuggestions suggestions={assetSuggestions} onAction={handleSuggestionAction} />
+          )}
+
           {activeSub === 'swap' ? (
-            <AssetSwap category={defaultTab.toLowerCase()} />
+            <AssetSwap category={defaultTab.toLowerCase()} initialFromSymbol={swapFromSymbol} />
           ) : activeSub === 'arbitrage' ? (
             <RwaArbitrageTab category={defaultTab.toLowerCase()} />
           ) : (

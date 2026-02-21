@@ -69,7 +69,8 @@
 /* ── Protocol Table ──────────────────────────────────────────────── */
 
 .yield-table-wrap {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border-radius: var(--radius-1);
 }
 
@@ -497,5 +498,5 @@
   .yield-stat-label { font-size: 10px; }
   .yield-detail-stats { gap: 12px; padding: 14px; }
   .yield-select-display { padding: 10px 12px; font-size: 12px; border-radius: var(--radius-3); }
-  .yield-deposit-btn, .yield-withdraw-btn { padding: 10px 16px; font-size: 12px; }
+  .yield-deposit-btn, .yield-withdraw-btn { padding: 10px 16px; font-size: 12px; min-height: 44px; }
 }

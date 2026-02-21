@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
 import { useWallet } from '../context/WalletContext'
 import { useAccount } from 'wagmi'
 import { useConnection, useWallet as useSolanaWallet } from '@solana/wallet-adapter-react'
@@ -28,6 +28,19 @@ import {
   fromSmallestUnit as kyberFromSmallest,
   PAYMENT_TOKEN_META,
 } from '../services/kyberswapApi'
+
+// Lazily-cached asset list — avoids re-concatenating 4 arrays on every getQuote call
+let _allAssetsCache = null
+function getAllAssets() {
+  if (!_allAssetsCache) {
+    _allAssetsCache = [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
+  }
+  return _allAssetsCache
+}
+
+function findAsset(symbol) {
+  return getAllAssets().find(a => a.symbol.toUpperCase() === symbol.toUpperCase())
+}
 
 export function WinmoAgentProvider({ children }) {
   const wallet = useWallet()
@@ -59,7 +72,7 @@ export function WinmoAgentProvider({ children }) {
       async getAssets(category, subcategory) {
         const getters = { stocks: getStocks, crypto: getCrypto, commodities: getCommodities, bonds: getBonds }
         if (category && getters[category]) return getters[category](subcategory)
-        if (!category) return [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
+        if (!category) return getAllAssets()
         return []
       },
 
@@ -97,10 +110,8 @@ export function WinmoAgentProvider({ children }) {
         }
 
         if (chain === 'solana') {
-          const fromAsset = [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
-            .find(a => a.symbol.toUpperCase() === from.toUpperCase())
-          const toAsset = [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
-            .find(a => a.symbol.toUpperCase() === to.toUpperCase())
+          const fromAsset = findAsset(from)
+          const toAsset = findAsset(to)
 
           let inputMint, inputDecimals
           const payMeta = SOLANA_PAYMENT_META[from.toUpperCase()]
@@ -127,10 +138,8 @@ export function WinmoAgentProvider({ children }) {
         }
 
         if (chain === 'ethereum') {
-          const fromAsset = [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
-            .find(a => a.symbol.toUpperCase() === from.toUpperCase())
-          const toAsset = [...getStocks(), ...getCrypto(), ...getCommodities(), ...getBonds()]
-            .find(a => a.symbol.toUpperCase() === to.toUpperCase())
+          const fromAsset = findAsset(from)
+          const toAsset = findAsset(to)
 
           let inputAddr, inputDecimals
           const payMeta = PAYMENT_TOKEN_META[from.toUpperCase()]

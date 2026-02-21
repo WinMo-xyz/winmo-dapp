@@ -416,6 +416,14 @@
     right: 8px;
   }
 
+  .modal-input {
+    font-size: 16px;
+  }
+
+  .modal-output-input {
+    font-size: 16px;
+  }
+
   .modal-buy-btn {
     min-height: 48px;
   }

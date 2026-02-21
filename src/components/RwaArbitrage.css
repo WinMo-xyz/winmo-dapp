@@ -485,7 +485,7 @@
   .rwa-arb-spread { font-size: 11px; }
   .rwa-arb-rate-cell { font-size: 11px; }
   .rwa-arb-chain-badge { font-size: 8px; padding: 2px 5px; }
-  .rwa-arb-trade-btn { padding: 3px 6px; font-size: 9px; }
+  .rwa-arb-trade-btn { padding: 6px 10px; font-size: 10px; min-height: 44px; }
 
   .rwa-arb-inline-swap { padding: 10px 8px; }
   .rwa-arb-inline-swap-title { font-size: 12px; }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
 import { fetchPriceHistory, isCryptoAsset, generatePriceHistory } from '../services/coingeckoApi'
 import './PriceChart.css'
 
@@ -49,7 +49,7 @@ function buildPath(data, width, height) {
   return { line, area, points, yMin, yMax, yRange, xMin, xMax, xRange, drawW, drawH }
 }
 
-export default function PriceChart({ assetId, price, category, subcategory }) {
+export default memo(function PriceChart({ assetId, price, category, subcategory }) {
   const [days, setDays] = useState(7)
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -93,6 +93,10 @@ export default function PriceChart({ assetId, price, category, subcategory }) {
 
   const handleMouseLeave = useCallback(() => setHover(null), [])
 
+  const width = 800
+  const height = 220
+  const pathData = useMemo(() => buildPath(data || [], width, height), [data])
+
   if (loading) {
     return (
       <div className="price-chart">
@@ -120,9 +124,7 @@ export default function PriceChart({ assetId, price, category, subcategory }) {
     )
   }
 
-  const width = 800
-  const height = 220
-  const { line, area, points, yMin, yRange, xMin, xRange, drawW, drawH } = buildPath(data, width, height)
+  const { line, area, points, yMin, yRange, xMin, xRange, drawW, drawH } = pathData
   const isUp = data[data.length - 1].price >= data[0].price
   const strokeColor = isUp ? 'var(--success)' : 'var(--red)'
   const gradId = `priceGrad-${assetId}`
@@ -192,4 +194,4 @@ export default function PriceChart({ assetId, price, category, subcategory }) {
       </div>
     </div>
   )
-}
+})

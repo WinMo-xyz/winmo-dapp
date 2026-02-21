@@ -154,6 +154,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -161,6 +162,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -607,7 +609,7 @@ textarea:focus-visible {
 /* ---- Mobile responsive ---- */
 @media (max-width: 768px) {
   .container {
-    padding: 0 max(50px, env(safe-area-inset-left)) 0 max(50px, env(safe-area-inset-right));
+    padding: 0 max(24px, env(safe-area-inset-left)) 0 max(24px, env(safe-area-inset-right));
   }
 
   .section {
@@ -662,7 +664,7 @@ textarea:focus-visible {
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 max(50px, env(safe-area-inset-left)) 0 max(50px, env(safe-area-inset-right));
+    padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right));
   }
 
   .section {

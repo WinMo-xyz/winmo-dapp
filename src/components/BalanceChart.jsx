@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useMemo } from 'react'
+import { useState, useRef, useCallback, useMemo, memo } from 'react'
 import { usePortfolioHistory } from '../hooks/usePortfolioHistory'
 import './BalanceChart.css'
 
@@ -104,7 +104,7 @@ function formatRangeLabel(range) {
   return 'All time'
 }
 
-export default function BalanceChart({ totalValue, holdings, chainName }) {
+export default memo(function BalanceChart({ totalValue, holdings, chainName }) {
   const [activeRange, setActiveRange] = useState(RANGES[RANGES.length - 1]) // default ALL
   const [hover, setHover] = useState(null)
   const svgRef = useRef(null)
@@ -230,4 +230,4 @@ export default function BalanceChart({ totalValue, holdings, chainName }) {
       )}
     </div>
   )
-}
+})

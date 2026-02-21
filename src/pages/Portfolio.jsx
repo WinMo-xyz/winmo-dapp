@@ -1,9 +1,12 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DappNavbar from '../components/DappNavbar'
 import AssetLogo from '../components/AssetLogo'
+import AISuggestions from '../components/AISuggestions'
 import { useWallet } from '../context/WalletContext'
-import { getAIInsights, getPortfolio } from '../services/portfolio'
-import { getStaticPriceMap } from '../services/assets'
+import { getPortfolio } from '../services/portfolio'
+import { getStaticPriceMap, searchAssets } from '../services/assets'
+import { generatePortfolioSuggestions } from '../services/aiSuggestions'
 import { usePortfolio } from '../hooks/usePortfolio'
 import { useSolanaPortfolio } from '../hooks/useSolanaPortfolio'
 import { useLivePrices } from '../hooks/useLivePrices'
@@ -14,7 +17,7 @@ export default function Portfolio() {
   const { displayName, isEvmConnected, isSolanaConnected, evmAddress, solanaAddress, ensName } = useWallet()
   const { version } = useLivePrices()
   const [livePrices, setLivePrices] = useState(null)
-  const insights = getAIInsights()
+  const navigate = useNavigate()
 
   // Static prices for stocks, bonds, commodities (fallback)
   const staticPrices = useMemo(() => getStaticPriceMap(), [])
@@ -54,6 +57,18 @@ export default function Portfolio() {
   const demoPortfolio = useMemo(() => isDemo ? getPortfolio() : null, [isDemo])
   const holdings = isDemo ? demoPortfolio.holdings : realHoldings
   const totalValue = isDemo ? demoPortfolio.totalValue : realTotal
+  const portfolioSuggestions = useMemo(() => generatePortfolioSuggestions(holdings, totalValue), [holdings, totalValue])
+
+  const handleSuggestionAction = useCallback((s) => {
+    // Try to find the asset and navigate to its detail page
+    const results = searchAssets(s.asset)
+    if (results.length > 0) {
+      navigate(`/assets/${results[0].id}`)
+    } else {
+      // Fallback: navigate to the crypto page
+      navigate('/crypto')
+    }
+  }, [navigate])
 
   const chainName = hasEvm && hasSol
     ? 'Solana + Ethereum'
@@ -103,59 +118,8 @@ export default function Portfolio() {
 
           <div className="gradient-line" />
 
-          {/* AI Insights - Blurred with Coming Soon */}
-          <section className="portfolio-insights">
-            <h2 className="portfolio-section-title">AI Insights</h2>
-            <div className="portfolio-insights-wrapper">
-              <div className="portfolio-insights-blur">
-                <div className="portfolio-insights-grid">
-                  {/* Allocation Cards */}
-                  <div className="insight-card glass-card">
-                    <h4 className="insight-card-title">Portfolio Allocation</h4>
-                    <div className="insight-donut-placeholder">
-                      <div className="donut-ring">
-                        <svg viewBox="0 0 120 120">
-                          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--light-10)" strokeWidth="12" />
-                          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" strokeWidth="12"
-                            strokeDasharray="314" strokeDashoffset="172" strokeLinecap="round" />
-                          <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent-cool)" strokeWidth="12"
-                            strokeDasharray="314" strokeDashoffset="234" strokeLinecap="round"
-                            transform="rotate(163 60 60)" />
-                        </svg>
-                      </div>
-                      <div className="donut-labels">
-                        <span><span className="dot" style={{ background: 'var(--accent)' }} /> Stocks {insights.allocation.stocks}%</span>
-                        <span><span className="dot" style={{ background: 'var(--purple)' }} /> Crypto {insights.allocation.crypto}%</span>
-                        <span><span className="dot" style={{ background: 'var(--accent-cool)' }} /> Bonds {insights.allocation.bonds}%</span>
-                        <span><span className="dot" style={{ background: '#d4a853' }} /> Commodities {insights.allocation.commodities}%</span>
-                        <span><span className="dot" style={{ background: 'var(--color-light-secondary)' }} /> Cash {insights.allocation.cash}%</span>
-                        <span><span className="dot" style={{ background: 'var(--success)' }} /> Yield {insights.allocation.yield}%</span>
-                        <span><span className="dot" style={{ background: '#e87848' }} /> Forex {insights.allocation.forex}%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Recommendations */}
-                  <div className="insight-card glass-card">
-                    <h4 className="insight-card-title">Action Required</h4>
-                    <p className="insight-action-text">3 rebalancing opportunities</p>
-                    <div className="insight-recommendations">
-                      {insights.recommendations.map((rec, i) => (
-                        <div key={i} className="insight-rec">
-                          <span className={`insight-rec-action ${rec.action.toLowerCase()}`}>{rec.action}</span>
-                          <span className="insight-rec-asset">{rec.asset}</span>
-                          <span className="insight-rec-reason">{rec.reason}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="portfolio-coming-soon">
-                <span className="coming-soon-badge">Coming Soon</span>
-              </div>
-            </div>
-          </section>
+          {/* AI Suggestions */}
+          <AISuggestions suggestions={portfolioSuggestions} title="AI Insights" onAction={handleSuggestionAction} />
 
           <div className="gradient-line" />
 

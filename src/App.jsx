@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
-import Portfolio from './pages/Portfolio'
+
+const Portfolio = lazy(() => import('./pages/Portfolio'))
 
 const Assets = lazy(() => import('./pages/Assets'))
 const AssetDetail = lazy(() => import('./pages/AssetDetail'))

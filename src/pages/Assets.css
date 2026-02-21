@@ -217,8 +217,8 @@
   .assets-tabs { padding: 3px; margin-bottom: 16px; }
   .assets-tab { padding: 6px 10px; font-size: 11px; }
 
-  .assets-table th:nth-child(3),
-  .assets-table td:nth-child(3) { display: none; }
+  .assets-table th:nth-child(2),
+  .assets-table td:nth-child(2) { display: none; }
   .assets-table th:nth-child(4),
   .assets-table td:nth-child(4) { display: none; }
 
@@ -232,6 +232,6 @@
 
   .asset-actions { width: 100%; }
   .asset-buy-btn, .asset-sell-btn, .asset-detail-btn {
-    width: 100%; text-align: center; padding: 6px 10px; font-size: 11px;
+    width: 100%; text-align: center; padding: 6px 10px; font-size: 11px; min-height: 44px;
   }
 }

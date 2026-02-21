@@ -92,7 +92,6 @@ export async function fetchCryptoPrices() {
     cache = { data: priceMap, timestamp: now }
     return priceMap
   } catch (err) {
-    console.error('[prices] Failed to fetch prices:', err)
     return cache.data || null
   }
 }

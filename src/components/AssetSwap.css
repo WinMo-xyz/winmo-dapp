@@ -254,4 +254,16 @@
   .asset-swap-card {
     padding: 20px 16px;
   }
+
+  .asset-swap-input {
+    font-size: 16px;
+  }
+
+  .asset-swap-select {
+    font-size: 16px;
+  }
+
+  .asset-swap-btn {
+    min-height: 48px;
+  }
 }

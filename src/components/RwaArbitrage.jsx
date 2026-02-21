@@ -55,7 +55,6 @@ export default function RwaArbitrageTab({ category }) {
         }
         return { key, rate }
       } catch (err) {
-        console.warn(`[RWA-ARB] ${key} quote failed:`, err.message || err)
         return { key, rate: null }
       }
     }

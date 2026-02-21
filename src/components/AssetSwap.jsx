@@ -57,7 +57,7 @@ function saveHistory(entry) {
   } catch { /* ignore */ }
 }
 
-export default function AssetSwap({ category }) {
+export default function AssetSwap({ category, initialFromSymbol }) {
   const [chain, setChain] = useState('solana')
   const [fromAddr, setFromAddr] = useState('')
   const [toAddr, setToAddr] = useState('')
@@ -102,6 +102,18 @@ export default function AssetSwap({ category }) {
     const solTkns = getSwappableTokens(category, 'solana')
     setChain(solTkns.length > 0 ? 'solana' : 'ethereum')
   }, [category])
+
+  // Pre-select "from" token when initialFromSymbol is provided
+  useEffect(() => {
+    if (!initialFromSymbol) return
+    const match = tokens.find(t => t.symbol?.toUpperCase() === initialFromSymbol.toUpperCase())
+    if (match) {
+      setFromAddr(match.address)
+      setFromAmount('')
+      setQuote(null)
+      setError(null)
+    }
+  }, [initialFromSymbol, tokens])
 
   const fromToken = useMemo(() => tokens.find(t => t.address === fromAddr), [tokens, fromAddr])
   const toToken = useMemo(() => tokens.find(t => t.address === toAddr), [tokens, toAddr])

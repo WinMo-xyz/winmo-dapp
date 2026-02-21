@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import './AssetLogo.css'
 
-export default function AssetLogo({ logo, name, size = 32 }) {
+export default memo(function AssetLogo({ logo, name, size = 32 }) {
   const [failed, setFailed] = useState(false)
 
   if (!logo || failed) {
@@ -19,8 +19,9 @@ export default function AssetLogo({ logo, name, size = 32 }) {
         alt={name}
         width={size}
         height={size}
+        loading="lazy"
         onError={() => setFailed(true)}
       />
     </span>
   )
-}
+})

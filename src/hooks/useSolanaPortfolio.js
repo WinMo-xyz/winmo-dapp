@@ -83,7 +83,7 @@ export function useSolanaPortfolio(priceMap) {
     setIsLoading(true)
 
     fetchBalances(connection, publicKey, signal)
-      .catch(err => console.error('[useSolanaPortfolio] fetch error:', err))
+      .catch(() => {})
       .finally(() => { if (!signal.cancelled) setIsLoading(false) })
 
     return () => { signal.cancelled = true }

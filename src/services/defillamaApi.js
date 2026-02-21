@@ -30,7 +30,6 @@ export async function fetchYieldPools(poolIds) {
     cache = { data: poolMap, timestamp: now }
     return filterPools(poolMap, poolIds)
   } catch (err) {
-    console.error('[defiLlama] Failed to fetch yield pools:', err)
     return cache.data ? filterPools(cache.data, poolIds) : {}
   }
 }

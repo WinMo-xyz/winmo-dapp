@@ -7,6 +7,8 @@ import { VersionedTransaction, PublicKey } from '@solana/web3.js'
 import { getAssociatedTokenAddress } from '@solana/spl-token'
 import DappNavbar from '../components/DappNavbar'
 import ForexSwap from '../components/forex/ForexSwap'
+import AISuggestions from '../components/AISuggestions'
+import { generateForexSuggestions } from '../services/aiSuggestions'
 import { useForexRates } from '../hooks/useForexRates'
 import {
   FOREX_TOKENS, CURRENCY_META, MATRIX_CURRENCIES,
@@ -22,14 +24,41 @@ const TABS = [
   { key: 'swap', label: 'Swap' },
 ]
 
+// Map currency code → primary stablecoin symbol for swap pre-selection
+const CURRENCY_TO_TOKEN = {
+  USD: 'USDC', EUR: 'EURC', JPY: 'GYEN', GBP: 'VGBP', CHF: 'VCHF',
+  BRL: 'BRZ', TRY: 'TRYB', MXN: 'MXNe', NGN: 'NGNC', IDR: 'IDRX', ZAR: 'ZARP',
+}
+
 export default function Forex() {
   const [activeTab, setActiveTab] = useState('markets')
+  const [swapFrom, setSwapFrom] = useState(null)
+  const [swapTo, setSwapTo] = useState(null)
   const navigate = useNavigate()
   const { rates, markets, isLoading, getDirectRate, getCrossRate } = useForexRates()
+
+  const forexSuggestions = useMemo(() => generateForexSuggestions(rates, markets), [rates, markets])
 
   const handleTrade = (pair) => {
     navigate(`/forex/${pair.replace('/', '')}`)
   }
+
+  const handleSuggestionAction = useCallback((s) => {
+    if (s.asset && s.asset.includes('/')) {
+      const [base, quote] = s.asset.split('/')
+      const fromToken = CURRENCY_TO_TOKEN[base]
+      const toToken = CURRENCY_TO_TOKEN[quote]
+      if (fromToken && toToken) {
+        setSwapFrom(fromToken)
+        setSwapTo(toToken)
+        setActiveTab('swap')
+      } else {
+        handleTrade(s.asset)
+      }
+    } else {
+      setActiveTab('swap')
+    }
+  }, [navigate])
 
   return (
     <>
@@ -55,11 +84,13 @@ export default function Forex() {
             ))}
           </div>
 
+          <AISuggestions suggestions={forexSuggestions} onAction={handleSuggestionAction} />
+
           <div className="forex-content">
             {activeTab === 'markets' && <MarketsTab markets={markets} isLoading={isLoading} onTrade={handleTrade} />}
             {activeTab === 'matrix' && <MatrixTab getCrossRate={getCrossRate} rates={rates} isLoading={isLoading} />}
             {activeTab === 'arbitrage' && <ArbitrageTab />}
-            {activeTab === 'swap' && <ForexSwap getCrossRate={getCrossRate} />}
+            {activeTab === 'swap' && <ForexSwap getCrossRate={getCrossRate} initialFrom={swapFrom} initialTo={swapTo} />}
           </div>
         </div>
       </main>

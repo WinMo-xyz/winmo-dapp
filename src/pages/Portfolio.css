@@ -417,8 +417,8 @@
 
   .holdings-table th:nth-child(2),
   .holdings-table td:nth-child(2) { display: none; }
-  .holdings-table th:nth-child(4),
-  .holdings-table td:nth-child(4) { display: none; }
+  .holdings-table th:nth-child(5),
+  .holdings-table td:nth-child(5) { display: none; }
 
   .holdings-table th,
   .holdings-table td { padding: 8px 6px; font-size: 11px; }
