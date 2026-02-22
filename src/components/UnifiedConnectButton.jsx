@@ -12,7 +12,9 @@ export default function UnifiedConnectButton({ compact = false }) {
   const [solModalOpen, setSolModalOpen] = useState(false)
   const [solBalance, setSolBalance] = useState(null)
   const [copied, setCopied] = useState(false)
+  const [pickerPos, setPickerPos] = useState({ top: 0, right: 0 })
   const ref = useRef(null)
+  const pickerRef = useRef(null)
   const solModalRef = useRef(null)
   const { isEvmConnected, isSolanaConnected, evmAddress, solanaAddress } = useWallet()
   const { disconnect: disconnectSolana, wallet: solanaWalletInfo, publicKey } = useSolanaWallet()
@@ -35,11 +37,24 @@ export default function UnifiedConnectButton({ compact = false }) {
     return () => { cancelled = true }
   }, [solModalOpen, publicKey, connection])
 
+  // Position picker dropdown relative to the trigger button
+  useEffect(() => {
+    if (!pickerOpen || !ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    setPickerPos({
+      top: rect.bottom + 8,
+      right: window.innerWidth - rect.right,
+    })
+  }, [pickerOpen])
+
   // Close picker on outside click
   useEffect(() => {
     if (!pickerOpen) return
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setPickerOpen(false)
+      if (ref.current && !ref.current.contains(e.target) &&
+          pickerRef.current && !pickerRef.current.contains(e.target)) {
+        setPickerOpen(false)
+      }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
@@ -84,8 +99,8 @@ export default function UnifiedConnectButton({ compact = false }) {
                 </svg>
               )}
             </button>
-            {pickerOpen && (
-              <div className="unified-picker">
+            {pickerOpen && createPortal(
+              <div className="unified-picker" ref={pickerRef} style={{ top: pickerPos.top, right: pickerPos.right }}>
                 <button
                   className="unified-picker-option"
                   onClick={() => { setPickerOpen(false); openSolanaModal(true) }}
@@ -100,7 +115,8 @@ export default function UnifiedConnectButton({ compact = false }) {
                   <span className="unified-picker-icon">Ξ</span>
                   <span>Ethereum</span>
                 </button>
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         )}
@@ -193,8 +209,8 @@ export default function UnifiedConnectButton({ compact = false }) {
             )}
           </div>
 
-          {pickerOpen && (
-            <div className="unified-picker">
+          {pickerOpen && createPortal(
+            <div className="unified-picker" ref={pickerRef} style={{ top: pickerPos.top, right: pickerPos.right }}>
               {!hasSol && (
                 <button
                   className="unified-picker-option"
@@ -213,7 +229,8 @@ export default function UnifiedConnectButton({ compact = false }) {
                   <span>Ethereum</span>
                 </button>
               )}
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       )}

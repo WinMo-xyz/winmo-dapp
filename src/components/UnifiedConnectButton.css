@@ -34,11 +34,9 @@
   transition-duration: 0.1s;
 }
 
-/* Chain picker dropdown */
+/* Chain picker dropdown - portalled to body */
 .unified-picker {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
+  position: fixed;
   min-width: 180px;
   padding: 6px;
   background: rgba(var(--dark), 0.95);
@@ -46,7 +44,7 @@
   border: 1px solid rgba(var(--light), 0.1);
   border-radius: 14px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-  z-index: 100;
+  z-index: 9500;
   animation: picker-in 0.15s ease-out;
 }
 
