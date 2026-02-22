@@ -5,6 +5,9 @@ import BuyModal from '../components/BuyModal'
 import AISuggestions from '../components/AISuggestions'
 import { generateYieldSuggestions } from '../services/aiSuggestions'
 import { useLiveYield } from '../hooks/useLiveYield'
+import { useRatings } from '../hooks/useRatings'
+import { useLivePrices } from '../hooks/useLivePrices'
+import { SYMBOL_TO_GECKO_ID } from '../services/cmcApi'
 import './Yield.css'
 
 const RISK_LEVELS = [
@@ -72,6 +75,7 @@ export default function Yield() {
   const [modalId, setModalId] = useState(null)
   const [modalMode, setModalMode] = useState('buy')
 
+  const { version } = useLivePrices()
   const { protocols: allProtocols, isLoading: apyLoading } = useLiveYield()
   const selected = allProtocols.find(p => p.id === selectedId) || allProtocols[0]
   const modalProtocol = modalId ? allProtocols.find(p => p.id === modalId) : null
@@ -94,7 +98,13 @@ export default function Yield() {
     }
   }, [modalProtocol])
 
-  const yieldSuggestions = useMemo(() => generateYieldSuggestions(filteredProtocols), [filteredProtocols])
+  const yieldRatingSymbols = useMemo(
+    () => [...new Set(filteredProtocols.map(p => p.asset).filter(s => s && SYMBOL_TO_GECKO_ID[s]))],
+    [filteredProtocols]
+  )
+  const { ratings, isLoading: ratingsLoading, hasError: ratingsError } = useRatings(yieldRatingSymbols, version)
+
+  const yieldSuggestions = useMemo(() => generateYieldSuggestions(filteredProtocols, ratings), [filteredProtocols, ratings])
 
   const openDeposit = (id) => { setModalId(id); setModalMode('buy') }
   const openWithdraw = (id) => { setModalId(id); setModalMode('sell') }
@@ -144,7 +154,7 @@ export default function Yield() {
             ))}
           </div>
 
-          <AISuggestions suggestions={yieldSuggestions} onAction={handleSuggestionAction} />
+          <AISuggestions suggestions={yieldSuggestions} onAction={handleSuggestionAction} ratingsLoading={ratingsLoading} ratingsError={ratingsError} />
 
           <div className="yield-layout">
             {/* Protocol table */}

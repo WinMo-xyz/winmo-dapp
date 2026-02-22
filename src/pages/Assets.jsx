@@ -7,6 +7,7 @@ import AISuggestions from '../components/AISuggestions'
 import { getStocks, getCrypto, getCommodities, getBonds, getAssetChains } from '../services/assets'
 import { generateAssetSuggestions } from '../services/aiSuggestions'
 import { useLivePrices } from '../hooks/useLivePrices'
+import { useRatings } from '../hooks/useRatings'
 import RwaArbitrageTab from '../components/RwaArbitrage'
 import AssetSwap from '../components/AssetSwap'
 import './Assets.css'
@@ -77,14 +78,19 @@ export default function Assets({ defaultTab = 'Crypto' }) {
   const [swapFromSymbol, setSwapFromSymbol] = useState(null)
   const navigate = useNavigate()
   const { version } = useLivePrices()
-  void version
 
   const activeSub = subSelections[defaultTab]
   const tabs = SUB_TABS[defaultTab] || []
   const fetcher = FETCHERS[defaultTab]
   const assets = fetcher ? fetcher(activeSub) : []
 
-  const assetSuggestions = useMemo(() => generateAssetSuggestions(assets, null, defaultTab), [assets, defaultTab])
+  const ratingSymbols = useMemo(() => {
+    if (defaultTab !== 'Crypto') return []
+    return assets.map(a => a.symbol).filter(Boolean)
+  }, [assets, defaultTab])
+  const { ratings, isLoading: ratingsLoading, hasError: ratingsError } = useRatings(ratingSymbols, version)
+
+  const assetSuggestions = useMemo(() => generateAssetSuggestions(assets, null, defaultTab, ratings), [assets, defaultTab, ratings])
 
   const handleSubChange = (key) => {
     setSubSelections(prev => ({ ...prev, [defaultTab]: key }))
@@ -135,7 +141,7 @@ export default function Assets({ defaultTab = 'Crypto' }) {
           )}
 
           {activeSub !== 'swap' && activeSub !== 'arbitrage' && (
-            <AISuggestions suggestions={assetSuggestions} onAction={handleSuggestionAction} />
+            <AISuggestions suggestions={assetSuggestions} onAction={handleSuggestionAction} ratingsLoading={ratingsLoading} ratingsError={ratingsError} />
           )}
 
           {activeSub === 'swap' ? (

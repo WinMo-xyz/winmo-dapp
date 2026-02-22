@@ -1,21 +1,24 @@
 // ─── AI Suggestions Engine ─────────────────────────────────────────────
-// Pure heuristic-based suggestion generators — no external AI API.
+// Pure heuristic-based suggestion generators - no external AI API.
 // Every suggestion targets a specific tradeable asset with an executable action.
 
 /**
  * @typedef {Object} Suggestion
  * @property {string} id
- * @property {string} type     - momentum | value | risk | yield | arbitrage | rebalance
- * @property {string} action   - Buy | Sell | Deposit | Swap
+ * @property {string} type    - momentum | value | risk | yield | arbitrage | rebalance | rating
+ * @property {string} action  - Buy | Sell | Deposit | Swap | Watch
  * @property {string} title
  * @property {string} reason
- * @property {string} asset    - specific tradeable symbol
+ * @property {string} asset   - specific tradeable symbol
  * @property {string} confidence - high | medium | low
+ * @property {{ compositeScore: number, sources: string[] }|undefined} ratingData
  */
+
+const STABLECOINS = new Set(['USDT', 'USDC', 'DAI', 'USDS', 'BUSD', 'TUSD', 'FRAX', 'LUSD', 'PYUSD', 'USDP', 'GUSD', 'FDUSD', 'USDe'])
 
 // ─── Asset Suggestions (Stocks, Crypto, Commodities, Bonds) ─────────
 
-export function generateAssetSuggestions(assets, livePrices, category) {
+export function generateAssetSuggestions(assets, livePrices, category, ratings = {}) {
   if (!assets || assets.length === 0) return []
   const suggestions = []
 
@@ -30,7 +33,7 @@ export function generateAssetSuggestions(assets, livePrices, category) {
   // Sort by change24h to find relative top/bottom movers
   const sorted = [...enriched].sort((a, b) => b.change24h - a.change24h)
 
-  // Top gainer — always show the #1 performer
+  // Top gainer - always show the #1 performer
   if (sorted.length > 0 && sorted[0].change24h > 0) {
     const top = sorted[0]
     suggestions.push({
@@ -44,7 +47,7 @@ export function generateAssetSuggestions(assets, livePrices, category) {
     })
   }
 
-  // Biggest loser — dip buy opportunity
+  // Biggest loser - dip buy opportunity
   if (sorted.length > 1) {
     const bottom = sorted[sorted.length - 1]
     if (bottom.change24h < 0) {
@@ -53,7 +56,7 @@ export function generateAssetSuggestions(assets, livePrices, category) {
         type: 'value',
         action: 'Buy',
         title: `${bottom.symbol} Dip Opportunity`,
-        reason: `Down ${Math.abs(bottom.change24h).toFixed(2)}% today — the biggest pullback in ${category.toLowerCase()}. Could be a buying opportunity.`,
+        reason: `Down ${Math.abs(bottom.change24h).toFixed(2)}% today - the biggest pullback in ${category.toLowerCase()}. Could be a buying opportunity.`,
         asset: bottom.symbol,
         confidence: bottom.change24h > -3 ? 'medium' : 'low',
       })
@@ -74,7 +77,7 @@ export function generateAssetSuggestions(assets, livePrices, category) {
     })
   }
 
-  // Multi-provider arbitrage — targets a specific asset
+  // Multi-provider arbitrage - targets a specific asset
   const multiProvider = enriched.filter(a => a.providers && a.providers.length >= 2)
   if (multiProvider.length > 0) {
     const pick = multiProvider[0]
@@ -85,14 +88,14 @@ export function generateAssetSuggestions(assets, livePrices, category) {
         type: 'arbitrage',
         action: 'Buy',
         title: `${pick.symbol} Multi-Provider`,
-        reason: `Available from ${providerNames.join(' & ')}. Compare prices across providers — buy from the cheapest.`,
+        reason: `Available from ${providerNames.join(' & ')}. Compare prices across providers - buy from the cheapest.`,
         asset: pick.symbol,
         confidence: 'medium',
       })
     }
   }
 
-  // Second cheapest asset — budget pick
+  // Second cheapest asset - budget pick
   const byPrice = [...enriched].sort((a, b) => a.price - b.price)
   if (byPrice.length > 1 && byPrice[0].price < byPrice[byPrice.length - 1].price * 0.1) {
     const cheap = byPrice[0]
@@ -107,12 +110,60 @@ export function generateAssetSuggestions(assets, livePrices, category) {
     })
   }
 
-  return suggestions
+  // ── Rating-based suggestions (max 2) ──────────────────────────────
+  if (suggestions.length < 6 && ratings && Object.keys(ratings).length > 0) {
+    let ratingCount = 0
+
+    const ratedAssets = enriched
+      .filter(a => ratings[a.symbol]?.compositeScore != null && !STABLECOINS.has(a.symbol))
+      .sort((a, b) => ratings[b.symbol].compositeScore - ratings[a.symbol].compositeScore)
+
+    // Highly rated asset
+    if (ratedAssets.length > 0 && ratingCount < 2 && suggestions.length < 6) {
+      const top = ratedAssets[0]
+      const r = ratings[top.symbol]
+      if (r.compositeScore >= 70) {
+        const sourceText = r.sources.length > 1 ? `Rated by ${r.sources.join(' & ')}` : `Rated by ${r.sources[0]}`
+        suggestions.push({
+          id: `rating-top-${top.symbol}`,
+          type: 'rating',
+          action: 'Buy',
+          title: `${top.symbol} Highly Rated`,
+          reason: `${sourceText} with a composite score of ${r.compositeScore}/100. ${top.name} has strong fundamentals across developer activity, community, and liquidity.`,
+          asset: top.symbol,
+          confidence: r.compositeScore >= 80 ? 'high' : 'medium',
+          ratingData: { compositeScore: r.compositeScore, sources: r.sources },
+        })
+        ratingCount++
+      }
+    }
+
+    // Rising but poorly rated - warning
+    if (suggestions.length < 6) {
+      const risky = ratedAssets.filter(a => ratings[a.symbol].compositeScore < 40 && a.change24h > 2)
+      if (risky.length > 0 && ratingCount < 2) {
+        const warn = risky[0]
+        const r = ratings[warn.symbol]
+        suggestions.push({
+          id: `rating-warn-${warn.symbol}`,
+          type: 'rating',
+          action: 'Watch',
+          title: `${warn.symbol} Rising but Low-Rated`,
+          reason: `Up ${warn.change24h.toFixed(1)}% today, but composite rating is only ${r.compositeScore}/100. Proceed with caution - fundamentals are weak.`,
+          asset: warn.symbol,
+          confidence: 'low',
+          ratingData: { compositeScore: r.compositeScore, sources: r.sources },
+        })
+      }
+    }
+  }
+
+  return suggestions.slice(0, 6)
 }
 
 // ─── Yield Suggestions ──────────────────────────────────────────────
 
-export function generateYieldSuggestions(protocols) {
+export function generateYieldSuggestions(protocols, ratings = {}) {
   if (!protocols || protocols.length === 0) return []
   const suggestions = []
 
@@ -123,7 +174,7 @@ export function generateYieldSuggestions(protocols) {
     byRisk[p.riskLevel].push(p)
   }
 
-  // Best in each risk tier — each targets a specific depositable protocol
+  // Best in each risk tier - each targets a specific depositable protocol
   for (const [risk, group] of Object.entries(byRisk)) {
     const best = group.reduce((a, b) => a.apy > b.apy ? a : b)
     const riskLabel = risk === 'high-yield' ? 'High Yield' : risk.charAt(0).toUpperCase() + risk.slice(1)
@@ -132,13 +183,13 @@ export function generateYieldSuggestions(protocols) {
       type: 'yield',
       action: 'Deposit',
       title: `Top ${riskLabel}: ${best.name}`,
-      reason: `${best.name} offers ${best.apy}% APY — the highest in the ${riskLabel.toLowerCase()} tier. ${best.protocol} on ${best.network}.`,
+      reason: `${best.name} offers ${best.apy}% APY - the highest in the ${riskLabel.toLowerCase()} tier. ${best.protocol} on ${best.network}.`,
       asset: best.name,
       confidence: risk === 'safe' ? 'high' : risk === 'low' ? 'medium' : 'low',
     })
   }
 
-  // APY anomalies — targets a specific protocol to deposit into cautiously
+  // APY anomalies - targets a specific protocol to deposit into cautiously
   for (const [risk, group] of Object.entries(byRisk)) {
     if (group.length < 2) continue
     const avg = group.reduce((sum, p) => sum + p.apy, 0) / group.length
@@ -148,8 +199,8 @@ export function generateYieldSuggestions(protocols) {
           id: `anomaly-${p.id}`,
           type: 'risk',
           action: 'Deposit',
-          title: `${p.name} High APY — Verify Risk`,
-          reason: `${p.apy}% APY is well above the ${risk} tier average of ${avg.toFixed(1)}%. Deposit with caution — verify the risk profile first.`,
+          title: `${p.name} High APY - Verify Risk`,
+          reason: `${p.apy}% APY is well above the ${risk} tier average of ${avg.toFixed(1)}%. Deposit with caution - verify the risk profile first.`,
           asset: p.name,
           confidence: 'low',
         })
@@ -157,7 +208,7 @@ export function generateYieldSuggestions(protocols) {
     }
   }
 
-  // Network comparison — recommend the best protocol on the winning chain
+  // Network comparison - recommend the best protocol on the winning chain
   const ethSafe = protocols.filter(p => p.network === 'Ethereum' && p.riskLevel === 'safe')
   const solSafe = protocols.filter(p => p.network === 'Solana' && p.riskLevel === 'safe')
   if (ethSafe.length > 0 && solSafe.length > 0) {
@@ -169,7 +220,7 @@ export function generateYieldSuggestions(protocols) {
         id: 'network-sol-wins',
         type: 'yield',
         action: 'Deposit',
-        title: `${best.name} — Solana Yields Lead`,
+        title: `${best.name} - Solana Yields Lead`,
         reason: `Safe Solana yields average ${avgSol.toFixed(1)}% vs Ethereum's ${avgEth.toFixed(1)}%. ${best.name} at ${best.apy}% is the top pick.`,
         asset: best.name,
         confidence: 'medium',
@@ -180,7 +231,7 @@ export function generateYieldSuggestions(protocols) {
         id: 'network-eth-wins',
         type: 'yield',
         action: 'Deposit',
-        title: `${best.name} — Ethereum Yields Lead`,
+        title: `${best.name} - Ethereum Yields Lead`,
         reason: `Safe Ethereum yields average ${avgEth.toFixed(1)}% vs Solana's ${avgSol.toFixed(1)}%. ${best.name} at ${best.apy}% is the top pick.`,
         asset: best.name,
         confidence: 'medium',
@@ -188,7 +239,28 @@ export function generateYieldSuggestions(protocols) {
     }
   }
 
-  return suggestions
+  // ── Rating-aware yield warnings ───────────────────────────────────
+  if (suggestions.length < 6 && ratings && Object.keys(ratings).length > 0) {
+    for (const p of protocols) {
+      const r = ratings[p.asset]
+      if (!r || r.compositeScore == null) continue
+      if (r.compositeScore < 30 && p.apy > 5) {
+        suggestions.push({
+          id: `yield-rating-warn-${p.id}`,
+          type: 'rating',
+          action: 'Watch',
+          title: `${p.name} - Underlying Low-Rated`,
+          reason: `${p.asset} has a rating of ${r.compositeScore}/100. The ${p.apy}% APY may not justify the fundamental risk.`,
+          asset: p.name,
+          confidence: 'low',
+          ratingData: { compositeScore: r.compositeScore, sources: r.sources },
+        })
+        break
+      }
+    }
+  }
+
+  return suggestions.slice(0, 6)
 }
 
 // ─── Forex Suggestions ──────────────────────────────────────────────
@@ -243,7 +315,7 @@ export function generateForexSuggestions(rates, markets) {
     }
   }
 
-  // ── 2. Extreme rate — pair far from round number (mean reversion) ──
+  // ── 2. Extreme rate - pair far from round number (mean reversion) ──
   // Currencies near psychological levels (e.g. USD/JPY near 150) tend to revert.
   const ROUND_LEVELS = {
     'USD/JPY': [140, 145, 150, 155, 160],
@@ -272,7 +344,7 @@ export function generateForexSuggestions(rates, markets) {
       type: 'momentum',
       action: 'Swap',
       title: `${bestProximity.pair} Near ${bestProximity.level}`,
-      reason: `Trading at ${bestProximity.rate.toFixed(4)}, just ${direction} the key ${bestProximity.level} level. Expect increased volatility — profit from the breakout or reversion.`,
+      reason: `Trading at ${bestProximity.rate.toFixed(4)}, just ${direction} the key ${bestProximity.level} level. Expect increased volatility - profit from the breakout or reversion.`,
       asset: bestProximity.pair,
       confidence: bestProximity.pctDist < 0.2 ? 'high' : 'medium',
     })
@@ -301,14 +373,14 @@ export function generateForexSuggestions(rates, markets) {
       type: 'value',
       action: 'Swap',
       title: `${bestCarry.emCurrency} Carry Trade`,
-      reason: `${bestCarry.emCurrency} offers ~${bestCarry.carry.toFixed(1)}% implied carry over USD. Swap into ${bestCarry.pair} to capture the rate differential — but watch for depreciation risk.`,
+      reason: `${bestCarry.emCurrency} offers ~${bestCarry.carry.toFixed(1)}% implied carry over USD. Swap into ${bestCarry.pair} to capture the rate differential - but watch for depreciation risk.`,
       asset: bestCarry.pair,
       confidence: bestCarry.carry > 10 ? 'high' : 'medium',
     })
   }
 
   // ── 4. Best liquid pair for low-risk execution ────────────────────
-  // Only if we have fewer than 3 suggestions so far — keep the list useful.
+  // Only if we have fewer than 3 suggestions so far - keep the list useful.
   if (suggestions.length < 3) {
     const byVolume = [...tradeable].sort((a, b) => (b.volume || 0) - (a.volume || 0))
     if (byVolume.length > 0 && byVolume[0].volume > 0 && byVolume[0].rate) {
@@ -317,24 +389,24 @@ export function generateForexSuggestions(rates, markets) {
         id: `liquid-${top.pair}`,
         type: 'momentum',
         action: 'Swap',
-        title: `${top.pair} — Lowest Slippage`,
-        reason: `Highest volume pair on-chain. Best execution with minimal slippage — ideal for larger trades.`,
+        title: `${top.pair} - Lowest Slippage`,
+        reason: `Highest volume pair on-chain. Best execution with minimal slippage - ideal for larger trades.`,
         asset: top.pair,
         confidence: 'high',
       })
     }
   }
 
-  return suggestions
+  return suggestions.slice(0, 6)
 }
 
 // ─── Portfolio Suggestions ──────────────────────────────────────────
 
-export function generatePortfolioSuggestions(holdings, totalValue) {
+export function generatePortfolioSuggestions(holdings, totalValue, ratings = {}) {
   if (!holdings || holdings.length === 0 || !totalValue) return []
   const suggestions = []
 
-  // Concentration risk — sell the specific overweight asset
+  // Concentration risk - sell the specific overweight asset
   for (const h of holdings) {
     const pct = (h.value / totalValue) * 100
     if (pct > 25) {
@@ -367,7 +439,7 @@ export function generatePortfolioSuggestions(holdings, totalValue) {
     }
   }
 
-  // Top holding — buy more if not concentrated
+  // Top holding - buy more if not concentrated
   if (holdings.length >= 2) {
     const top = holdings[0]
     const pct = (top.value / totalValue) * 100
@@ -376,7 +448,7 @@ export function generatePortfolioSuggestions(holdings, totalValue) {
         id: `top-${top.symbol}`,
         type: 'momentum',
         action: 'Buy',
-        title: `${top.symbol} — Your Strongest`,
+        title: `${top.symbol} - Your Strongest`,
         reason: `Your largest position at $${top.value.toLocaleString(undefined, { maximumFractionDigits: 0 })} (${pct.toFixed(0)}%). Double down on your winner.`,
         asset: top.symbol,
         confidence: 'medium',
@@ -384,7 +456,7 @@ export function generatePortfolioSuggestions(holdings, totalValue) {
     }
   }
 
-  // Smallest holding — swap dust into something bigger
+  // Smallest holding - swap dust into something bigger
   const nonDust = holdings.filter(h => h.value > 0)
   if (nonDust.length >= 2) {
     const smallest = nonDust[nonDust.length - 1]
@@ -401,5 +473,46 @@ export function generatePortfolioSuggestions(holdings, totalValue) {
     }
   }
 
-  return suggestions
+  // ── Rating warnings for held assets (max 2) ──────────────────────
+  if (suggestions.length < 6 && ratings && Object.keys(ratings).length > 0) {
+    let ratingWarnings = 0
+
+    for (const h of holdings) {
+      if (ratingWarnings >= 2 || suggestions.length >= 6) break
+      const r = ratings[h.symbol]
+      if (!r || r.compositeScore == null || STABLECOINS.has(h.symbol)) continue
+      const pct = (h.value / totalValue) * 100
+
+      // Warn about poorly rated significant holdings
+      if (r.compositeScore < 40 && pct > 5) {
+        suggestions.push({
+          id: `rating-warn-holding-${h.symbol}`,
+          type: 'rating',
+          action: 'Sell',
+          title: `${h.symbol} Low Rating Warning`,
+          reason: `${h.symbol} is ${pct.toFixed(0)}% of your portfolio but has a composite rating of only ${r.compositeScore}/100. Consider reducing exposure.`,
+          asset: h.symbol,
+          confidence: r.compositeScore < 20 ? 'high' : 'medium',
+          ratingData: { compositeScore: r.compositeScore, sources: r.sources },
+        })
+        ratingWarnings++
+      }
+
+      // Highlight well-rated small holdings worth adding to
+      if (suggestions.length < 6 && r.compositeScore >= 75 && pct < 10 && pct > 1) {
+        suggestions.push({
+          id: `rating-strong-${h.symbol}`,
+          type: 'rating',
+          action: 'Buy',
+          title: `${h.symbol} Well-Rated - Add More?`,
+          reason: `Composite rating of ${r.compositeScore}/100 from ${r.sources.join(' & ')}. Only ${pct.toFixed(0)}% of your portfolio - consider increasing your position.`,
+          asset: h.symbol,
+          confidence: 'medium',
+          ratingData: { compositeScore: r.compositeScore, sources: r.sources },
+        })
+      }
+    }
+  }
+
+  return suggestions.slice(0, 6)
 }

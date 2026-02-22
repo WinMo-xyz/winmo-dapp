@@ -10,7 +10,8 @@ import { generatePortfolioSuggestions } from '../services/aiSuggestions'
 import { usePortfolio } from '../hooks/usePortfolio'
 import { useSolanaPortfolio } from '../hooks/useSolanaPortfolio'
 import { useLivePrices } from '../hooks/useLivePrices'
-import { fetchCryptoPrices } from '../services/cmcApi'
+import { fetchCryptoPrices, SYMBOL_TO_GECKO_ID } from '../services/cmcApi'
+import { useRatings } from '../hooks/useRatings'
 import './Portfolio.css'
 
 export default function Portfolio() {
@@ -57,7 +58,11 @@ export default function Portfolio() {
   const demoPortfolio = useMemo(() => isDemo ? getPortfolio() : null, [isDemo])
   const holdings = isDemo ? demoPortfolio.holdings : realHoldings
   const totalValue = isDemo ? demoPortfolio.totalValue : realTotal
-  const portfolioSuggestions = useMemo(() => generatePortfolioSuggestions(holdings, totalValue), [holdings, totalValue])
+
+  const ratingSymbols = useMemo(() => holdings.filter(h => h.value > 0 && SYMBOL_TO_GECKO_ID[h.symbol]).map(h => h.symbol), [holdings])
+  const { ratings, isLoading: ratingsLoading, hasError: ratingsError } = useRatings(ratingSymbols, version)
+
+  const portfolioSuggestions = useMemo(() => generatePortfolioSuggestions(holdings, totalValue, ratings), [holdings, totalValue, ratings])
 
   const handleSuggestionAction = useCallback((s) => {
     // Try to find the asset and navigate to its detail page
@@ -119,7 +124,7 @@ export default function Portfolio() {
           <div className="gradient-line" />
 
           {/* AI Suggestions */}
-          <AISuggestions suggestions={portfolioSuggestions} title="AI Insights" onAction={handleSuggestionAction} />
+          <AISuggestions suggestions={portfolioSuggestions} title="AI Insights" onAction={handleSuggestionAction} ratingsLoading={ratingsLoading} ratingsError={ratingsError} />
 
           <div className="gradient-line" />
 
